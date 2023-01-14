@@ -2,7 +2,7 @@ import pybullet as p
 import pybullet_data
 import time
 import pyrosim.pyrosim as pyrosim
-import numpy
+import numpy as np
 import random
 
 physicsClient = p.connect(p.GUI)
@@ -14,14 +14,30 @@ robotId = p.loadURDF("body.urdf")
 
 p.loadSDF("world.sdf")
 
-backLegSensorValues = numpy.zeros(10000)
-frontLegSensorValues = numpy.zeros(10000)
+backLegSensorValues = np.zeros(10000)
+frontLegSensorValues = np.zeros(10000)
 
 pyrosim.Prepare_To_Simulate(robotId)
 pi = 3.14159
 
-targetAngles = numpy.sin(numpy.array((0., 30., 45., 60., 90.)) * numpy.pi / 180. )
-for i in range(10000):
+#targetAngles = abs(np.sin(np.linspace(-np.pi, np.pi, 201))*2*np.pi)
+bl_amplitude = np.pi/8
+bl_frequency = 5
+bl_phaseOffset = 0
+
+bl_targetAngles = np.array(list(map(lambda x: bl_amplitude * np.sin(bl_frequency * x + bl_phaseOffset), 
+                                 np.linspace(0, 2*np.pi, 1000))))
+
+fl_amplitude = np.pi/4
+fl_frequency = 10
+fl_phaseOffset = np.pi/4
+
+fl_targetAngles = np.array(list(map(lambda x: fl_amplitude * np.sin(fl_frequency * x + fl_phaseOffset), 
+                                 np.linspace(0, 2*np.pi, 1000))))
+#p.save('data/fl_targetAngles', fl_targetAngles)
+#np.save('data/bl_targetAngles', bl_targetAngles)
+
+for i in range(1000):
     p.stepSimulation()
     backLegSensorValues[i] = pyrosim.Get_Touch_Sensor_Value_For_Link("BackLeg")
     frontLegSensorValues[i] = pyrosim.Get_Touch_Sensor_Value_For_Link("FrontLeg")
@@ -30,18 +46,18 @@ for i in range(10000):
     bodyIndex = robotId,
     jointName = b"Torso_BackLeg",
     controlMode = p.POSITION_CONTROL,
-    targetPosition = random.random()%(pi/8.0),
+    targetPosition = bl_targetAngles[i],
     maxForce = 200)
 
-    """pyrosim.Set_Motor_For_Joint(
+    pyrosim.Set_Motor_For_Joint(
     bodyIndex = robotId,
     jointName = b"Torso_FrontLeg",
     controlMode = p.POSITION_CONTROL,
-    targetPosition = random.random()%(pi/8.0),
-    maxForce = 200)"""
+    targetPosition = fl_targetAngles[i],
+    maxForce = 200)
 
     time.sleep(1/2000)
 
 p.disconnect()
-numpy.save('data/backLegSensorValues', backLegSensorValues)
-numpy.save('data/frontLegSensorValues', frontLegSensorValues)
+np.save('data/backLegSensorValues', backLegSensorValues)
+np.save('data/frontLegSensorValues', frontLegSensorValues)
