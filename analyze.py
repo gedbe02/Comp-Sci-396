@@ -1,10 +1,23 @@
-import numpy
-import matplotlib.pyplot
+import numpy as np
+import matplotlib.pyplot as plt
 
-backLegSensorValues = numpy.load("data/backLegSensorValues.npy")
-frontLegSensorValues = numpy.load("data/frontLegSensorValues.npy")
-matplotlib.pyplot.plot(backLegSensorValues, label='back', linewidth=5)
-matplotlib.pyplot.plot(frontLegSensorValues, label='front')
-matplotlib.pyplot.legend()
-matplotlib.pyplot.show()
+#x = np.linspace(-np.pi, np.pi, 201)
+#plt.plot(x, abs(np.sin(x)*2*np.pi))
+#plt.plot(x, [2*np.pi]*201,)
+#plt.plot(x, [0]*201,)
+"""x = np.load("data/sinVector.npy")
+plt.plot(np.linspace(0,1000, 1000), x)
+plt.xlabel('steps')
+plt.ylabel('sin(x)')
+plt.axis('tight')
+plt.show()"""
+
+
+
+backLegTargetValues = np.load("data/bl_targetAngles.npy")
+frontLegTargetValues = np.load("data/fl_targetAngles.npy")
+plt.plot(backLegTargetValues, label='back', linewidth=5)
+plt.plot(frontLegTargetValues, label='front')
+plt.legend()
+plt.show()
 
