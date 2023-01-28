@@ -23,3 +23,7 @@ bl_phaseOffset = 0
 fl_amplitude = np.pi/4
 fl_frequency = 10
 fl_phaseOffset = np.pi/4
+
+# Hill Climber
+numberOfGenerations = 10
+directOrGUI = "DIRECT"
