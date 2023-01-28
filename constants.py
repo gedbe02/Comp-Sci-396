@@ -26,4 +26,4 @@ fl_phaseOffset = np.pi/4
 
 # Hill Climber
 numberOfGenerations = 10
-directOrGUI = "DIRECT"
+populationSize = 10
