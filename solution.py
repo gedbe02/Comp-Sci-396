@@ -15,13 +15,14 @@ class SOLUTION:
         self.Create_Brain()
 
         os.system("python3 simulate.py " + directOrGUI + " "+ str(self.myID) + " &")
+        #os.system("python3 simulate.py " + directOrGUI + " "+ str(self.myID) + "2&>1 &")
     
     def Wait_For_Simulation_To_End(self):
-        while not os.path.exists(f'fitness/fitness{self.myID}.txt'):
+        while not os.path.exists(f'fitness{self.myID}.txt'):
             time.sleep(0.01)
-        f = open(f'fitness/fitness{self.myID}.txt', "r")
+        f = open(f'fitness{self.myID}.txt', "r")
         self.fitness = float(f.readlines()[0])
-        os.system(f'rm fitness/fitness{self.myID}.txt')
+        os.system(f'rm fitness{self.myID}.txt')
 
 
     def Create_World(self):
@@ -60,7 +61,7 @@ class SOLUTION:
         pyrosim.End()
 
     def Create_Brain(self):
-        pyrosim.Start_NeuralNetwork(f'brains/brain{self.myID}.nndf')
+        pyrosim.Start_NeuralNetwork(f'brain{self.myID}.nndf')
 
         pyrosim.Send_Sensor_Neuron(name = 0 , linkName = "Torso")
         pyrosim.Send_Sensor_Neuron(name = 1 , linkName = "BackLeg")

@@ -5,8 +5,8 @@ import os
 
 class PARALLEL_HILL_CLIMBER:
     def __init__(self):
-        os.system("rm brain/brain*.nndf")
-        os.system("rm fitness/fitness*.nndf")
+        os.system("rm brain*.nndf")
+        #os.system("rm fitness*.nndf")
         self.nextAvailableID = 0
         self.parents = {}
         for p in range(c.populationSize):
