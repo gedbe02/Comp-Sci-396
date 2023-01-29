@@ -27,3 +27,6 @@ fl_phaseOffset = np.pi/4
 # Hill Climber
 numberOfGenerations = 10
 populationSize = 10
+numSensorNeurons = 4
+numMotorNeurons = 8
+motorJointRange = 0.2
