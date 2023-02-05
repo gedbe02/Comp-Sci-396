@@ -47,12 +47,15 @@ class PARALLEL_HILL_CLIMBER:
                 self.parents[p] = self.children[p]
     
     def Show_Best(self):
-        lowest_fitness = float('inf')
+        best_fitness = -float('inf')
         best = self.parents[0]
         for p in self.parents:
-            if self.parents[p].fitness < lowest_fitness:
+            if self.parents[p].fitness > best_fitness:
                 best = self.parents[p]
+                best_fitness = self.parents[p].fitness
+        print(best_fitness)
         best.Start_Simulation("GUI")
+        os.system(f'cp brain{best.myID}.nndf results/brain{best.myID}.nndf')
     
     def Evaluate(self, solutions):
         for p in range(c.populationSize):
