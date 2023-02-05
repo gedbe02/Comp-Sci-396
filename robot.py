@@ -5,6 +5,7 @@ import os
 from sensor import SENSOR
 from motor import MOTOR
 import constants as c
+import math
 
 
 
@@ -25,6 +26,8 @@ class ROBOT:
     def Sense(self, i):
         for linkName in self.sensors:
             self.sensors[linkName].Get_Value(i)
+        #self.sensors[linkName].values[i] = math.sin(10*i)
+        #print(linkName)
     
     def Prepare_To_Act(self):
         for jointName in pyrosim.jointNamesToIndices:
@@ -44,10 +47,11 @@ class ROBOT:
     def Get_Fitness(self):
         basePositionAndOrientation = p.getBasePositionAndOrientation(self.robotId)
         basePosition = basePositionAndOrientation[0]
-        xCoordinateOfLinkZero = basePosition[0]
+        xPosition = basePosition[0]
+        zPosition = basePosition[2]
 
         f = open(f'tmp{self.solutionID}.txt', "w")
-        f.write(str(xCoordinateOfLinkZero))
+        f.write(str(zPosition))
         f.close()
         os.system(f'mv tmp{self.solutionID}.txt fitness{self.solutionID}.txt')
 

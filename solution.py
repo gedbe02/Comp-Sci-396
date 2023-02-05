@@ -14,7 +14,6 @@ class SOLUTION:
         self.Create_World()
         self.Create_Body()
         self.Create_Brain()
-
         os.system("python3 simulate.py " + directOrGUI + " "+ str(self.myID) + " &")
         #os.system("python3 simulate.py " + directOrGUI + " "+ str(self.myID) + "2&>1 &")
     
@@ -36,11 +35,59 @@ class SOLUTION:
         z = 0.5
 
         pyrosim.Start_SDF("world.sdf")
-        pyrosim.Send_Cube(name="Box", pos=[x,y,z] , size=[length,width,height])
+        #pyrosim.Send_Cube(name="Box", pos=[x,y,z] , size=[length,width,height])
         pyrosim.End()
-
-        
+    
     def Create_Body(self):
+        pyrosim.Start_URDF("body.urdf")
+
+        pyrosim.Send_Cube(name="Torso", pos=[0,0,2] , size=[0.75,0.5,1], color=['Green','    <color rgba="0.0 1.0 0.0 1.0"/>'])
+
+        #Right Leg - Test Joint Axis
+        pyrosim.Send_Joint( name = "Torso_UpperRightLeg" , parent= "Torso" , child = "UpperRightLeg" , type = "revolute", position = [0.375,0,1.75], jointAxis = "1 0 0")
+        pyrosim.Send_Cube(name="UpperRightLeg", pos=[0.125,0,-0.5] , size=[0.25,0.25,1], color=['Blue','    <color rgba="0.0 0.25 1.0 1.0"/>'])
+
+        pyrosim.Send_Joint( name = "UpperRightLeg_LowerRightLeg" , parent= "UpperRightLeg" , child = "LowerRightLeg" , type = "revolute", position = [0.125,0,-1], jointAxis = "1 0 0")
+        pyrosim.Send_Cube(name="LowerRightLeg", pos=[0,0,-0.35] , size=[0.25,0.25,0.70], color=['Light Blue','    <color rgba="0.0 0.5 1.0 1.0"/>'])
+
+        pyrosim.Send_Joint( name = "LowerRightLeg_RightFoot" , parent= "LowerRightLeg" , child = "RightFoot" , type = "revolute", position = [0,0,-0.70], jointAxis = "1 0 0")
+        pyrosim.Send_Cube(name="RightFoot", pos=[0,0,-0.025] , size=[0.25,0.5,0.05], color=['Black','    <color rgba="0 0 0 1"/>'])
+
+        #Left Leg - Test Joint Axis
+        pyrosim.Send_Joint( name = "Torso_UpperLeftLeg" , parent= "Torso" , child = "UpperLeftLeg" , type = "revolute", position = [-0.375,0,1.75], jointAxis = "1 0 0")
+        pyrosim.Send_Cube(name="UpperLeftLeg", pos=[-0.125,0,-0.5] , size=[0.25,0.25,1], color=['Red','    <color rgba="1.0 0.25 0 1.0"/>'])
+
+        pyrosim.Send_Joint( name = "UpperLeftLeg_LowerLeftLeg" , parent= "UpperLeftLeg" , child = "LowerLeftLeg" , type = "revolute", position = [-0.125,0,-1], jointAxis = "1 0 0")
+        pyrosim.Send_Cube(name="LowerLeftLeg", pos=[0,0,-0.35] , size=[0.25,0.25,0.70], color=['Orange','    <color rgba="1.0 0.5 0.0 1.0"/>'])
+
+        pyrosim.Send_Joint( name = "LowerLeftLeg_LeftFoot" , parent= "LowerLeftLeg" , child = "LeftFoot" , type = "revolute", position = [0,0,-0.70], jointAxis = "1 0 0")
+        pyrosim.Send_Cube(name="LeftFoot", pos=[0,0,-0.025] , size=[0.25,0.5,0.05], color=['Black','    <color rgba="0 0 0 1"/>'])
+        
+
+        pyrosim.End()
+    
+
+    def Create_Brain(self):
+        pyrosim.Start_NeuralNetwork(f'brain{self.myID}.nndf')
+
+        for currentRow in range(c.numSensorNeurons):
+            for currentColumn in range(c.numMotorNeurons):
+                pyrosim.Send_Synapse( sourceNeuronName = currentRow, targetNeuronName = currentColumn+c.numSensorNeurons , weight = self.weights[currentRow][currentColumn] )
+
+        pyrosim.End()
+    
+    def Mutate(self):
+        row = random.randint(0,c.numSensorNeurons-1)
+        col = random.randint(0,c.numMotorNeurons-1)
+        self.weights[row][col] = random.random() * 2 - 1
+    
+    def Set_ID(self, id):
+        self.myID = id
+    
+
+
+
+    def Create_Quad_Body(self):
         pyrosim.Start_URDF("body.urdf")
 
         pyrosim.Send_Cube(name="Torso", pos=[0,0,1] , size=[1,1,1])
@@ -55,7 +102,7 @@ class SOLUTION:
         pyrosim.Send_Cube(name="LeftLeg", pos=[-0.5,0,0] , size=[1,0.2,0.2])
 
         pyrosim.Send_Joint( name = "Torso_RightLeg" , parent= "Torso" , child = "RightLeg" , type = "revolute", position = [0.5,0,1], jointAxis = "0 1 0")
-        pyrosim.Send_Cube(name="RightLeg", pos=[0.5,0,0] , size=[1,0.2,0.2])
+        pyrosim.Send_Cube(name="RightLeg", pos=[0.5,0,0] , size=[1,0.2,0.2], color = ['Red','    <color rgba="1.0 0.0 0.0 1.0"/>'])
 
         pyrosim.Send_Joint( name = "BackLeg_BackLowerLeg" , parent= "BackLeg" , child = "BackLowerLeg" , type = "revolute", position = [0,-1,0], jointAxis = "1 0 0")
         pyrosim.Send_Cube(name="BackLowerLeg", pos=[0,0,-0.5] , size=[0.2,0.2,1])
@@ -67,12 +114,11 @@ class SOLUTION:
         pyrosim.Send_Cube(name="LeftLowerLeg", pos=[0,0,-0.5] , size=[0.2,0.2,1])
 
         pyrosim.Send_Joint( name = "RightLeg_RightLowerLeg" , parent= "RightLeg" , child = "RightLowerLeg" , type = "revolute", position = [1,0,0], jointAxis = "0 1 0")
-        pyrosim.Send_Cube(name="RightLowerLeg", pos=[0,0,-0.5] , size=[0.2,0.2,1])
+        pyrosim.Send_Cube(name="RightLowerLeg", pos=[0,0,-0.5] , size=[0.2,0.2,1], color = ['Red','    <color rgba="1.0 0.0 0.0 1.0"/>'])
 
         pyrosim.End()
 
-    def Create_Brain(self):
-        print(f'brain{self.myID}.nndf')
+    def Create_Quad_Brain(self):
         pyrosim.Start_NeuralNetwork(f'brain{self.myID}.nndf')
 
         '''pyrosim.Send_Sensor_Neuron(name = 0 , linkName = "Torso")
@@ -113,11 +159,3 @@ class SOLUTION:
                 pyrosim.Send_Synapse( sourceNeuronName = currentRow, targetNeuronName = currentColumn+c.numSensorNeurons , weight = self.weights[currentRow][currentColumn] )
 
         pyrosim.End()
-    
-    def Mutate(self):
-        row = random.randint(0,c.numSensorNeurons-1)
-        col = random.randint(0,c.numMotorNeurons-1)
-        self.weights[row][col] = random.random() * 2 - 1
-    
-    def Set_ID(self, id):
-        self.myID = id
