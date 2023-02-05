@@ -8,6 +8,7 @@ import constants as c
 class SOLUTION:
     def __init__(self, nextAvailableID):
         self.weights = np.random.rand(c.numSensorNeurons,c.numMotorNeurons)*2-1
+        self.motorJointRange = np.random.rand(c.numSensorNeurons,c.numMotorNeurons)*2-1
         self.myID = nextAvailableID
 
     def Start_Simulation(self, directOrGUI):
@@ -15,7 +16,6 @@ class SOLUTION:
         self.Create_Body()
         self.Create_Brain()
         os.system("python3 simulate.py " + directOrGUI + " "+ str(self.myID) + " &")
-        #os.system("python3 simulate.py " + directOrGUI + " "+ str(self.myID) + "2&>1 &")
     
     def Wait_For_Simulation_To_End(self):
         while not os.path.exists(f'fitness{self.myID}.txt'):
@@ -50,8 +50,7 @@ class SOLUTION:
         pyrosim.Send_Joint( name = "UpperRightLeg_LowerRightLeg" , parent= "UpperRightLeg" , child = "LowerRightLeg" , type = "revolute", position = [0.125,0,-1], jointAxis = "1 0 0")
         pyrosim.Send_Cube(name="LowerRightLeg", pos=[0,0,-0.35] , size=[0.25,0.25,0.70], color=['Light Blue','    <color rgba="0.0 0.5 1.0 1.0"/>'])
 
-        pyrosim.Send_Joint( name = "LowerRightLeg_RightFoot" , parent= "LowerRightLeg" , child = "RightFoot" , type = "revolute", position = [0,0,-0.70], jointAxis = "1 0 0")
-        pyrosim.Send_Cube(name="RightFoot", pos=[0,0,-0.025] , size=[0.25,0.5,0.05], color=['Black','    <color rgba="0 0 0 1"/>'])
+        
 
         #Left Leg - Test Joint Axis
         pyrosim.Send_Joint( name = "Torso_UpperLeftLeg" , parent= "Torso" , child = "UpperLeftLeg" , type = "revolute", position = [-0.375,0,1.75], jointAxis = "1 0 0")
@@ -60,15 +59,31 @@ class SOLUTION:
         pyrosim.Send_Joint( name = "UpperLeftLeg_LowerLeftLeg" , parent= "UpperLeftLeg" , child = "LowerLeftLeg" , type = "revolute", position = [-0.125,0,-1], jointAxis = "1 0 0")
         pyrosim.Send_Cube(name="LowerLeftLeg", pos=[0,0,-0.35] , size=[0.25,0.25,0.70], color=['Orange','    <color rgba="1.0 0.5 0.0 1.0"/>'])
 
+        
+        
+        #Feet 
+        pyrosim.Send_Joint( name = "LowerRightLeg_RightFoot" , parent= "LowerRightLeg" , child = "RightFoot" , type = "revolute", position = [0,0,-0.70], jointAxis = "1 0 0")
+        pyrosim.Send_Cube(name="RightFoot", pos=[0,0,-0.025] , size=[0.25,0.5,0.05], color=['Black','    <color rgba="0 0 0 1"/>'])
+
         pyrosim.Send_Joint( name = "LowerLeftLeg_LeftFoot" , parent= "LowerLeftLeg" , child = "LeftFoot" , type = "revolute", position = [0,0,-0.70], jointAxis = "1 0 0")
         pyrosim.Send_Cube(name="LeftFoot", pos=[0,0,-0.025] , size=[0.25,0.5,0.05], color=['Black','    <color rgba="0 0 0 1"/>'])
-        
+
 
         pyrosim.End()
     
 
     def Create_Brain(self):
         pyrosim.Start_NeuralNetwork(f'brain{self.myID}.nndf')
+
+        pyrosim.Send_Sensor_Neuron(name = 0 , linkName = "RightFoot")
+        pyrosim.Send_Sensor_Neuron(name = 1 , linkName = "LeftFoot")
+
+        pyrosim.Send_Motor_Neuron( name = 2 , jointName = "Torso_UpperRightLeg")
+        pyrosim.Send_Motor_Neuron( name = 3 , jointName = "UpperRightLeg_LowerRightLeg")
+        pyrosim.Send_Motor_Neuron( name = 4 , jointName = "LowerRightLeg_RightFoot")
+        pyrosim.Send_Motor_Neuron( name = 5 , jointName = "Torso_UpperLeftLeg")
+        pyrosim.Send_Motor_Neuron( name = 6 , jointName = "UpperLeftLeg_LowerLeftLeg")
+        pyrosim.Send_Motor_Neuron( name = 7 , jointName = "LowerLeftLeg_LeftFoot")
 
         for currentRow in range(c.numSensorNeurons):
             for currentColumn in range(c.numMotorNeurons):

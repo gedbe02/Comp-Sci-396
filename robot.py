@@ -16,6 +16,7 @@ class ROBOT:
         self.motors = {}
         self.robotId = p.loadURDF("body.urdf")
         self.nn = NEURAL_NETWORK(f'brain{solutionID}.nndf')
+        #self.motorJointRange = ???
         os.system(f'rm brain{solutionID}.nndf')
         self.solutionID = solutionID
     
@@ -26,7 +27,7 @@ class ROBOT:
     def Sense(self, i):
         for linkName in self.sensors:
             self.sensors[linkName].Get_Value(i)
-        #self.sensors[linkName].values[i] = math.sin(10*i)
+            #self.sensors[linkName].values[i] = math.sin(10*i)
         #print(linkName)
     
     def Prepare_To_Act(self):
@@ -38,7 +39,10 @@ class ROBOT:
             if self.nn.Is_Motor_Neuron(neuronName):
                 jointName = self.nn.Get_Motor_Neurons_Joint(neuronName)
                 desiredAngle = self.nn.Get_Value_Of(neuronName) * c.motorJointRange
+                print(self.nn.Get_Value_Of(neuronName), c.motorJointRange, desiredAngle)
+                self.motors[jointName]
                 self.motors[jointName].Set_Value(self.robotId, desiredAngle)
+        exit()
     
     def Think(self):
         self.nn.Update()
@@ -48,10 +52,11 @@ class ROBOT:
         basePositionAndOrientation = p.getBasePositionAndOrientation(self.robotId)
         basePosition = basePositionAndOrientation[0]
         xPosition = basePosition[0]
+        yPosition = basePosition[1]
         zPosition = basePosition[2]
 
         f = open(f'tmp{self.solutionID}.txt', "w")
-        f.write(str(zPosition))
+        f.write(str(yPosition))
         f.close()
         os.system(f'mv tmp{self.solutionID}.txt fitness{self.solutionID}.txt')
 
