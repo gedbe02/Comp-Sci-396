@@ -26,10 +26,10 @@ class ROBOT:
         if not test:
             os.system(f'rm brain{solutionID}.nndf')
         self.solutionID = solutionID
-        self.totalHeight = 0
-        self.totalGoodBoy = 0
+        #self.totalHeight = 0
+        self.totalStandReward = 0
         self.lastSpot = 0
-        self.moveReward = 0
+        #self.moveReward = 0
         self.lastYUp = 0
     
     def Prepare_To_Sense(self):
@@ -64,18 +64,18 @@ class ROBOT:
         yPosition = p.getBasePositionAndOrientation(self.robotId)[0][1]
         zPosition = p.getBasePositionAndOrientation(self.robotId)[0][2]
 
-        if i % 100 == 0:
-            deltaY = yPosition - self.lastSpot
-            if deltaY > 0.1:
-                self.moveReward += 1
-            self.lastSpot = yPosition
+        #if i % 100 == 0:
+            #deltaY = yPosition - self.lastSpot
+            #if deltaY > 0.1:
+            #    self.moveReward += 1
+            #self.lastSpot = yPosition
 
-        self.totalHeight += zPosition
+        #self.totalHeight += zPosition
         if zPosition >= 2:
-            self.totalGoodBoy += 10
+            self.totalStandReward += 10
             self.lastYUp = yPosition
         else:
-            self.totalGoodBoy -= 5
+            self.totalStandReward -= 5
         #print(zPosition)
     
     def Think(self):
@@ -97,11 +97,11 @@ class ROBOT:
         yReward = self.lastYUp * 50
         fitness += yReward
 
-        # At each step, self.totalGoodBoy is incremented by 10 if the robot is standing and decremented by 5 if not
+        # At each step, self.totalStandReward is incremented by 10 if the robot is standing and decremented by 5 if not
         # Below value is the average standing reward given a weight of .3
-        fitness += self.totalGoodBoy*.3/len(self.sensors) #give reward for time spent standing
+        fitness += self.totalStandReward*.3/len(self.sensors) #give reward for time spent standing
      
-        #print("fitness", yReward, (self.totalGoodBoy*.3/len(self.sensors)), self.moveReward*20, fitness)
+        #print("fitness", yReward, (self.totalStandReward*.3/len(self.sensors)), self.moveReward*20, fitness)
 
         f = open(f'tmp{self.solutionID}.txt', "w")
         f.write(str(fitness))
