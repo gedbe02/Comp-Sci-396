@@ -55,7 +55,7 @@ class PARALLEL_HILL_CLIMBER:
                 best_fitness = self.parents[p].fitness
         print(best_fitness)
         best.Start_Simulation("GUI")
-        os.system(f'cp brain{best.myID}.nndf results/brain{best.myID}.nndf')
+        os.system(f'cp brain{best.myID}.nndf results/outputs/brain{best.myID}.nndf')
     
     def Evaluate(self, solutions):
         for p in range(c.populationSize):
