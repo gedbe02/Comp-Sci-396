@@ -13,6 +13,8 @@
   The arms, legs, and feet all had their own motor joint range.
   
   10 Generations with Populations of size 10 were used to get the results in the <a href="https://www.youtube.com/watch?v=WH9SkkmBqPY">video</a>.
+  
+  To run the experiment, simply run main.py
 
 <h2>Fitness Function:</h2>
  
