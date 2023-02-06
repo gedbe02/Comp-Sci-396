@@ -10,7 +10,9 @@
   For each leg, there's a hip joint connected to an upper leg, which is connected to lower leg by a knee joint. Additionally, there's a foot connected to
   the lower leg by an ankle joint. All these limbs are connected to the main torso, a rectangular prism. 
   
-  The arms, legs, and feet all had their own motor joint range. 
+  The arms, legs, and feet all had their own motor joint range.
+  
+  10 Generations with Populations of size 10 were used to get the results in the <a href="https://www.youtube.com/watch?v=WH9SkkmBqPY">video</a>.
 
 <h2>Fitness Function:</h2>
  
