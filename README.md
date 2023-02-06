@@ -3,6 +3,7 @@
 Bipedal Walking:
  The goal of this robot is to walk in the positive y direction without falling for as long as possible. 
  <img width="266" alt="Screen Shot 2023-02-05 at 7 14 46 PM" src="https://user-images.githubusercontent.com/82680052/216859877-b27a3854-4928-4670-9fad-63e66d26de8c.png">
+  
   The robot has 2 arms and two legs. For each arm, there's a shoulder joint connected to an upper arm, which is connected to a lower arm by an elbow joint.
   For each leg, there's a hip joint connected to an upper leg, which is connected to lower leg by a knee joint. Additionally, there's a foot connected to
   the lower leg by an ankle joint. All these limbs are connected to the main torso, a rectangular prism. 
