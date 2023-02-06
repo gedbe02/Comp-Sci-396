@@ -1,6 +1,7 @@
 # Comp-Sci-396
 
-Bipedal Walking:
+<h2>Bipedal Walking:</h2>
+
  The goal of this robot is to walk in the positive y direction without falling for as long as possible. 
  <img width="266" alt="Screen Shot 2023-02-05 at 7 14 46 PM" src="https://user-images.githubusercontent.com/82680052/216859877-b27a3854-4928-4670-9fad-63e66d26de8c.png">
   
@@ -10,7 +11,8 @@ Bipedal Walking:
   
   The arms, legs, and feet all had their own motor joint range. 
 
-Fitness Function:
+<h2>Fitness Function:</h2>
+ 
  The Fitness of a robot (shown in Get_Fitness method in robot.py) is based on the farthest y position the robot got to before falling and Average reward 
  the robot got for standing. 
 
