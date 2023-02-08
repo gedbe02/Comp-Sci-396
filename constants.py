@@ -5,7 +5,7 @@ gravity_y = 0
 gravity_z = -9.8
 
 # Steps/In Loop
-steps = 1000
+steps = 100
 max_force = 200
 sleep_time = 1/2000
 
@@ -29,4 +29,4 @@ numberOfGenerations = 10
 populationSize = 10
 numSensorNeurons = 6
 numMotorNeurons = 10
-motorJointRange = 1.5
+motorJointRange = 0.5

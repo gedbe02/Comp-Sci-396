@@ -14,7 +14,9 @@ class ROBOT:
     def __init__(self, solutionID, test, evolved):
         self.sensors = {}
         self.motors = {}
-        self.robotId = p.loadURDF("body.urdf")
+        body = "body.urdf"
+
+        self.robotId = p.loadURDF(body)
         if test:
             if evolved:
                 self.nn = NEURAL_NETWORK(f'results/evolved/brain{solutionID}.nndf')
