@@ -14,9 +14,10 @@ class ROBOT:
     def __init__(self, solutionID, test, evolved):
         self.sensors = {}
         self.motors = {}
-        body = "body.urdf"
 
-        self.robotId = p.loadURDF(body)
+        #Won't work with assignments <=5
+        self.robotId = p.loadURDF(f'body{solutionID}.urdf') #Need to change old PHC for it to work.
+
         if test:
             if evolved:
                 self.nn = NEURAL_NETWORK(f'results/evolved/brain{solutionID}.nndf')

@@ -6,12 +6,13 @@ import os
 import constants as c
 from sensor import SENSOR
 from motor import MOTOR
+from robot import ROBOT
 from pyrosim.neuralNetwork import NEURAL_NETWORK
 
 green = ['Green','    <color rgba="0.0 1.0 0.0 1.0"/>']
 blue  = ['Blue','    <color rgba="0.0 0.5 1.0 1.0"/>']
 
-class SNAKE: #Combined Solution and Robot
+class SNAKE(ROBOT): #Combined Solution and Robot
     def __init__(self, id, num_parts, num_sensors):
         self.myID = id
         self.num_parts = num_parts
@@ -23,9 +24,7 @@ class SNAKE: #Combined Solution and Robot
         self.Create_Body()
         self.Create_Brain()
 
-        #Robot Aspect
-        self.robotId = p.loadURDF(f'body{id}.urdf')
-        self.nn = NEURAL_NETWORK(f'brain{id}.nndf')
+        ROBOT.__init__(self, id, False, False)
 
     def Create_Body(self):
         pyrosim.Start_URDF(f'body{self.myID}.urdf')
@@ -41,23 +40,6 @@ class SNAKE: #Combined Solution and Robot
             for motor in range(self.num_parts-1): #should be right
                 pyrosim.Send_Synapse( sourceNeuronName = sensor, targetNeuronName = motor+self.sensors , weight = self.weights[sensor][motor] )
         pyrosim.End()
-
-
-    
-    
-    
-    #Robot Aspect
-    def Prepare_To_Sense(self):
-        for linkName in pyrosim.linkNamesToIndices:
-            self.sensors[linkName] = SENSOR(linkName)
-    
-    def Sense(self, i):
-        for linkName in self.sensors:
-            self.sensors[linkName].Get_Value(i)
-    
-    def Prepare_To_Act(self):
-        for jointName in pyrosim.jointNamesToIndices:
-            self.motors[jointName.decode('utf-8')] = MOTOR(jointName)
     
     def Act(self, i):
         for neuronName in self.nn.Get_Neuron_Names():
@@ -66,11 +48,6 @@ class SNAKE: #Combined Solution and Robot
                 desiredAngle = self.nn.Get_Value_Of(neuronName) * c.motorJointRange
                 self.motors[jointName]
                 self.motors[jointName].Set_Value(self.robotId, desiredAngle)
-    
-    def Think(self):
-        self.nn.Update()
-        #self.nn.Print()
-
     
 
 

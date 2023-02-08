@@ -22,9 +22,6 @@ class SIMULATION:
         p.setGravity(c.gravity_x,c.gravity_y,c.gravity_z)
         self.world = WORLD()
 
-        if solutionID == -1:
-            return
-
         self.robot = ROBOT(solutionID, test, evolved, False) 
 
         pyrosim.Prepare_To_Simulate(self.robot.robotId)
@@ -32,7 +29,7 @@ class SIMULATION:
         self.robot.Prepare_To_Act()
     
     def Run(self):
-        for i in range(c.steps):
+        for i in range(c.steps): 
             p.stepSimulation()
             self.robot.Sense(i) 
             self.robot.Think()
@@ -42,17 +39,7 @@ class SIMULATION:
     
     def Get_Fitness(self):
         self.robot.Get_Fitness()
-    
-    def Make_Snake(self):
-        id = 0 #for now
-        s = SNAKE(id, 1, 0)
-        self.robot = ROBOT(id, self.test, self.evolved, True)
-
-        pyrosim.Prepare_To_Simulate(self.robot.robotId)
-        self.robot.Prepare_To_Sense()
-        self.robot.Prepare_To_Act()
         
-
     def __del__(self):
         p.disconnect()  
 
