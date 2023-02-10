@@ -20,7 +20,7 @@ class SNAKE_SIMILATION(SIMULATION):
         self.world = WORLD()
 
         num_parts = random.randint(2,7)
-        num_sensors = random.randint(1, max(num_parts-2,1))
+        num_sensors = random.randint(1, max(num_parts-1,1))
         self.robot = SNAKE(id, num_parts, num_sensors)
         self.directOrGUI = "GUI"
 

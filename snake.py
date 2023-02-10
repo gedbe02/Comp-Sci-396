@@ -34,12 +34,15 @@ class SNAKE(ROBOT): #Combined Solution and Robot
             color = green
         else:
             color = blue
-        
+        '''
         side = random.randint(50,100)/100
         length = side
         width = side
         height = side
-
+        '''
+        length = random.randint(50,100)/100
+        width = random.randint(50,100)/100
+        height = random.randint(50,100)/100
         pyrosim.Send_Cube(name="Part0", pos=[0,0,0.5] , size=[length, width, height], color=color)
 
         previous = ["Part0", 0, width]
@@ -47,11 +50,16 @@ class SNAKE(ROBOT): #Combined Solution and Robot
             parent = previous[0]
             prevY = previous[1]
             prevWidth = previous[2]
-            #Randomize below
+
+            length = random.randint(50,100)/100
+            width = random.randint(50,100)/100
+            height = random.randint(50,100)/100
+            '''
             side = random.randint(50,100)/100
             length = side
             width = side
             height = side
+            '''
 
             if i == 1:
                 newJointY = prevY + prevWidth/2
@@ -66,8 +74,10 @@ class SNAKE(ROBOT): #Combined Solution and Robot
                 color = green
             else:
                 color = blue
-                                                                                                                               
-            pyrosim.Send_Joint(name = f'{parent}_Part{i}' , parent= parent , child = f'Part{i}' , type = "revolute", position = [0,newJointY,z], jointAxis = "1 0 0") #To Do: Make joint axis random
+
+            jointAxis = random.choice(["1 0 0", "0 0 1"])
+
+            pyrosim.Send_Joint(name = f'{parent}_Part{i}' , parent= parent , child = f'Part{i}' , type = "revolute", position = [0,newJointY,z], jointAxis = jointAxis) #To Do: Make joint axis random
             pyrosim.Send_Cube(name=f'Part{i}', pos=[0,newCubeY,0] , size=[length,width,height], color=color) 
             previous = [f'Part{i}', newJointY, width]
 
