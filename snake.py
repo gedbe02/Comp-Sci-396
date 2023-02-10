@@ -18,12 +18,8 @@ class SNAKE(ROBOT): #Combined Solution and Robot
         self.numParts = num_parts
         self.numSensors = num_sensors
         self.isSensor = np.full((1,num_parts), False)[0]
-        print(self.isSensor)
         self.isSensor[random.sample(range(num_parts), num_sensors)] = True
-        print(self.isSensor)
 
-        self.sensors = {}
-        self.motors = {}
         self.weights = np.random.rand(num_sensors,num_parts-1)*2-1
 
         self.Create_Body()
@@ -33,20 +29,29 @@ class SNAKE(ROBOT): #Combined Solution and Robot
 
     def Create_Body(self):
         pyrosim.Start_URDF(f'body{self.myID}.urdf')
+
         if self.isSensor[0]:
             color = green
         else:
             color = blue
-        pyrosim.Send_Cube(name="Torso", pos=[0,0,0.5] , size=[1,1,1], color=color)
-        previous = ["Torso", 0, 1]
+        
+        side = random.randint(50,100)/100
+        length = side
+        width = side
+        height = side
+
+        pyrosim.Send_Cube(name="Part0", pos=[0,0,0.5] , size=[length, width, height], color=color)
+
+        previous = ["Part0", 0, width]
         for i in range(1, self.numParts):   
             parent = previous[0]
             prevY = previous[1]
             prevWidth = previous[2]
             #Randomize below
-            width = i+0.5
-            length = i/2 + 1
-            height = 1
+            side = random.randint(50,100)/100
+            length = side
+            width = side
+            height = side
 
             if i == 1:
                 newJointY = prevY + prevWidth/2
@@ -61,19 +66,32 @@ class SNAKE(ROBOT): #Combined Solution and Robot
                 color = green
             else:
                 color = blue
-                                                                                                    #To Do: Randomize Z Axis
-            pyrosim.Send_Joint(name = f'{parent}_Part{i}' , parent= parent , child = f'Part{i}' , type = "revolute", position = [0,newJointY,z], jointAxis = "1 0 0") #Make joint axis random
-            pyrosim.Send_Cube(name=f'Part{i}', pos=[0,newCubeY,0] , size=[length,width,height], color=color) #To Do: Randomize if sensor
+                                                                                                                               
+            pyrosim.Send_Joint(name = f'{parent}_Part{i}' , parent= parent , child = f'Part{i}' , type = "revolute", position = [0,newJointY,z], jointAxis = "1 0 0") #To Do: Make joint axis random
+            pyrosim.Send_Cube(name=f'Part{i}', pos=[0,newCubeY,0] , size=[length,width,height], color=color) 
             previous = [f'Part{i}', newJointY, width]
 
         pyrosim.End()
     
     def Create_Brain(self):
         pyrosim.Start_NeuralNetwork(f'brain{self.myID}.nndf')
+        i = 0
+        j = self.numSensors
+        for part in range(self.numParts):
+            #Sensor Neurons
+            is_sensor = self.isSensor[part]
+            if is_sensor:
+                pyrosim.Send_Sensor_Neuron(name = i , linkName = f'Part{part}')
+                i += 1
+                
+            #Motor Neurons
+            if part != self.numParts-1:
+                pyrosim.Send_Motor_Neuron( name = j , jointName = f'Part{part}_Part{part+1}')
+                j += 1
 
-       # for sensor in range(self.numSensors):
-       #     for motor in range(self.numParts-1): #should be right
-       #         pyrosim.Send_Synapse( sourceNeuronName = sensor, targetNeuronName = motor+self.sensors , weight = self.weights[sensor][motor] )
+        for sensor in range(self.numSensors):
+            for motor in range(self.numParts-1): #should be right
+                pyrosim.Send_Synapse( sourceNeuronName = sensor, targetNeuronName = motor+self.numSensors , weight = self.weights[sensor][motor] )
         pyrosim.End()
     
     def Act(self, i):
@@ -81,7 +99,6 @@ class SNAKE(ROBOT): #Combined Solution and Robot
             if self.nn.Is_Motor_Neuron(neuronName):
                 jointName = self.nn.Get_Motor_Neurons_Joint(neuronName)
                 desiredAngle = self.nn.Get_Value_Of(neuronName) * c.motorJointRange
-                self.motors[jointName]
                 self.motors[jointName].Set_Value(self.robotId, desiredAngle)
     
 
