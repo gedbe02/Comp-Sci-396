@@ -18,7 +18,9 @@ class SNAKE(ROBOT): #Combined Solution and Robot
         self.numParts = num_parts
         self.numSensors = num_sensors
         self.isSensor = np.full((1,num_parts), False)[0]
+        print(self.isSensor)
         self.isSensor[random.sample(range(num_parts), num_sensors)] = True
+        print(self.isSensor)
 
         self.sensors = {}
         self.motors = {}
@@ -37,18 +39,23 @@ class SNAKE(ROBOT): #Combined Solution and Robot
             color = blue
         pyrosim.Send_Cube(name="Torso", pos=[0,0,0.5] , size=[1,1,1], color=color)
         previous = ["Torso", 0, 1]
-        z = 0.5
-        for i in range(self.numParts-1):   
+        for i in range(1, self.numParts):   
             parent = previous[0]
             prevY = previous[1]
             prevWidth = previous[2]
             #Randomize below
-            width = i+2
+            width = i+0.5
             length = i/2 + 1
             height = 1
 
-            newJointY = prevY + prevWidth/2
-            newCubeY = width/2
+            if i == 1:
+                newJointY = prevY + prevWidth/2
+                newCubeY = width/2
+                z = 0.5
+            else:
+                newJointY = prevWidth
+                newCubeY = width/2
+                z = 0
 
             if self.isSensor[i]:
                 color = green
@@ -57,7 +64,6 @@ class SNAKE(ROBOT): #Combined Solution and Robot
                                                                                                     #To Do: Randomize Z Axis
             pyrosim.Send_Joint(name = f'{parent}_Part{i}' , parent= parent , child = f'Part{i}' , type = "revolute", position = [0,newJointY,z], jointAxis = "1 0 0") #Make joint axis random
             pyrosim.Send_Cube(name=f'Part{i}', pos=[0,newCubeY,0] , size=[length,width,height], color=color) #To Do: Randomize if sensor
-            z = 0
             previous = [f'Part{i}', newJointY, width]
 
         pyrosim.End()
