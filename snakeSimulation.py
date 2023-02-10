@@ -18,7 +18,7 @@ class SNAKE_SIMILATION(SIMULATION):
         p.setGravity(c.gravity_x,c.gravity_y,c.gravity_z)
         self.world = WORLD()
 
-        self.robot = SNAKE(id, 1, 0)# for now. make dynamic
+        self.robot = SNAKE(id, 3, 2)# for now. make random later
         self.directOrGUI = "GUI"
 
         pyrosim.Prepare_To_Simulate(self.robot.robotId)

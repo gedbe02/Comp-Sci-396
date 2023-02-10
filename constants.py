@@ -5,7 +5,7 @@ gravity_y = 0
 gravity_z = -9.8
 
 # Steps/In Loop
-steps = 100
+steps = 1000
 max_force = 200
 sleep_time = 1/2000
 

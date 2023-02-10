@@ -1,3 +1,7 @@
 import os
-for i in range(2):
+
+os.system("rm body*.urdf")
+os.system("rm brain*.urdf")
+
+for i in range(1):
     os.system("python3 randomGenerate.py " + str(i))
