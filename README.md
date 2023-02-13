@@ -11,6 +11,8 @@
 
 <h3> Examples of Snakes </h3>
   <img width="395" alt="Screen Shot 2023-02-12 at 7 08 32 PM" src="https://user-images.githubusercontent.com/82680052/218349483-d197f9e4-3b97-4ca7-8fa5-46722015873a.png">
+  <img width="674" alt="Screen Shot 2023-02-12 at 7 47 20 PM" src="https://user-images.githubusercontent.com/82680052/218352819-48c6e4dc-ab4a-4006-89b4-52dc18c6bf42.png"> Diagram of Above
+
   
   <img width="281" alt="Screen Shot 2023-02-12 at 7 08 17 PM" src="https://user-images.githubusercontent.com/82680052/218349507-c2916849-f169-4000-be19-13755795c964.png">
  
