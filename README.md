@@ -4,7 +4,7 @@
 
  The goal of this program is to create random snake-like robots. Each snake has a random number of parts (Between 2 and 7) and a random number of sensors (Between 1 and NumParts-1). Sensor links are green, normal links are blue. Each link's length, width, and height are randomly selected (Between 0.25 and 1). Each link is connected by a joint that either moves on the x or z joint axis. 
   
- To see it in action, click <a href="https://www.youtube.com/watch?v=7DWbC3VZHM4">here</a>. It has 10 random generations
+ To see it in action, click <a href="https://www.youtube.com/watch?v=7DWbC3VZHM4">here</a>. It has 6 random generations with the last one shown moving
   
  To run the experiment, simply run main.py
 
