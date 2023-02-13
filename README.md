@@ -1,30 +1,18 @@
 # Comp-Sci-396
 
-<h2>Bipedal Walking:</h2>
+<h2>Random Snakes:</h2>
 
- The goal of this robot is to walk in the positive y direction without falling for as long as possible. 
- 
- <img width="266" alt="Screen Shot 2023-02-05 at 7 14 46 PM" src="https://user-images.githubusercontent.com/82680052/216859877-b27a3854-4928-4670-9fad-63e66d26de8c.png">
+ The goal of this program is to create random snake-liked robots. Each snake has a random number of parts (Between 2 and 7) and a random number of sensors (Between 1 and NumParts-1). Each link's length, width, and height are randomly selected (Between 0.25 and 1). Each link is connected by a joint that either moves on the x or z joint axis. 
   
-  The robot has 2 arms and two legs. For each arm, there's a shoulder joint connected to an upper arm, which is connected to a lower arm by an elbow joint.
-  For each leg, there's a hip joint connected to an upper leg, which is connected to lower leg by a knee joint. Additionally, there's a foot connected to
-  the lower leg by an ankle joint. All these limbs are connected to the main torso, a rectangular prism. 
+ To see it in action, click <a href="https://www.youtube.com/watch?v=7DWbC3VZHM4">here</a>. It has 10 random generations
   
-  The arms, legs, and feet all had their own motor joint range.
-  
-  10 Generations with Populations of size 10 were used to get the results in the <a href="https://www.youtube.com/watch?v=WH9SkkmBqPY">video</a>.
-  
-  To run the experiment, simply run main.py
+ To run the experiment, simply run main.py
 
-<h2>Fitness Function:</h2>
- 
- The Fitness of a robot (shown in Get_Fitness method in robot.py) is based on the farthest y position the robot got to before falling and Average reward 
- the robot got for standing. 
 
- When a robot's z position drops below 2, it is considered as falling/fallen, and that y value is saved in self.lastSpot. 
- At every step, if the robot's z position is above 2, it gets a reward of 10 added to self.totalStandReward, if not, it gets a punishment of -5.
+<h3> Examples of Snakes </h3>
+  <img width="395" alt="Screen Shot 2023-02-12 at 7 08 32 PM" src="https://user-images.githubusercontent.com/82680052/218349483-d197f9e4-3b97-4ca7-8fa5-46722015873a.png">
+  
+  <img width="281" alt="Screen Shot 2023-02-12 at 7 08 17 PM" src="https://user-images.githubusercontent.com/82680052/218349507-c2916849-f169-4000-be19-13755795c964.png">
  
- When calculating fitness, self.lastSpot is multiplied by 50 and self.totalStandReward is divided by the number of steps (Average stand reward) and 
- multiplied by .3. The sum of these values is the robot's fitness. If a child's fitness is greater than its parent, it is selected. 
  
- 
+Code based on reddit.com/r/ludobots
