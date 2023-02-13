@@ -40,9 +40,10 @@ class SNAKE(ROBOT): #Combined Solution and Robot
         width = side
         height = side
         '''
-        length = random.randint(50,100)/100
-        width = random.randint(50,100)/100
-        height = random.randint(50,100)/100
+        minSide = 25 #/100
+        length = random.randint(minSide,100)/100
+        width = random.randint(minSide,100)/100
+        height = random.randint(minSide,100)/100
         pyrosim.Send_Cube(name="Part0", pos=[0,0,0.5] , size=[length, width, height], color=color)
 
         previous = ["Part0", 0, width]
@@ -51,9 +52,9 @@ class SNAKE(ROBOT): #Combined Solution and Robot
             prevY = previous[1]
             prevWidth = previous[2]
 
-            length = random.randint(50,100)/100
-            width = random.randint(50,100)/100
-            height = random.randint(50,100)/100
+            length = random.randint(minSide,100)/100
+            width = random.randint(minSide,100)/100
+            height = random.randint(minSide,100)/100
             '''
             side = random.randint(50,100)/100
             length = side
