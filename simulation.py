@@ -24,7 +24,7 @@ class SIMULATION:
 
         self.robot = ROBOT(solutionID, test, evolved, False) 
 
-        pyrosim.Prepare_To_Simulate(self.robot.robotId)
+        pyrosim.Prepare_To_Simulate(self.robot.robotId) 
         self.robot.Prepare_To_Sense()
         self.robot.Prepare_To_Act()
     
