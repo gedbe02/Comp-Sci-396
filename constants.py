@@ -30,3 +30,8 @@ populationSize = 10
 numSensorNeurons = 6
 numMotorNeurons = 10
 motorJointRange = 0.5
+
+
+# Random Generation
+minSide = 0.25
+maxSide = 1

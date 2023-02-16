@@ -21,16 +21,16 @@ class SNAKE_SIMILATION(SIMULATION):
 
         num_parts = random.randint(2,7)
         num_sensors = random.randint(1, max(num_parts-1,1))
-        self.robot = SNAKE(id, num_parts, num_sensors)
+        self.robot = SNAKE(id, 2,1)#num_parts, num_sensors)
         self.directOrGUI = "GUI"
 
         pyrosim.Prepare_To_Simulate(self.robot.robotId)
         self.robot.Prepare_To_Sense()
         self.robot.Prepare_To_Act()
 
-        print(f'Num Parts: {self.robot.numParts}')
-        print(self.robot.sensors)
-        print(self.robot.motors)
+        #print(f'Num Parts: {self.robot.numParts}')
+        #print(self.robot.sensors)
+        #print(self.robot.motors)
     
     def Create_World(self):
         pyrosim.Start_SDF("world.sdf")

@@ -14,6 +14,8 @@ from pyrosim.urdf  import URDF
 
 from pyrosim.joint import JOINT
 
+from pyrosim.originurdf      import ORIGIN_URDF
+
 SDF_FILETYPE  = 0
 
 URDF_FILETYPE = 1
@@ -118,11 +120,11 @@ def Send_Cube(name="default",pos=[0,0,0],size=[1,1,1], color=['Cyan','    <color
 
         link = LINK_SDF(name,pos,size)
 
-        links.append(link)
+        links[name] = link
     else:
         link = LINK_URDF(name,pos,size, color)
 
-        links.append(link)
+        links[name] = link
 
     link.Save(f)
 
@@ -133,6 +135,12 @@ def Send_Cube(name="default",pos=[0,0,0],size=[1,1,1], color=['Cyan','    <color
     linkNamesToIndices[name] = availableLinkIndex
 
     availableLinkIndex = availableLinkIndex + 1
+
+# Ben Added
+def Update_Position(name, pos):
+    global links
+    links[name].origin = ORIGIN_URDF(pos)
+    
 
 def Send_Joint(name,parent,child,type,position,jointAxis):
 
@@ -209,7 +217,7 @@ def Start_SDF(filename):
 
     global links
 
-    links = []
+    links = {}
 
 def Start_URDF(filename):
 
@@ -237,7 +245,7 @@ def Start_URDF(filename):
 
     global links
 
-    links = []
+    links = {}
 
 def Start_Model(modelName,pos):
 
