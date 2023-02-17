@@ -1,7 +1,7 @@
 import pyrosim.pyrosim as pyrosim
 from part import PART
 class CUBE(PART):
-    def __init__(self, name, length, width, height, relative_pos, absolute_pos, color):
+    def __init__(self, name, length, width, height, relative_pos, absolute_pos, color, direction):
         self.name = name
         self.length = length
         self.width = width
@@ -11,6 +11,7 @@ class CUBE(PART):
         self.z = relative_pos[2]
         self.absolutePos = absolute_pos
         self.color = color
+        self.direction = direction
         self.isJoint = False
 
         PART.__init__(self, name, self.x, self.y, self.z, self.isJoint)

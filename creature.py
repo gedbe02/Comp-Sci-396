@@ -63,7 +63,7 @@ class CREATURE(ROBOT): #Combined Solution and Robot
         ###
         #color = blue
         ###
-        cube = CUBE("Part0", length, width, height, cubePos, cubePos, color)
+        cube = CUBE("Part0", length, width, height, cubePos, cubePos, color, None)
         self.parts["Part0"] = cube
         self.cubes.append(cube)
         #print(cubePos)
@@ -75,6 +75,7 @@ class CREATURE(ROBOT): #Combined Solution and Robot
         #If branch cant continue, stop making new links
         stop = False
         for i in range(1, self.numParts):  
+            #Can I clean this up? Like OOP it?
             parent = previous[0]
             prevX = previous[1]
             prevY = previous[2]
@@ -140,15 +141,38 @@ class CREATURE(ROBOT): #Combined Solution and Robot
                 cubeZ = height/2
                 #newZ = oldZ + (prevHeight/2 * direction[2])
                 newZ = oldZ + ((prevHeight+height)/2 * direction[2])
+
+                #Check for overlapping cubes
                 for cub in self.cubes:
                     intersecting |= cub.overlapping([newX, newY, newZ], [length, width, height])
                 options.remove(list(direction))
+
+                #If branch reaches end point, start a new branch
                 if (len(options)) == 0:
-                    self.numParts = i
-                    stop = True
-                    print("Break")
+                    #previous = [f'Part{i}', jointPos[0], jointPos[1], jointPos[2], newX, newY, newZ, width, length, height, direction] 
+                    #Make new parent
+                    print("New Branch", i)
+                    new_parent    = random.choice(self.cubes[1:])
+                    name          = new_parent.name
+                    #prevX = previous[1]
+                    #prevY = previous[2]
+                    #prevZ = previous[3]
+                    oldX          = new_parent.absolutePos[0]
+                    oldY          = new_parent.absolutePos[1]
+                    oldZ          = new_parent.absolutePos[2]
+                    prevWidth     = new_parent.width
+                    prevLength    = new_parent.length
+                    prevHeight    = new_parent.height
+                    prevDirection = new_parent.direction
+                    options = [[1,0,0], [0,1,0], [0,0,1], [-1,0,0], [0,-1,0], [0,0,-1]]
+                    options.remove(list(prevDirection*-1))
+
+                    #Old Cut Off
+                    #self.numParts = i
+                    #stop = True
+                    #print("Break")
                     #Maybe choose random part to offshoot off of
-                    break
+                    #break
                 #WHAT DO IF NO MORE OPTIONS?
                 ###
                 #setOptions[i] = [0,0,1]
@@ -164,7 +188,7 @@ class CREATURE(ROBOT): #Combined Solution and Robot
             
             # If not moving on z, must maintain height
             if i == 1 and abs(direction[2]) != 1: #Don't do if moving on z axis
-                jointPos[2] = prevZ
+                jointPos[2] = oldZ #prevZ
     
             #print(absoluteCubePos)
 
@@ -193,7 +217,7 @@ class CREATURE(ROBOT): #Combined Solution and Robot
 
             self.parts[f'{parent}_Part{i}'] = JOINT(f'{parent}_Part{i}', jointPos, parent, f'Part{i}', jointAxis)
 
-            cube = CUBE(f'Part{i}', length, width, height, relativeCubePos, absoluteCubePos, color) 
+            cube = CUBE(f'Part{i}', length, width, height, relativeCubePos, absoluteCubePos, color, direction) 
             self.parts[f'Part{i}'] = cube
             self.cubes.append(cube)
 
