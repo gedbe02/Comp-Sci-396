@@ -26,12 +26,12 @@ class CREATURE(ROBOT): #Combined Solution and Robot
         self.myID = id
         self.numParts = num_parts
         self.numSensors = num_sensors
+        print(num_parts, num_sensors)
         self.isSensor = np.full((1,num_parts), False)[0]
         self.isSensor[random.sample(range(num_parts), num_sensors)] = True
 
-        self.weights = np.random.rand(num_sensors,num_parts-1)*2-1
-
         self.Create_Body()
+        self.weights = np.random.rand(self.numSensors,self.numParts-1)*2-1
         self.Create_Brain()
 
         ROBOT.__init__(self, id, False, False)
@@ -74,7 +74,7 @@ class CREATURE(ROBOT): #Combined Solution and Robot
         previous = ["Part0", x, y, z, x, y, z, width, length, height, None]
         #If branch cant continue, stop making new links
         stop = False
-        for i in range(1, self.numParts):   
+        for i in range(1, self.numParts):  
             parent = previous[0]
             prevX = previous[1]
             prevY = previous[2]
@@ -106,8 +106,9 @@ class CREATURE(ROBOT): #Combined Solution and Robot
             #What if out of directions?
             ###
             #x = 1
-            #setOptions = [[0,1,0], [0,1,0], [1,0,0], [0,-1,0], [-1,0,0]]
+            setOptions = [[0,1,0], [0,1,0], [1,0,0], [0,-1,0], [0,0,-1], [0,-1,0], [0,0,-1]]
             ###
+            
             intersecting = True
             while intersecting: #change to while new cube intersecting
                 intersecting = False
@@ -139,55 +140,19 @@ class CREATURE(ROBOT): #Combined Solution and Robot
                 cubeZ = height/2
                 #newZ = oldZ + (prevHeight/2 * direction[2])
                 newZ = oldZ + ((prevHeight+height)/2 * direction[2])
-
                 for cub in self.cubes:
                     intersecting |= cub.overlapping([newX, newY, newZ], [length, width, height])
                 options.remove(list(direction))
                 if (len(options)) == 0:
-                    self.numParts = i-1
+                    self.numParts = i
                     stop = True
-                    print("uh Oh")
+                    print("Break")
                     #Maybe choose random part to offshoot off of
                     break
                 #WHAT DO IF NO MORE OPTIONS?
                 ###
                 #setOptions[i] = [0,0,1]
                 ###
-                #Then remove curr direction from options
-                '''if i == 1:
-                    #X
-                    jointX = prevX + (prevLength/2 * direction[0])
-                    cubeX = length/2 
-                    newX = oldX + (prevLength/2 * direction[0])
-
-                    #Y
-                    jointY = prevY + (prevWidth/2 * direction[1])
-                    cubeY = width/2
-                    newY = oldY + (prevWidth/2 * direction[1])
-
-                    #Z
-                    jointZ = prevZ + (prevHeight/2 * direction[2])
-                    cubeZ = height/2
-                    newZ = oldZ + (prevHeight/2 * direction[2])
-                else:
-                    oldCenter = np.array([0,0,0])
-                    oldCenter = oldCenter + (prevDirection*np.array([prevLength, prevWidth, prevHeight])/2)
-
-                    #Make two lines using np.array?
-                    #X
-                    jointX = oldCenter[0] + direction[0]*prevLength/2#prevLength * direction[0]
-                    cubeX = length/2
-                    newX = oldX + (prevLength/2 * direction[0])
-
-                    #Y
-                    jointY = oldCenter[1] + direction[1]*prevWidth/2#prevWidth * direction[1]
-                    cubeY = width/2
-                    newY = oldY + (prevWidth/2 * direction[1])
-
-                    #Z
-                    jointZ = oldCenter[2] + direction[2]*prevHeight/2#prevHeight * direction[2]
-                    cubeZ = height/2
-                    newZ = oldZ + (prevHeight/2 * direction[2])'''
             
            
             #Joint and Cube Positions
@@ -206,8 +171,8 @@ class CREATURE(ROBOT): #Combined Solution and Robot
 
             #minZ Calculation
             # Need extra distance to calculate minZ
-            if direction[2] == -1:
-                newZ -= height/2
+            #if direction[2] == -1:
+            #    newZ -= height/2
             minZ = min(minZ, newZ-height/2)
             
             # Make joint and cube
@@ -254,8 +219,8 @@ class CREATURE(ROBOT): #Combined Solution and Robot
    
 
     def Create_Brain(self):
-        
         pyrosim.Start_NeuralNetwork(f'brain{self.myID}.nndf')
+        print(self.numParts, self.numSensors)
         i = 0
         j = self.numSensors
         for part in range(self.numParts):
