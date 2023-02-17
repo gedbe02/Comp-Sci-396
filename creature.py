@@ -58,7 +58,7 @@ class CREATURE(ROBOT): #Combined Solution and Robot
         #Trying to get minZ: Lowest z coordinate of body (Lowest edge)
         minZ = z - height/2 #Z coord of Center of Part0 - its "radius"
 
-        previous = ["Part0", x, y, z, z, width, length, height]
+        previous = ["Part0", x, y, z, z, width, length, height, None]
 
         for i in range(1, self.numParts):   
             parent = previous[0]
@@ -69,6 +69,7 @@ class CREATURE(ROBOT): #Combined Solution and Robot
             prevWidth = previous[5]
             prevLength = previous[6]
             prevHeight = previous[7]
+            prevDirection = previous[8]
 
             length = random.randint(minSide,maxSide)/100
             width  = random.randint(minSide,maxSide)/100
@@ -81,7 +82,10 @@ class CREATURE(ROBOT): #Combined Solution and Robot
             #
 
             # Direction
-            direction = np.array(random.choice([[1,0,0], [0,1,0], [0,0,1]])) * random.choice([-1,1])
+            options = [[1,0,0], [0,1,0], [0,0,1], [-1,0,0], [0,-1,0], [0,0,-1]]
+            if i != 1:
+                options.remove(list(prevDirection))
+            direction = np.array(random.choice(options))
 
             # Calculate Position
             if i == 1:
@@ -101,16 +105,20 @@ class CREATURE(ROBOT): #Combined Solution and Robot
                 #newZ = absoluteZ + zOffset #jointZ
                 newZ = absoluteZ + (prevHeight/2 * direction[2])
             else:
+                oldCenter = np.array([0,0,0])
+                oldCenter = oldCenter + (prevDirection*np.array([prevLength, prevWidth, prevHeight])/2)
+
+                #Make two lines using np.array?
                 #X
-                jointX = prevLength * direction[0]
+                jointX = oldCenter[0] + direction[0]*prevLength/2#prevLength * direction[0]
                 cubeX = length/2
 
                 #Y
-                jointY = prevWidth * direction[1]
+                jointY = oldCenter[1] + direction[1]*prevWidth/2#prevWidth * direction[1]
                 cubeY = width/2
 
                 #Z
-                jointZ = prevHeight * direction[2]
+                jointZ = oldCenter[2] + direction[2]*prevHeight/2#prevHeight * direction[2]
                 cubeZ = height/2
 
                 #jointZ = zOffset
@@ -142,7 +150,7 @@ class CREATURE(ROBOT): #Combined Solution and Robot
 
             self.parts[f'Part{i}'] = CUBE(f'Part{i}', length, width, height, cubePos, color) 
 
-            previous = [f'Part{i}', jointPos[0], jointPos[1], jointPos[2], newZ, width, length, height] 
+            previous = [f'Part{i}', jointPos[0], jointPos[1], jointPos[2], newZ, width, length, height, direction] 
 
             
         self.parts['Part0'].z -= minZ
