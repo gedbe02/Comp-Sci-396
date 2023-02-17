@@ -18,8 +18,7 @@ class SNAKE(ROBOT): #Combined Solution and Robot
     def __init__(self, id, num_parts, num_sensors):
         self.myID = id
         self.numParts = num_parts
-        self.numSensors = 0#num_sensors
-        print("Need to change back numSensors in init")
+        self.numSensors = num_sensors
         self.isSensor = np.full((1,num_parts), False)[0]
         self.isSensor[random.sample(range(num_parts), num_sensors)] = True
 
@@ -75,26 +74,22 @@ class SNAKE(ROBOT): #Combined Solution and Robot
             height = random.randint(minSide,maxside)/100
 
 
-            
             jointX = 0
             cubeX = 0
             cubeZ = 0
-            #maybe dont use prevZ
-            zOffset = random.randint(0, math.floor(abs(prevZ + prevHeight/2) * 100))/100 #* random.choice([-1,1]) #Absolute of it Should never be more than Absolute of prevZ+prevHeight
+            
+            zOffset = random.randint(0, math.floor((prevHeight*100)/2))/100 * random.choice([-1,1])
+   
             if i == 1:
                 jointY = prevY + prevWidth/2
                 cubeY = width/2
-                jointZ = prevZ + zOffset #Need to know how/why to change
+                jointZ = prevZ + zOffset 
                 newZ = jointZ
             else:
                 jointY = prevWidth
                 cubeY = width/2
-                jointZ = zOffset #Need to know how/why to change
+                jointZ = zOffset 
                 newZ = prevZ + jointZ
-                
-
-            #minZ Calculations 
-            #zOffset = 0 #Need to know how/why to change
             
             minZ = min(minZ, newZ-height/2)
 
@@ -110,29 +105,20 @@ class SNAKE(ROBOT): #Combined Solution and Robot
 
             #Should probably split into partDict and jointDict
 
-            previous = [f'Part{i}', jointY, newZ, width] #CHANGE
-        print(minZ)
+            previous = [f'Part{i}', jointY, newZ, width, height] #CHANGE
 
-        #
-        main_body = parts['Part0']
-        print(f'Calc: minZ: {minZ}, main_body.z: {main_body.z}, newZ: {main_body.z - minZ}')
+
         parts['Part0'].z -= minZ
         if 'Part0_Part1' in parts:
             parts['Part0_Part1'].z -= minZ #Make more dynamic idk
-        '''if minZ <= 0:
-            parts['Part0'].z += abs(minZ)
-        else:
-            parts['Part0'].z -= minZ'''
-        #
-
+        
+        
         for name in parts:
             part = parts[name]
             if part.isJoint:
                 part.Send_Joint()
-                #pyrosim.Send_Joint(name = f'{parent}_Part{i}' , parent= parent , child = f'Part{i}' , type = "revolute", position = [jointX,jointY,jointZ], jointAxis = jointAxis) 
             else:
                 part.Send_Cube()
-                #pyrosim.Send_Cube(name=f'Part{i}', pos=[0,newCubeY,0] , size=[length,width,height], color=color)
         pyrosim.End()
     
     def Create_Brain(self):

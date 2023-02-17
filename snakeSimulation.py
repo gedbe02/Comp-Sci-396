@@ -21,7 +21,7 @@ class SNAKE_SIMILATION(SIMULATION):
 
         num_parts = random.randint(2,7)
         num_sensors = random.randint(1, max(num_parts-1,1))
-        self.robot = SNAKE(id, 2,1)#num_parts, num_sensors)
+        self.robot = SNAKE(id, num_parts, num_sensors)
         self.directOrGUI = "GUI"
 
         pyrosim.Prepare_To_Simulate(self.robot.robotId)
