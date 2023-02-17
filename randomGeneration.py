@@ -5,8 +5,7 @@ import pybullet as p
 import time
 import os
 from world import WORLD
-from snake import SNAKE
-from snakeSimulation import SNAKE_SIMILATION
+from creatureSimulation import CREATURE_SIMILATION
 
 class RANDOM_GENERATION:
     def __init__(self, id):
@@ -14,7 +13,7 @@ class RANDOM_GENERATION:
 
 
     def Generate_And_Run(self):
-        sim = SNAKE_SIMILATION(self.myID) #Generate
+        sim = CREATURE_SIMILATION(self.myID) #Generate
         sim.Run()                 #Run/Simulate
             
         os.system("rm body*.urdf")

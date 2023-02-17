@@ -7,7 +7,6 @@ import time
 import constants as c
 from world import WORLD
 from robot import ROBOT
-from snake import SNAKE
 
 class SIMULATION:
     def __init__(self, directOrGUI, solutionID, test, evolved):
