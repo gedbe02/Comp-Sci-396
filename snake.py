@@ -9,6 +9,8 @@ from sensor import SENSOR
 from motor import MOTOR
 from robot import ROBOT
 from part import PART
+from cube import CUBE
+from joint import JOINT
 from pyrosim.neuralNetwork import NEURAL_NETWORK
 
 green = ['Green','    <color rgba="0.0 1.0 0.0 1.0"/>']
@@ -54,7 +56,7 @@ class SNAKE(ROBOT): #Combined Solution and Robot
         y = 0
         startingZ = 0.5
         #pyrosim.Send_Cube(name="Part0", pos=[x,y,z] , size=[length, width, height], color=color)
-        parts["Part0"] = PART("Part0", length, width, height, x, y, startingZ, color, False, -1, -1)
+        parts["Part0"] = CUBE("Part0", length, width, height, x, y, startingZ, color)
         '''
             Idea: Random choice on each cube that a leg will grow out of it. Nested for loop
         '''
@@ -99,18 +101,17 @@ class SNAKE(ROBOT): #Combined Solution and Robot
                 color = blue
 
             #pyrosim.Send_Joint(name = f'{parent}_Part{i}' , parent= parent , child = f'Part{i}' , type = "revolute", position = [jointX,jointY,jointZ], jointAxis = jointAxis) #To Do: Make joint axis random
-            parts[f'{parent}_Part{i}'] = PART(f'{parent}_Part{i}',-1, -1, -1, jointX, jointY, jointZ, -1, True, parent, f'Part{i}')
+            parts[f'{parent}_Part{i}'] = JOINT(f'{parent}_Part{i}', jointX, jointY, jointZ, parent, f'Part{i}')
             #pyrosim.Send_Cube(name=f'Part{i}', pos=[0,newCubeY,0] , size=[length,width,height], color=color)
-            parts[f'Part{i}'] = PART(f'Part{i}', length, width, height, cubeX, cubeY, cubeZ, color, False, -1, -1) 
-
-            #Should probably split into partDict and jointDict
+            parts[f'Part{i}'] = CUBE(f'Part{i}', length, width, height, cubeX, cubeY, cubeZ, color) 
 
             previous = [f'Part{i}', jointY, newZ, width, height] #CHANGE
 
 
         parts['Part0'].z -= minZ
         if 'Part0_Part1' in parts:
-            parts['Part0_Part1'].z -= minZ #Make more dynamic idk
+            #First joints in stream need this. Will need to edit this
+            parts['Part0_Part1'].z -= minZ
         
         
         for name in parts:
