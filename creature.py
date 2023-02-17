@@ -146,7 +146,9 @@ class CREATURE(ROBOT): #Combined Solution and Robot
             else:
                 color = blue
 
-            self.parts[f'{parent}_Part{i}'] = JOINT(f'{parent}_Part{i}', jointPos, parent, f'Part{i}')
+            jointAxis = random.choice(["1 0 0", "0 1 0", "0 0 1"])
+
+            self.parts[f'{parent}_Part{i}'] = JOINT(f'{parent}_Part{i}', jointPos, parent, f'Part{i}', jointAxis)
 
             self.parts[f'Part{i}'] = CUBE(f'Part{i}', length, width, height, cubePos, color) 
 
@@ -185,7 +187,7 @@ class CREATURE(ROBOT): #Combined Solution and Robot
                 pyrosim.Send_Motor_Neuron( name = j , jointName = f'Part{part}_Part{part+1}')
                 j += 1
         print("Need to revert brain.")
-        for sensor in range(0):#self.numSensors):
+        for sensor in range(self.numSensors):
             for motor in range(self.numParts-1): #should be right
                 pyrosim.Send_Synapse( sourceNeuronName = sensor, targetNeuronName = motor+self.numSensors , weight = self.weights[sensor][motor] )
         pyrosim.End()

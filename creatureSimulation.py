@@ -14,13 +14,14 @@ class CREATURE_SIMILATION(SIMULATION):
     def __init__(self, id):
         self.Create_World()
         p.connect(p.GUI)
+        p.configureDebugVisualizer(p.COV_ENABLE_GUI,0)
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
         p.setGravity(c.gravity_x,c.gravity_y,c.gravity_z)
         self.world = WORLD()
 
-        num_parts = random.randint(2,7)
-        num_sensors = random.randint(1, max(num_parts-1,1))
-        self.robot = CREATURE(id, 4, 1)#num_parts, num_sensors)
+        num_parts = random.randint(10,20)
+        num_sensors = random.randint(num_parts//2, num_parts-1)
+        self.robot = CREATURE(id, num_parts, num_sensors)
         self.directOrGUI = "GUI"
 
         pyrosim.Prepare_To_Simulate(self.robot.robotId)

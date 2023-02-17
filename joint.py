@@ -3,7 +3,7 @@ from part import PART
 import random
 
 class JOINT(PART):
-    def __init__(self, name, pos, parent, child):
+    def __init__(self, name, pos, parent, child, jointAxis):
         self.name = name
         self.x = pos[0]
         self.y = pos[1]
@@ -11,7 +11,7 @@ class JOINT(PART):
         self.parent = parent
         self.child = child
         self.isJoint = True
-        self.jointAxis = jointAxis = random.choice(["1 0 0", "0 0 1"])
+        self.jointAxis = jointAxis
 
         PART.__init__(self, name, self.x, self.y, self.z, self.isJoint)
 
