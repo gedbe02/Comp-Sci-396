@@ -2,24 +2,13 @@ import pyrosim.pyrosim as pyrosim
 import pybullet as p
 import numpy as np
 import random
-import os
-import math
 import constants as c
-from sensor import SENSOR
-from motor import MOTOR
 from robot import ROBOT
-from part import PART
 from cube import CUBE
 from joint import JOINT
-from pyrosim.neuralNetwork import NEURAL_NETWORK
 
 green = ['Green','    <color rgba="0.0 1.0 0.0 1.0"/>']
 blue  = ['Blue','    <color rgba="0.0 0.5 1.0 1.0"/>']
-
-#tests
-red  = ['Red','    <color rgba="1.0 0.0 0.0 1.0"/>']
-purple  = ['Purple','    <color rgba="1.0 0.0 1.0 1.0"/>']
-teal  = ['Teal','    <color rgba="0.0 1.0 1.0 1.0"/>']
 
 class CREATURE(ROBOT): #Combined Solution and Robot
     def __init__(self, id, num_parts, num_sensors):
@@ -73,7 +62,6 @@ class CREATURE(ROBOT): #Combined Solution and Robot
         stop = False
         for i in range(1, self.numParts):  
             branches = 0
-            #Can I clean this up? Like OOP it?
             if i == 1:
                 parent    = self.cubes[0]
             else:
@@ -96,22 +84,11 @@ class CREATURE(ROBOT): #Combined Solution and Robot
             if i != 1:
                 options.remove(list(prevDirection*-1))
             
-            #Make new cube. If intersecting another, make again
-            #What if out of directions?
-            ###
-            #x = 1
-            #setOptions = [[0,1,0], [0,1,0], [1,0,0], [0,-1,0], [0,0,-1], [0,-1,0], [0,0,-1]]
-            ###
-            
+            # Try to make new cube/joint
             intersecting = True
-            while intersecting: #change to while new cube intersecting
+            while intersecting: 
                 intersecting = False
-                #x = 0
-                # Direction
                 direction = np.array(random.choice(options))
-                ###
-                #direction = np.array(setOptions[i])
-                ###
 
                 # Calculate Position
                 if i == 1:
@@ -132,7 +109,6 @@ class CREATURE(ROBOT): #Combined Solution and Robot
                 #Z
                 jointZ = oldCenter[2] + direction[2]*prevHeight/2
                 cubeZ = height/2
-                #newZ = oldZ + (prevHeight/2 * direction[2])
                 newZ = oldZ + ((prevHeight+height)/2 * direction[2])
 
                 #Check for overlapping cubes
@@ -144,7 +120,7 @@ class CREATURE(ROBOT): #Combined Solution and Robot
                 #If branch reaches end point, start a new branch
                 if (len(options)) == 0:
                     branches += 1
-                    # In very unlikely situation that no branches can be made, stop trying to gorw
+                    # In the very unlikely situation that no branches can be made, stop trying to grow
                     if branches == len(self.cubes):
                         self.numParts = i
                         if self.numParts == 1:
@@ -176,33 +152,21 @@ class CREATURE(ROBOT): #Combined Solution and Robot
             
             # If not moving on z, must maintain height
             if i == 1 and abs(direction[2]) != 1: #Don't do if moving on z axis
-                jointPos[2] = oldZ #prevZ
+                jointPos[2] = oldZ 
     
-            #print(absoluteCubePos)
 
 
             #minZ Calculation
-            # Need extra distance to calculate minZ
-            #if direction[2] == -1:
-            #    newZ -= height/2
             minZ = min(minZ, newZ-height/2)
             
-            # Make joint and cube
+            #Make joint and cube
             if self.isSensor[i]:
                 color = green
                 newTotalSensors += 1
             else:
                 color = blue
             
-            ###
-            #colors = [blue,green,red,purple,teal]
-            #j = i % 5
-            #color = colors[j]
-
-            ###
-
             jointAxis = random.choice(["1 0 0", "0 1 0", "0 0 1"])
-            #print(f'{parentName}_Part{i}')
             joint = JOINT(f'{parentName}_Part{i}', jointPos, parentName, f'Part{i}', jointAxis)
             self.parts[f'{parentName}_Part{i}'] = joint
             self.joints.append(joint)
@@ -211,23 +175,15 @@ class CREATURE(ROBOT): #Combined Solution and Robot
             self.parts[f'Part{i}'] = cube
             self.cubes.append(cube)
 
-            #previous = [f'Part{i}', jointPos[0], jointPos[1], jointPos[2], newX, newY, newZ, width, length, height, direction] 
 
-        print("Double check min z calc after done with before")
-        oldTorsoZ = self.parts['Part0'].z
         self.parts['Part0'].z -= minZ
         if 'Part0_Part1' in self.parts:
-            #First joints in stream need this. Will need to edit this
             self.parts['Part0_Part1'].z -= minZ
-        newTorsoZ = self.parts['Part0'].z
-        #print(f'minZ: {minZ}, old torso z: {oldTorsoZ}, new torso z: {newTorsoZ}')
         
-        #print()
         for name in self.parts:
             part = self.parts[name]
             if part.isJoint:
                 part.Send_Joint()
-                #print(part.name)
             else:
                 part.Send_Cube()
         #If branch breaks, need to decrease numSensors
@@ -253,7 +209,7 @@ class CREATURE(ROBOT): #Combined Solution and Robot
             j += 1
 
         for sensor in range(self.numSensors):
-            for motor in range(self.numParts-1): #should be right
+            for motor in range(self.numParts-1):
                 pyrosim.Send_Synapse( sourceNeuronName = sensor, targetNeuronName = motor+self.numSensors , weight = self.weights[sensor][motor] )
         pyrosim.End()
     
