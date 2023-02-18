@@ -52,6 +52,7 @@ class CREATURE(ROBOT): #Combined Solution and Robot
 
         self.parts = {}
         self.cubes = []
+        self.joints = []
 
         length = random.randint(minSide,maxSide)/100
         width  = random.randint(minSide,maxSide)/100
@@ -60,44 +61,35 @@ class CREATURE(ROBOT): #Combined Solution and Robot
         y = 0
         z = 0.5
         cubePos = [x,y,z]
-        ###
-        #color = blue
-        ###
+
         cube = CUBE("Part0", length, width, height, cubePos, cubePos, color, None)
         self.parts["Part0"] = cube
         self.cubes.append(cube)
-        #print(cubePos)
 
         #Trying to get minZ: Lowest z coordinate of body (Lowest edge)
         minZ = z - height/2 #Z coord of Center of Part0 - its "radius"
 
-        previous = ["Part0", x, y, z, x, y, z, width, length, height, None]
         #If branch cant continue, stop making new links
         stop = False
         for i in range(1, self.numParts):  
             branches = 0
             #Can I clean this up? Like OOP it?
-            parent = previous[0]
-            prevX = previous[1]
-            prevY = previous[2]
-            prevZ = previous[3]
-            oldX = previous[4]
-            oldY = previous[5]
-            oldZ = previous[6]
-            prevWidth = previous[7]
-            prevLength = previous[8]
-            prevHeight = previous[9]
-            prevDirection = previous[10]
+            if i == 1:
+                parent    = self.cubes[0]
+            else:
+                parent    = random.choice(self.cubes[1:])
+            parentName    = parent.name
+            oldX          = parent.absolutePos[0]
+            oldY          = parent.absolutePos[1]
+            oldZ          = parent.absolutePos[2]
+            prevWidth     = parent.width
+            prevLength    = parent.length
+            prevHeight    = parent.height
+            prevDirection = parent.direction
 
             length = random.randint(minSide,maxSide)/100
             width  = random.randint(minSide,maxSide)/100
             height = random.randint(minSide,maxSide)/100
-            
-            # Do Later??
-            xOffset = 0
-            yOffset = 0
-            zOffset = 0#random.randint(0, math.floor((prevHeight*100)/2))/100 * random.choice([-1,1])
-            #
 
             #Direction Options
             options = [[1,0,0], [0,1,0], [0,0,1], [-1,0,0], [0,-1,0], [0,0,-1]]
@@ -108,7 +100,7 @@ class CREATURE(ROBOT): #Combined Solution and Robot
             #What if out of directions?
             ###
             #x = 1
-            setOptions = [[0,1,0], [0,1,0], [1,0,0], [0,-1,0], [0,0,-1], [0,-1,0], [0,0,-1]]
+            #setOptions = [[0,1,0], [0,1,0], [1,0,0], [0,-1,0], [0,0,-1], [0,-1,0], [0,0,-1]]
             ###
             
             intersecting = True
@@ -155,17 +147,15 @@ class CREATURE(ROBOT): #Combined Solution and Robot
                     # In very unlikely situation that no branches can be made, stop trying to gorw
                     if branches == len(self.cubes):
                         self.numParts = i
+                        if self.numParts == 1:
+                            self.numSensors = 0
                         stop = True
                         print("Break")
                         break
-                    #previous = [f'Part{i}', jointPos[0], jointPos[1], jointPos[2], newX, newY, newZ, width, length, height, direction] 
                     #Make new parent
                     print("New Branch", i)
                     new_parent    = random.choice(self.cubes[1:])
-                    name          = new_parent.name
-                    #prevX = previous[1]
-                    #prevY = previous[2]
-                    #prevZ = previous[3]
+                    parentName    = new_parent.name
                     oldX          = new_parent.absolutePos[0]
                     oldY          = new_parent.absolutePos[1]
                     oldZ          = new_parent.absolutePos[2]
@@ -175,17 +165,6 @@ class CREATURE(ROBOT): #Combined Solution and Robot
                     prevDirection = new_parent.direction
                     options = [[1,0,0], [0,1,0], [0,0,1], [-1,0,0], [0,-1,0], [0,0,-1]]
                     options.remove(list(prevDirection*-1))
-
-                    #Old Cut Off
-                    #self.numParts = i
-                    #stop = True
-                    #print("Break")
-                    #Maybe choose random part to offshoot off of
-                    #break
-                #WHAT DO IF NO MORE OPTIONS?
-                ###
-                #setOptions[i] = [0,0,1]
-                ###
             
            
             #Joint and Cube Positions
@@ -223,14 +202,16 @@ class CREATURE(ROBOT): #Combined Solution and Robot
             ###
 
             jointAxis = random.choice(["1 0 0", "0 1 0", "0 0 1"])
-
-            self.parts[f'{parent}_Part{i}'] = JOINT(f'{parent}_Part{i}', jointPos, parent, f'Part{i}', jointAxis)
-
+            #print(f'{parentName}_Part{i}')
+            joint = JOINT(f'{parentName}_Part{i}', jointPos, parentName, f'Part{i}', jointAxis)
+            self.parts[f'{parentName}_Part{i}'] = joint
+            self.joints.append(joint)
+            
             cube = CUBE(f'Part{i}', length, width, height, relativeCubePos, absoluteCubePos, color, direction) 
             self.parts[f'Part{i}'] = cube
             self.cubes.append(cube)
 
-            previous = [f'Part{i}', jointPos[0], jointPos[1], jointPos[2], newX, newY, newZ, width, length, height, direction] 
+            #previous = [f'Part{i}', jointPos[0], jointPos[1], jointPos[2], newX, newY, newZ, width, length, height, direction] 
 
         print("Double check min z calc after done with before")
         oldTorsoZ = self.parts['Part0'].z
@@ -239,13 +220,14 @@ class CREATURE(ROBOT): #Combined Solution and Robot
             #First joints in stream need this. Will need to edit this
             self.parts['Part0_Part1'].z -= minZ
         newTorsoZ = self.parts['Part0'].z
-        print(f'minZ: {minZ}, old torso z: {oldTorsoZ}, new torso z: {newTorsoZ}')
+        #print(f'minZ: {minZ}, old torso z: {oldTorsoZ}, new torso z: {newTorsoZ}')
         
-        
+        #print()
         for name in self.parts:
             part = self.parts[name]
             if part.isJoint:
                 part.Send_Joint()
+                #print(part.name)
             else:
                 part.Send_Cube()
         #If branch breaks, need to decrease numSensors
@@ -257,20 +239,19 @@ class CREATURE(ROBOT): #Combined Solution and Robot
     def Create_Brain(self):
         pyrosim.Start_NeuralNetwork(f'brain{self.myID}.nndf')
         print(self.numParts, self.numSensors)
+        #Sensor Neurons
         i = 0
-        j = self.numSensors
         for part in range(self.numParts):
-            #Sensor Neurons
             is_sensor = self.isSensor[part]
             if is_sensor:
                 pyrosim.Send_Sensor_Neuron(name = i , linkName = f'Part{part}')
                 i += 1
-                
-            #Motor Neurons
-            if part != self.numParts-1:
-                pyrosim.Send_Motor_Neuron( name = j , jointName = f'Part{part}_Part{part+1}')
-                j += 1
-       
+        #Motor Neurons
+        j = self.numSensors
+        for joint in self.joints:
+            pyrosim.Send_Motor_Neuron( name = j , jointName = joint.name)
+            j += 1
+
         for sensor in range(self.numSensors):
             for motor in range(self.numParts-1): #should be right
                 pyrosim.Send_Synapse( sourceNeuronName = sensor, targetNeuronName = motor+self.numSensors , weight = self.weights[sensor][motor] )
