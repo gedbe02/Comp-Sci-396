@@ -75,6 +75,7 @@ class CREATURE(ROBOT): #Combined Solution and Robot
         #If branch cant continue, stop making new links
         stop = False
         for i in range(1, self.numParts):  
+            branches = 0
             #Can I clean this up? Like OOP it?
             parent = previous[0]
             prevX = previous[1]
@@ -145,10 +146,18 @@ class CREATURE(ROBOT): #Combined Solution and Robot
                 #Check for overlapping cubes
                 for cub in self.cubes:
                     intersecting |= cub.overlapping([newX, newY, newZ], [length, width, height])
-                options.remove(list(direction))
+                if intersecting:
+                    options.remove(list(direction))
 
                 #If branch reaches end point, start a new branch
                 if (len(options)) == 0:
+                    branches += 1
+                    # In very unlikely situation that no branches can be made, stop trying to gorw
+                    if branches == len(self.cubes):
+                        self.numParts = i
+                        stop = True
+                        print("Break")
+                        break
                     #previous = [f'Part{i}', jointPos[0], jointPos[1], jointPos[2], newX, newY, newZ, width, length, height, direction] 
                     #Make new parent
                     print("New Branch", i)
@@ -224,10 +233,13 @@ class CREATURE(ROBOT): #Combined Solution and Robot
             previous = [f'Part{i}', jointPos[0], jointPos[1], jointPos[2], newX, newY, newZ, width, length, height, direction] 
 
         print("Double check min z calc after done with before")
+        oldTorsoZ = self.parts['Part0'].z
         self.parts['Part0'].z -= minZ
         if 'Part0_Part1' in self.parts:
             #First joints in stream need this. Will need to edit this
             self.parts['Part0_Part1'].z -= minZ
+        newTorsoZ = self.parts['Part0'].z
+        print(f'minZ: {minZ}, old torso z: {oldTorsoZ}, new torso z: {newTorsoZ}')
         
         
         for name in self.parts:
@@ -258,7 +270,7 @@ class CREATURE(ROBOT): #Combined Solution and Robot
             if part != self.numParts-1:
                 pyrosim.Send_Motor_Neuron( name = j , jointName = f'Part{part}_Part{part+1}')
                 j += 1
-        print("Need to revert brain.")
+       
         for sensor in range(self.numSensors):
             for motor in range(self.numParts-1): #should be right
                 pyrosim.Send_Synapse( sourceNeuronName = sensor, targetNeuronName = motor+self.numSensors , weight = self.weights[sensor][motor] )

@@ -19,7 +19,7 @@ class CREATURE_SIMILATION(SIMULATION):
         p.setGravity(c.gravity_x,c.gravity_y,c.gravity_z)
         self.world = WORLD()
 
-        num_parts = random.randint(7,30)
+        num_parts = random.randint(c.minParts,c.maxParts)
         num_sensors = random.randint(num_parts//2, num_parts-1)
         self.robot = CREATURE(id, num_parts, num_sensors)
         self.directOrGUI = "GUI"

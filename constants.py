@@ -5,7 +5,7 @@ gravity_y = 0
 gravity_z = -9.8
 
 # Steps/In Loop
-steps = 3000
+steps = 500
 max_force = 100
 sleep_time = 1/100
 
@@ -33,5 +33,7 @@ motorJointRange = 0.5
 
 
 # Random Generation
-minSide = 0.25
-maxSide = 1
+minSide = 0.5
+maxSide = 2
+minParts = 7
+maxParts = 15
