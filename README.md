@@ -17,7 +17,9 @@
  a CUBE class. Then, within the loop, each additional body part and joint is made. When the second part is being made, the joint between Part0 and Part1
  must be absolute, so the creation behavior is slightly different (joint position is based on Part0's position). 
  
- For every new cube, a random parent cube is chosen and a random side of that parent to build off of (For simplicity sake, besides for Part1, each new part's parent must have a joint upstream). After creating the part's relative position, its absolute position is calculated. Then, a check is done to make sure the new part doesn't overlap any previous parts. If the cube does overlap with another, a different side is chosen to build off of. If all sides lead to overlaps, a different parent is chosen. If all potential parents cannot be built off of, the body creation is cut short and the number of parts and sensors is updated. Every joint has a random chance of moving in the x, y, or z axis. 
+ For every new cube, a random parent cube is chosen and a random side of that parent to build off of (For simplicity sake, besides for Part1, each new part's parent must have a joint upstream). After creating the part's relative position, its absolute position is calculated. Then, a check is done to make sure the new part doesn't overlap any previous parts. If the cube does overlap with another, a different side is chosen to build off of. If all sides lead to overlaps, a different parent is chosen. If all potential parents cannot be built off of, the body creation is cut short and the number of parts and sensors is updated. Every joint has a random chance of moving in the x, y, or z axis. Additionally, based on the numSensors input, that many parts are made to be sensors.
+ 
+ After the loop finishes, Part0's z position is updated so that the lowest body part won't clip the ground. Then, all the parts and joints are actually created. 
  
  
  
