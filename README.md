@@ -32,6 +32,11 @@
 <img width="664" alt="Screen Shot 2023-02-20 at 3 32 22 PM" src="https://user-images.githubusercontent.com/82680052/220201706-092bfa7a-fc6c-4d5f-a646-210534b60970.png">
 
   <img width="379" alt="Screen Shot 2023-02-20 at 3 34 56 PM" src="https://user-images.githubusercontent.com/82680052/220201715-6fcca301-7b34-41e6-8cd9-5969471e8680.png">
+  
+ <h2> Diagram </h2>
+ <img width="1192" alt="Screen Shot 2023-02-20 at 4 49 11 PM" src="https://user-images.githubusercontent.com/82680052/220209260-5a376471-5263-4610-a1a0-5e88daf91a09.png">
+<img width="1198" alt="Screen Shot 2023-02-20 at 4 49 23 PM" src="https://user-images.githubusercontent.com/82680052/220209264-0c63dd94-0683-458c-8068-cd4f08816e9c.png">
+
 
  
  
