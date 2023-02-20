@@ -61,11 +61,11 @@ class CREATURE(ROBOT): #Combined Solution and Robot
         #If branch cant continue, stop making new links
         stop = False
         for i in range(1, self.numParts):  
-            branches = 0
+            potential_parents = self.cubes[1:].copy()
             if i == 1:
                 parent    = self.cubes[0]
             else:
-                parent    = random.choice(self.cubes[1:])
+                parent    = random.choice(potential_parents)
             parentName    = parent.name
             oldX          = parent.absolutePos[0]
             oldY          = parent.absolutePos[1]
@@ -119,26 +119,26 @@ class CREATURE(ROBOT): #Combined Solution and Robot
 
                 #If branch reaches end point, start a new branch
                 if (len(options)) == 0:
-                    branches += 1
                     # In the very unlikely situation that no branches can be made, stop trying to grow
-                    if branches == len(self.cubes):
+                    if len(potential_parents) == 0:
                         self.numParts = i
                         if self.numParts == 1:
                             self.numSensors = 0
                         stop = True
                         print("Break")
                         break
-                    #Make new parent
-                    print("New Branch", i)
-                    new_parent    = random.choice(self.cubes[1:])
-                    parentName    = new_parent.name
-                    oldX          = new_parent.absolutePos[0]
-                    oldY          = new_parent.absolutePos[1]
-                    oldZ          = new_parent.absolutePos[2]
-                    prevWidth     = new_parent.width
-                    prevLength    = new_parent.length
-                    prevHeight    = new_parent.height
-                    prevDirection = new_parent.direction
+                    #Give new parent
+                    potential_parents.remove(parent)
+
+                    parent    = random.choice(potential_parents)
+                    parentName    = parent.name
+                    oldX          = parent.absolutePos[0]
+                    oldY          = parent.absolutePos[1]
+                    oldZ          = parent.absolutePos[2]
+                    prevWidth     = parent.width
+                    prevLength    = parent.length
+                    prevHeight    = parent.height
+                    prevDirection = parent.direction
                     options = [[1,0,0], [0,1,0], [0,0,1], [-1,0,0], [0,-1,0], [0,0,-1]]
                     options.remove(list(prevDirection*-1))
             
