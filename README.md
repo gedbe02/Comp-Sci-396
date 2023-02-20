@@ -17,16 +17,20 @@
  a CUBE class. Then, within the loop, each additional body part and joint is made. When the second part is being made, the joint between Part0 and Part1
  must be absolute, so the creation behavior is slightly different (joint position is based on Part0's position). 
  
- For every new cube, a random parent cube is chosen and a random side of that parent to build off of (For simplicity sake, besides for Part1, each new part's parent must have a joint upstream). After creating the part's relative position, its absolute position is calculated. Then, a check is done to make sure the new part doesn't overlap any previous parts. If the cube does overlap with another, a different side is chosen to build off of. If all sides lead to overlaps, a different parent is chosen. If all potential parents cannot be built off of, the body creation is cut short and the number of parts and sensors is updated. 
+ For every new cube, a random parent cube is chosen and a random side of that parent to build off of (For simplicity sake, besides for Part1, each new part's parent must have a joint upstream). After creating the part's relative position, its absolute position is calculated. Then, a check is done to make sure the new part doesn't overlap any previous parts. If the cube does overlap with another, a different side is chosen to build off of. If all sides lead to overlaps, a different parent is chosen. If all potential parents cannot be built off of, the body creation is cut short and the number of parts and sensors is updated. Every joint has a random chance of moving in the x, y, or z axis. 
  
  
- Brain Generation
-
+ 
+ <h4> Brain Generation </h4>
+ Every motor neuron is connected to every sensor neuron. 
 
 <h3> Examples of Creatures </h3>
-  
+  <img width="539" alt="Screen Shot 2023-02-20 at 3 34 44 PM" src="https://user-images.githubusercontent.com/82680052/220201686-716abbe3-824c-4bee-be23-489bd1b1e7e9.png">
 
-  
+<img width="664" alt="Screen Shot 2023-02-20 at 3 32 22 PM" src="https://user-images.githubusercontent.com/82680052/220201706-092bfa7a-fc6c-4d5f-a646-210534b60970.png">
+
+  <img width="379" alt="Screen Shot 2023-02-20 at 3 34 56 PM" src="https://user-images.githubusercontent.com/82680052/220201715-6fcca301-7b34-41e6-8cd9-5969471e8680.png">
+
  
  
 Code based on reddit.com/r/ludobots. pyrosim folder taken from [Pyrosim](https://github.com/jbongard/pyrosim.git)
