@@ -4,12 +4,35 @@ import os
 import random
 import time
 import constants as c
+from cube import CUBE
+from joint import JOINT
 
+# To Do
+# change init
+# Change Create_Body
+# Change Create_brain
+# Change Mutate
+    # On mutate, maybe add 0-c.maxNewParts parts and increase num sensors by 0-(# of new parts - 1)
+# Change Start_Simulation and Wait_For_Simulation_To_End
+
+green = ['Green','    <color rgba="0.0 1.0 0.0 1.0"/>']
+blue  = ['Blue','    <color rgba="0.0 0.5 1.0 1.0"/>']
 class SOLUTION:
-    def __init__(self, nextAvailableID): 
+    def __init__(self, nextAvailableID):  
         self.weights = np.random.rand(c.numSensorNeurons,c.numMotorNeurons)*2-1
-        self.motorJointRange = np.random.rand(c.numSensorNeurons,c.numMotorNeurons)*2-1
+        #self.motorJointRange = np.random.rand(c.numSensorNeurons,c.numMotorNeurons)*2-1 - Maybe add?
         self.myID = nextAvailableID
+
+        # Random Generation #
+        # All parents shoudl initally start with 2 parts and 1-2 sensors, so it can actually move
+        self.numParts = 2
+        self.numSensors = random.randint(1,2)
+        self.isSensor = np.full((1,self.numParts), False)[0]
+        self.isSensor[random.sample(range(self.numParts), self.numSensors)] = True
+
+        self.Initialize_Body()
+
+
 
     def Start_Simulation(self, directOrGUI):
         self.Create_World()
@@ -26,92 +49,198 @@ class SOLUTION:
 
 
     def Create_World(self):
-        length = 1
-        width = 1
-        height = 1
-
-        x = -2
-        y = 2
-        z = 0.5
-
         pyrosim.Start_SDF("world.sdf")
-        #pyrosim.Send_Cube(name="Box", pos=[x,y,z] , size=[length,width,height])
         pyrosim.End()
     
+    '''
+    Information:
+    Initialize_Body populates self.parts, but does so randomly every time
+
+    What Needs to Happen:
+    In init, Initialize_Body populates self.parts with Part0 and Part1
+
+    Run Create_Body to test solution
+
+    *Mutation*
+    A new body part(s) must be added to self.parts
+    Mutate_Body should do this
+        Needs to also randomly decide if part is a sensor or not
+
+    To Do:
+    Split Initialize Body into two functions
+    
+    '''
+
+
     def Create_Body(self):
-        pyrosim.Start_URDF("body.urdf")
+        #Min Z - To Do
+        parts = self.parts.copy()
+        parts['Part0'].z -= self.minZ
+        if 'Part0_Part1' in parts:
+            self.parts['Part0_Part1'].z -= self.minZ
 
-        pyrosim.Send_Cube(name="Torso", pos=[0,0,2.5] , size=[0.75,0.5,1.5], color=['Green','    <color rgba="0.0 1.0 0.0 1.0"/>'])
-
-        #Right Leg - Test Joint Axis
-        pyrosim.Send_Joint( name = "Torso_UpperRightLeg" , parent= "Torso" , child = "UpperRightLeg" , type = "revolute", position = [0.375,0,2], jointAxis = "1 0 0")
-        pyrosim.Send_Cube(name="UpperRightLeg", pos=[0.125,0,-0.5] , size=[0.25,0.25,1], color=['Blue','    <color rgba="0.0 0.25 1.0 1.0"/>'])
-
-        pyrosim.Send_Joint( name = "UpperRightLeg_LowerRightLeg" , parent= "UpperRightLeg" , child = "LowerRightLeg" , type = "revolute", position = [0.125,0,-1], jointAxis = "1 0 0")
-        pyrosim.Send_Cube(name="LowerRightLeg", pos=[0,0,-0.475] , size=[0.25,0.25,0.95], color=['Light Blue','    <color rgba="0.0 0.5 1.0 1.0"/>'])
-
-        
-
-        #Left Leg - Test Joint Axis
-        pyrosim.Send_Joint( name = "Torso_UpperLeftLeg" , parent= "Torso" , child = "UpperLeftLeg" , type = "revolute", position = [-0.375,0,2], jointAxis = "1 0 0")
-        pyrosim.Send_Cube(name="UpperLeftLeg", pos=[-0.125,0,-0.5] , size=[0.25,0.25,1], color=['Red','    <color rgba="1.0 0.25 0 1.0"/>'])
-
-        pyrosim.Send_Joint( name = "UpperLeftLeg_LowerLeftLeg" , parent= "UpperLeftLeg" , child = "LowerLeftLeg" , type = "revolute", position = [-0.125,0,-1], jointAxis = "1 0 0")
-        pyrosim.Send_Cube(name="LowerLeftLeg", pos=[0,0,-0.475] , size=[0.25,0.25,0.95], color=['Orange','    <color rgba="1.0 0.5 0.0 1.0"/>'])
-
-        #Right Arm
-        pyrosim.Send_Joint( name = "Torso_UpperRightArm" , parent= "Torso" , child = "UpperRightArm" , type = "revolute", position = [0.375,0,3.25], jointAxis = "1 0 0")
-        pyrosim.Send_Cube(name="UpperRightArm", pos=[0.125,0,-0.5] , size=[0.25,0.25,.75], color=['Blue','    <color rgba="0.0 0.25 1.0 1.0"/>'])
-        
-        pyrosim.Send_Joint( name = "UpperRightArm_LowerRightArm" , parent= "UpperRightArm" , child = "LowerRightArm" , type = "revolute", position = [0.125,0,-.75], jointAxis = "1 0 0")
-        pyrosim.Send_Cube(name="LowerRightArm", pos=[0,.475,0] , size=[0.25,0.70,0.25], color=['Light Blue','    <color rgba="0.0 0.5 1.0 1.0"/>'])
-
-        #Left Arm
-        pyrosim.Send_Joint( name = "Torso_UpperLeftArm" , parent= "Torso" , child = "UpperLeftArm" , type = "revolute", position = [-0.375,0,3.25], jointAxis = "1 0 0")
-        pyrosim.Send_Cube(name="UpperLeftArm", pos=[-0.125,0,-0.5] , size=[0.25,0.25,.75], color=['Red','    <color rgba="1.0 0.25 0.0 1.0"/>'])
-        
-        pyrosim.Send_Joint( name = "UpperLeftArm_LowerLeftArm" , parent= "UpperLeftArm" , child = "LowerLeftArm" , type = "revolute", position = [-0.125,0,-.75], jointAxis = "1 0 0")
-        pyrosim.Send_Cube(name="LowerLeftArm", pos=[0,.475,0] , size=[0.25,0.70,0.25], color=['Orange','    <color rgba="1.0 0.5 0.0 1.0"/>'])
-
-        #Feet 
-        pyrosim.Send_Joint( name = "LowerRightLeg_RightFoot" , parent= "LowerRightLeg" , child = "RightFoot" , type = "revolute", position = [0,0,-0.95], jointAxis = "1 0 0")
-        pyrosim.Send_Cube(name="RightFoot", pos=[0,0,-0.025] , size=[0.25,0.5,0.05], color=['Black','    <color rgba="0 0 0 1"/>'])
-
-        pyrosim.Send_Joint( name = "LowerLeftLeg_LeftFoot" , parent= "LowerLeftLeg" , child = "LeftFoot" , type = "revolute", position = [0,0,-0.95], jointAxis = "1 0 0")
-        pyrosim.Send_Cube(name="LeftFoot", pos=[0,0,-0.025] , size=[0.25,0.5,0.05], color=['Black','    <color rgba="0 0 0 1"/>'])
-
-
+        pyrosim.Start_URDF(f'body{self.myID}.urdf')
+        for name in parts:
+            part = parts[name]
+            if part.isJoint:
+                part.Send_Joint()
+            else:
+                part.Send_Cube()
+        #If branch breaks, need to decrease numSensors
+        #self.numSensors = newTotalSensors
         pyrosim.End()
     
+    def Initialize_Body(self):
+        #Part0
+        #newTotalSensors = 0
+        if self.isSensor[0]:
+            color = green
+            #newTotalSensors += 1
+        else:
+            color = blue
+
+        self.minSide = 100 * c.minSide #/100
+        self.maxSide = 100 * c.maxSide #/100
+
+        self.parts = {}
+        self.cubes = []
+        self.joints = []
+
+        length = random.randint(self.minSide,self.maxSide)/100
+        width  = random.randint(self.minSide,self.maxSide)/100
+        height = random.randint(self.minSide,self.maxSide)/100
+        x = 0
+        y = 0
+        z = 0.5
+        cubePos = [x,y,z]
+
+        cube = CUBE("Part0", length, width, height, cubePos, cubePos, color, None)
+        self.parts["Part0"] = cube
+        self.cubes.append(cube)
+
+        #Trying to get minZ: Lowest z coordinate of body (Lowest edge)
+        self.minZ = z - height/2 #Z coord of Center of Part0 - its "radius"
+
+        oldCenter = cubePos
+        parent    = self.cubes[0]
+        self.Make_Part(oldCenter, parent, 1)
+
+    
+    #For Mutation#
+    # potential_parents = self.cubes[1:].copy()
+    # parent            = random.choice(potential_parents)
+    # oldCenter = np.array([0,0,0])
+    # oldCenter = oldCenter + (prevDirection*np.array([prevLength, prevWidth, prevHeight])/2)
+    # vv Still for Mutation vv
+    '''
+    # In the very unlikely situation that no branches can be made, stop trying to grow
+                if len(potential_parents) == 0:
+                    self.numParts = i
+                    if self.numParts == 1:
+                        self.numSensors = 0
+                    stop = True
+                    print("Break")
+                    break
+                #Give new parent
+                potential_parents.remove(parent)
+    '''
+    #^^If Make_Part returns -1, try another parent
+    ## In the very unlikely situation that no branches can be made, stop trying to grow
+                ############ NEED STOP VARIABLE
+    '''
+    if stop:
+            print("Need to bug test when numParts parts can't be made")
+            exit()
+            break
+    '''
+
+    # Takes in previous center (relative or absolute) and a random parent
+    def Make_Part(self, oldCenter, parent, i):
+        #If branch cant continue, stop making new links
+        #stop = False
+        parentName    = parent.name
+        oldX          = parent.absolutePos[0]
+        oldY          = parent.absolutePos[1]
+        oldZ          = parent.absolutePos[2]
+        prevWidth     = parent.width
+        prevLength    = parent.length
+        prevHeight    = parent.height
+        prevDirection = parent.direction
+
+        length = random.randint(self.minSide,self.maxSide)/100
+        width  = random.randint(self.minSide,self.maxSide)/100
+        height = random.randint(self.minSide,self.maxSide)/100
+
+        #Direction Options
+        options = [[1,0,0], [0,1,0], [0,0,1], [-1,0,0], [0,-1,0], [0,0,-1]]
+        if prevDirection:
+            options.remove(list(prevDirection*-1))
+        
+        # Try to make new cube/joint
+        intersecting = True
+        while intersecting: 
+            intersecting = False
+            direction = np.array(random.choice(options))
+
+            #X
+            jointX = oldCenter[0] + direction[0]*prevLength/2
+            cubeX = length/2
+            newX = oldX + ((prevLength+length)/2 * direction[0])
+
+            #Y
+            jointY = oldCenter[1] + direction[1]*prevWidth/2
+            cubeY = width/2
+            newY = oldY + ((prevWidth+width)/2 * direction[1])
+
+            #Z
+            jointZ = oldCenter[2] + direction[2]*prevHeight/2
+            cubeZ = height/2
+            newZ = oldZ + ((prevHeight+height)/2 * direction[2])
+
+            #Check for overlapping cubes
+            for cub in self.cubes:
+                intersecting |= cub.overlapping([newX, newY, newZ], [length, width, height])
+            if intersecting:
+                options.remove(list(direction))
+
+            #If branch reaches end point, start a new branch
+            if (len(options)) == 0:
+                return -1
+        
+        #Joint and Cube Positions
+        jointPos = np.array([jointX, jointY, jointZ])
+        relativeCubePos  = np.array([cubeX, cubeY, cubeZ]) * direction
+        absoluteCubePos = np.array([newX, newY, newZ])
+        
+        # If not moving on z, must maintain height
+        # DO I NEED THIS? DO CHECK
+        if not prevDirection and abs(direction[2]) != 1: #Don't do if moving on z axis
+            jointPos[2] = oldZ 
+
+        #minZ Calculation
+        self.minZ = min(self.minZ, newZ-height/2)
+        
+        #Make joint and cube
+        if self.isSensor[i]:
+            color = green
+            #newTotalSensors += 1
+        else:
+            color = blue
+        
+        jointAxis = random.choice(["1 0 0", "0 1 0", "0 0 1"])
+        joint = JOINT(f'{parentName}_Part{i}', jointPos, parentName, f'Part{i}', jointAxis)
+        self.parts[f'{parentName}_Part{i}'] = joint
+        self.joints.append(joint)
+        
+        cube = CUBE(f'Part{i}', length, width, height, relativeCubePos, absoluteCubePos, color, direction) 
+        self.parts[f'Part{i}'] = cube
+        self.cubes.append(cube)
+
+        return 0
 
     def Create_Brain(self):
         pyrosim.Start_NeuralNetwork(f'brain{self.myID}.nndf')
-
-        pyrosim.Send_Sensor_Neuron(name = 0 , linkName = "RightFoot")
-        pyrosim.Send_Sensor_Neuron(name = 1 , linkName = "LeftFoot")
-        pyrosim.Send_Sensor_Neuron(name = 2 , linkName = "LowerRightArm")
-        pyrosim.Send_Sensor_Neuron(name = 3 , linkName = "LowerLeftArm")
-        pyrosim.Send_Sensor_Neuron(name = 4 , linkName = "LowerRightLeg")
-        pyrosim.Send_Sensor_Neuron(name = 5 , linkName = "LowerLeftLeg")
-
-
-        pyrosim.Send_Motor_Neuron( name = 6 , jointName = "Torso_UpperRightLeg")
-        pyrosim.Send_Motor_Neuron( name = 7 , jointName = "UpperRightLeg_LowerRightLeg")
-        pyrosim.Send_Motor_Neuron( name = 8 , jointName = "LowerRightLeg_RightFoot")
-        pyrosim.Send_Motor_Neuron( name = 9 , jointName = "Torso_UpperLeftLeg")
-        pyrosim.Send_Motor_Neuron( name = 10 , jointName = "UpperLeftLeg_LowerLeftLeg")
-        pyrosim.Send_Motor_Neuron( name = 11 , jointName = "LowerLeftLeg_LeftFoot")
-        pyrosim.Send_Motor_Neuron( name = 12 , jointName = "Torso_UpperRightArm")
-        pyrosim.Send_Motor_Neuron( name = 13 , jointName = "UpperRightArm_LowerRightArm")
-        pyrosim.Send_Motor_Neuron( name = 14 , jointName = "Torso_UpperLeftArm")
-        pyrosim.Send_Motor_Neuron( name = 15 , jointName = "UpperLeftArm_LowerLeftArm")
-
-        #pyrosim.Send_Synapse( sourceNeuronName = 0, targetNeuronName = 3 , weight = 1 )
-        #pyrosim.Send_Synapse( sourceNeuronName = 1, targetNeuronName = 3 , weight = 1 )
-        for currentRow in range(c.numSensorNeurons):
-            for currentColumn in range(c.numMotorNeurons):
-                pyrosim.Send_Synapse( sourceNeuronName = currentRow, targetNeuronName = currentColumn+c.numSensorNeurons , weight = self.weights[currentRow][currentColumn] )
-
+        # To Do
         pyrosim.End()
     
     def Mutate(self):
@@ -121,79 +250,3 @@ class SOLUTION:
     
     def Set_ID(self, id):
         self.myID = id
-    
-
-
-
-    def Create_Quad_Body(self):
-        pyrosim.Start_URDF("body.urdf")
-
-        pyrosim.Send_Cube(name="Torso", pos=[0,0,1] , size=[1,1,1])
-
-        pyrosim.Send_Joint( name = "Torso_BackLeg" , parent= "Torso" , child = "BackLeg" , type = "revolute", position = [0,-0.5,1], jointAxis = "1 0 0")
-        pyrosim.Send_Cube(name="BackLeg", pos=[0,-0.5,0] , size=[0.2,1,0.2])
-
-        pyrosim.Send_Joint( name = "Torso_FrontLeg" , parent= "Torso" , child = "FrontLeg" , type = "revolute", position = [0,0.5,1], jointAxis = "1 0 0")
-        pyrosim.Send_Cube(name="FrontLeg", pos=[0,0.5,0] , size=[0.2,1,0.2])
-
-        pyrosim.Send_Joint( name = "Torso_LeftLeg" , parent= "Torso" , child = "LeftLeg" , type = "revolute", position = [-0.5,0,1], jointAxis = "0 1 0")
-        pyrosim.Send_Cube(name="LeftLeg", pos=[-0.5,0,0] , size=[1,0.2,0.2])
-
-        pyrosim.Send_Joint( name = "Torso_RightLeg" , parent= "Torso" , child = "RightLeg" , type = "revolute", position = [0.5,0,1], jointAxis = "0 1 0")
-        pyrosim.Send_Cube(name="RightLeg", pos=[0.5,0,0] , size=[1,0.2,0.2], color = ['Red','    <color rgba="1.0 0.0 0.0 1.0"/>'])
-
-        pyrosim.Send_Joint( name = "BackLeg_BackLowerLeg" , parent= "BackLeg" , child = "BackLowerLeg" , type = "revolute", position = [0,-1,0], jointAxis = "1 0 0")
-        pyrosim.Send_Cube(name="BackLowerLeg", pos=[0,0,-0.5] , size=[0.2,0.2,1])
-
-        pyrosim.Send_Joint( name = "FrontLeg_FrontLowerLeg" , parent= "FrontLeg" , child = "FrontLowerLeg" , type = "revolute", position = [0,1,0], jointAxis = "1 0 0")
-        pyrosim.Send_Cube(name="FrontLowerLeg", pos=[0,0,-0.5] , size=[0.2,0.2,1])
-
-        pyrosim.Send_Joint( name = "LeftLeg_LeftLowerLeg" , parent= "LeftLeg" , child = "LeftLowerLeg" , type = "revolute", position = [-1,0,0], jointAxis = "0 1 0")
-        pyrosim.Send_Cube(name="LeftLowerLeg", pos=[0,0,-0.5] , size=[0.2,0.2,1])
-
-        pyrosim.Send_Joint( name = "RightLeg_RightLowerLeg" , parent= "RightLeg" , child = "RightLowerLeg" , type = "revolute", position = [1,0,0], jointAxis = "0 1 0")
-        pyrosim.Send_Cube(name="RightLowerLeg", pos=[0,0,-0.5] , size=[0.2,0.2,1], color = ['Red','    <color rgba="1.0 0.0 0.0 1.0"/>'])
-
-        pyrosim.End()
-
-    def Create_Quad_Brain(self):
-        pyrosim.Start_NeuralNetwork(f'brain{self.myID}.nndf')
-
-        '''pyrosim.Send_Sensor_Neuron(name = 0 , linkName = "Torso")
-        pyrosim.Send_Sensor_Neuron(name = 1 , linkName = "BackLeg")
-        pyrosim.Send_Sensor_Neuron(name = 2 , linkName = "FrontLeg")
-        pyrosim.Send_Sensor_Neuron(name = 3 , linkName = "LeftLeg")
-        pyrosim.Send_Sensor_Neuron(name = 4 , linkName = "RightLeg")
-        pyrosim.Send_Sensor_Neuron(name = 5 , linkName = "BackLowerLeg")
-        pyrosim.Send_Sensor_Neuron(name = 6 , linkName = "FrontLowerLeg")
-        pyrosim.Send_Sensor_Neuron(name = 7 , linkName = "LeftLowerLeg")
-        pyrosim.Send_Sensor_Neuron(name = 8 , linkName = "RightLowerLeg")
-
-        pyrosim.Send_Motor_Neuron( name = 9 , jointName = "Torso_BackLeg")
-        pyrosim.Send_Motor_Neuron( name = 10 , jointName = "Torso_FrontLeg")
-        pyrosim.Send_Motor_Neuron( name = 11 , jointName = "Torso_LeftLeg")
-        pyrosim.Send_Motor_Neuron( name = 12 , jointName = "Torso_RightLeg")
-        pyrosim.Send_Motor_Neuron( name = 13 , jointName = "BackLeg_BackLowerLeg")
-        pyrosim.Send_Motor_Neuron( name = 14 , jointName = "FrontLeg_FrontLowerLeg")
-        pyrosim.Send_Motor_Neuron( name = 15 , jointName = "LeftLeg_LeftLowerLeg")
-        pyrosim.Send_Motor_Neuron( name = 16 , jointName = "RightLeg_RightLowerLeg")'''
-
-        pyrosim.Send_Sensor_Neuron(name = 0 , linkName = "BackLowerLeg")
-        pyrosim.Send_Sensor_Neuron(name = 1 , linkName = "FrontLowerLeg")
-        pyrosim.Send_Sensor_Neuron(name = 2 , linkName = "LeftLowerLeg")
-        pyrosim.Send_Sensor_Neuron(name = 3 , linkName = "RightLowerLeg")
-
-        pyrosim.Send_Motor_Neuron( name = 4 , jointName = "Torso_BackLeg")
-        pyrosim.Send_Motor_Neuron( name = 5 , jointName = "Torso_FrontLeg")
-        pyrosim.Send_Motor_Neuron( name = 6 , jointName = "Torso_LeftLeg")
-        pyrosim.Send_Motor_Neuron( name = 7 , jointName = "Torso_RightLeg")
-        pyrosim.Send_Motor_Neuron( name = 8 , jointName = "BackLeg_BackLowerLeg")
-        pyrosim.Send_Motor_Neuron( name = 9 , jointName = "FrontLeg_FrontLowerLeg")
-        pyrosim.Send_Motor_Neuron( name = 10 , jointName = "LeftLeg_LeftLowerLeg")
-        pyrosim.Send_Motor_Neuron( name = 11 , jointName = "RightLeg_RightLowerLeg")
-
-        for currentRow in range(c.numSensorNeurons):
-            for currentColumn in range(c.numMotorNeurons):
-                pyrosim.Send_Synapse( sourceNeuronName = currentRow, targetNeuronName = currentColumn+c.numSensorNeurons , weight = self.weights[currentRow][currentColumn] )
-
-        pyrosim.End()

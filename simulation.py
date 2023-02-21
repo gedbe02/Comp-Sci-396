@@ -17,11 +17,12 @@ class SIMULATION:
             self.physicsClient = p.connect(p.DIRECT)
         else:
             p.connect(p.GUI)
+        p.configureDebugVisualizer(p.COV_ENABLE_GUI,0)
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
         p.setGravity(c.gravity_x,c.gravity_y,c.gravity_z)
         self.world = WORLD()
 
-        self.robot = ROBOT(solutionID, test, evolved, False) 
+        self.robot = ROBOT(solutionID, test, evolved) 
 
         pyrosim.Prepare_To_Simulate(self.robot.robotId) 
         self.robot.Prepare_To_Sense()
@@ -39,7 +40,7 @@ class SIMULATION:
     def Get_Fitness(self):
         self.robot.Get_Fitness()
         
-    def __del__(self):
+    def __del__(self): 
         p.disconnect()  
 
 

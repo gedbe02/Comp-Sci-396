@@ -7,6 +7,7 @@ solutionID = sys.argv[2]
 test = sys.argv[3] == "test"
 evolved = sys.argv[4] == "e"
 
-simulation = SIMULATION(directOrGUI, solutionID, test, evolved)
+simulation = SIMULATION(directOrGUI, solutionID, test, evolved) 
 simulation.Run()
-simulation.Get_Fitness()
+print("Need to edit simulate.py")
+#simulation.Get_Fitness()

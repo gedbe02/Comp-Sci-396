@@ -3,6 +3,10 @@ import constants as c
 import copy
 import os
 
+# To Do
+# Change init
+# Change mutate
+
 class PARALLEL_HILL_CLIMBER:
     def __init__(self):
         os.system("rm brain*.nndf")

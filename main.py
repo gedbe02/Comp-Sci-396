@@ -1,10 +1,6 @@
 import os
+#os.system("python3 search.py ")
 
-os.system("rm body*.urdf")
-os.system("rm brain*.urdf")
-
-for i in range(10):
-    os.system("python3 randomGenerate.py " + str(i))
-
-os.system("rm body*.urdf")
-os.system("rm brain*.urdf")
+from solution import SOLUTION
+s = SOLUTION(0)
+s.Start_Simulation("GUI")
