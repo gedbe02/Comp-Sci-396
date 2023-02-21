@@ -31,6 +31,8 @@ numSensorNeurons = 6
 numMotorNeurons = 10
 motorJointRange = 0.5
 
+maximumAddedParts = 2
+
 
 # Random Generation
 minSide = 0.25

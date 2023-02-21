@@ -29,6 +29,7 @@ class SOLUTION:
         self.numSensors = random.randint(1,2)
         self.isSensor = np.full((1,self.numParts), False)[0]
         self.isSensor[random.sample(range(self.numParts), self.numSensors)] = True
+        self.isSensor = list(self.isSensor)
 
         self.Initialize_Body()
 
@@ -125,35 +126,6 @@ class SOLUTION:
         parent    = self.cubes[0]
         self.Make_Part(oldCenter, parent, 1)
 
-    
-    #For Mutation#
-    # potential_parents = self.cubes[1:].copy()
-    # parent            = random.choice(potential_parents)
-    # oldCenter = np.array([0,0,0])
-    # oldCenter = oldCenter + (prevDirection*np.array([prevLength, prevWidth, prevHeight])/2)
-    # vv Still for Mutation vv
-    '''
-    # In the very unlikely situation that no branches can be made, stop trying to grow
-                if len(potential_parents) == 0:
-                    self.numParts = i
-                    if self.numParts == 1:
-                        self.numSensors = 0
-                    stop = True
-                    print("Break")
-                    break
-                #Give new parent
-                potential_parents.remove(parent)
-    '''
-    #^^If Make_Part returns -1, try another parent
-    ## In the very unlikely situation that no branches can be made, stop trying to grow
-                ############ NEED STOP VARIABLE
-    '''
-    if stop:
-            print("Need to bug test when numParts parts can't be made")
-            exit()
-            break
-    '''
-
     # Takes in previous center (relative or absolute) and a random parent
     def Make_Part(self, oldCenter, parent, i):
         #If branch cant continue, stop making new links
@@ -173,7 +145,7 @@ class SOLUTION:
 
         #Direction Options
         options = [[1,0,0], [0,1,0], [0,0,1], [-1,0,0], [0,-1,0], [0,0,-1]]
-        if prevDirection:
+        if i != 1:
             options.remove(list(prevDirection*-1))
         
         # Try to make new cube/joint
@@ -205,7 +177,7 @@ class SOLUTION:
 
             #If branch reaches end point, start a new branch
             if (len(options)) == 0:
-                return -1
+                return 0
         
         #Joint and Cube Positions
         jointPos = np.array([jointX, jointY, jointZ])
@@ -214,7 +186,7 @@ class SOLUTION:
         
         # If not moving on z, must maintain height
         # DO I NEED THIS? DO CHECK
-        if not prevDirection and abs(direction[2]) != 1: #Don't do if moving on z axis
+        if i == 1 and abs(direction[2]) != 1: #Don't do if moving on z axis
             jointPos[2] = oldZ 
 
         #minZ Calculation
@@ -236,17 +208,102 @@ class SOLUTION:
         self.parts[f'Part{i}'] = cube
         self.cubes.append(cube)
 
-        return 0
+        return 1
 
     def Create_Brain(self):
         pyrosim.Start_NeuralNetwork(f'brain{self.myID}.nndf')
-        # To Do
+        #Sensor Neurons
+        i = 0
+        for part in range(self.numParts):
+            is_sensor = self.isSensor[part]
+            if is_sensor:
+                pyrosim.Send_Sensor_Neuron(name = i , linkName = f'Part{part}')
+                i += 1
+        #Motor Neurons
+        j = self.numSensors
+        for joint in self.joints:
+            pyrosim.Send_Motor_Neuron( name = j , jointName = joint.name)
+            j += 1
+
+        for sensor in range(self.numSensors):
+            for motor in range(self.numParts-1):
+                pyrosim.Send_Synapse( sourceNeuronName = sensor, targetNeuronName = motor+self.numSensors , weight = self.weights[sensor][motor] )
         pyrosim.End()
     
-    def Mutate(self):
-        row = random.randint(0,c.numSensorNeurons-1)
-        col = random.randint(0,c.numMotorNeurons-1)
-        self.weights[row][col] = random.random() * 2 - 1
-    
+
+    # Add newParts body parts OR mutate a weight
+    # IMPORTANT: Make sure new weight is added for new parts
+    def Mutate(self, newParts, newSensors):
+        # If no parts are being added, mutate a weight instead
+        if newParts == 0:
+            row = random.randint(0,self.numSensors-1)
+            col = random.randint(0,self.numParts-1)
+            self.weights[row][col] = random.random() * 2 - 1
+            return
+
+        # Decide Sensors
+        is_sensor = np.full((1,newParts), False)[0]
+        is_sensor[random.sample(range(newParts), newSensors)] = True
+
+        # Mutating Body
+        for j in range(newParts):
+            i = self.numParts + j
+            self.numParts += 1
+
+            potential_parents = self.cubes[1:].copy()
+            while len(potential_parents) != 0:
+                self.isSensor.append(is_sensor[j])
+                if is_sensor[j]: 
+                    self.numSensors +=1
+                parent    = random.choice(potential_parents)
+                #oldCenter= np.array([0,0,0])
+                oldCenter = (parent.direction*np.array([parent.length, parent.width, parent.height])/2)
+                potential_parents.remove(parent)
+                
+                if (self.Make_Part(oldCenter, parent, i)):
+                    break
+            
+            #Debug this if need
+            if len(potential_parents) == 0:
+                print("Need to debug situations when body cannot be expanded")
+                #If bug occurs here, will likely need to subtract from self.numParts
+                '''
+                # In the very unlikely situation that no branches can be made, stop trying to grow
+                            if len(potential_parents) == 0:
+                                self.numParts = i
+                                if self.numParts == 1:
+                                    self.numSensors = 0
+                                stop = True
+                                print("Break")
+                                break
+                '''
+                #^^If Make_Part returns -1, try another parent
+                ## In the very unlikely situation that no branches can be made, stop trying to grow
+                            ############ NEED STOP VARIABLE
+                '''
+                if stop:
+                        print("Need to bug test when numParts parts can't be made")
+                        exit()
+                        break
+                '''
+
+            # Update weights
+            # self.weights = np.random.rand(c.numSensorNeurons,c.numMotorNeurons)*2-1
+
+            # Need to add new column for every new joint (# of new joints = newParts)
+            # Need to add new row for every new sensor
+
+            # Adding new motor neurons to weights
+            for i in range(newParts): 
+                newCol = np.random.rand(1, self.numSensors)*2*-1
+                newCol = np.array([[x] for x in newCol[0]])
+                weights = np.append(weights, newCol, axis=1)
+
+            # Adding new sensor neurons to weights
+            for i in range(newSensors):
+                newRow = np.random.rand(1, self.numParts)*2*-1
+                weights = np.append(weights, newRow, axis=0)
+
+
     def Set_ID(self, id):
         self.myID = id

@@ -9,5 +9,4 @@ evolved = sys.argv[4] == "e"
 
 simulation = SIMULATION(directOrGUI, solutionID, test, evolved) 
 simulation.Run()
-print("Need to edit simulate.py")
-#simulation.Get_Fitness()
+simulation.Get_Fitness()

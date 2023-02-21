@@ -13,7 +13,7 @@ blue  = ['Blue','    <color rgba="0.0 0.5 1.0 1.0"/>']
 class CREATURE(ROBOT): #Combined Solution and Robot
     def __init__(self, id, num_parts, num_sensors):
         self.myID = id
-        self.numParts = num_parts
+        self.numParts = num_parts 
         self.numSensors = num_sensors
         print(num_parts, num_sensors)
         self.isSensor = np.full((1,num_parts), False)[0]

@@ -86,6 +86,7 @@ class ROBOT:
         #self.nn.Print()
     
     def Get_Fitness(self):
+        ''' 
         basePositionAndOrientation = p.getBasePositionAndOrientation(self.robotId)
         basePosition = basePositionAndOrientation[0]
         xPosition = basePosition[0]
@@ -103,11 +104,12 @@ class ROBOT:
         # At each step, self.totalStandReward is incremented by 10 if the robot is standing and decremented by 5 if not
         # Below value is the average standing reward given a weight of .3
         fitness += self.totalStandReward*.3/len(self.sensors) #give reward for time spent standing
-     
+        
         #print("fitness", yReward, (self.totalStandReward*.3/len(self.sensors)), self.moveReward*20, fitness)
+        '''
 
         f = open(f'tmp{self.solutionID}.txt', "w")
-        f.write(str(fitness))
+        f.write(str(999))
         f.close()
         os.system(f'mv tmp{self.solutionID}.txt fitness{self.solutionID}.txt')
 

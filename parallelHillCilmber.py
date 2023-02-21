@@ -2,6 +2,7 @@ from solution import SOLUTION
 import constants as c
 import copy
 import os
+import random
 
 # To Do
 # Change init
@@ -42,8 +43,10 @@ class PARALLEL_HILL_CLIMBER:
 
 
     def Mutate(self):
-        for c in self.children:
-            self.children[c].Mutate()
+        for child in self.children:
+            new_parts   = random.randint(0,c.maximumAddedParts)
+            new_sensors = random.randint(new_parts//2, max(new_parts-1, 0))
+            self.children[child].Mutate(new_parts, new_sensors)
 
     def Select(self):
         for p in self.parents:

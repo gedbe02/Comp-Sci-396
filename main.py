@@ -1,6 +1,9 @@
 import os
 #os.system("python3 search.py ")
 
-from solution import SOLUTION
-s = SOLUTION(0)
-s.Start_Simulation("GUI")
+from parallelHillCilmber import PARALLEL_HILL_CLIMBER
+phc = PARALLEL_HILL_CLIMBER() 
+phc.Evolve()
+phc.Show_Best()
+
+print("Done")
