@@ -5,7 +5,7 @@ gravity_y = 0
 gravity_z = -9.8
 
 # Steps/In Loop
-steps = 500
+steps = 1000
 max_force = 100
 sleep_time = 1/100
 
@@ -25,8 +25,8 @@ fl_frequency = 10
 fl_phaseOffset = np.pi/4
 
 # Hill Climber
-numberOfGenerations = 1
-populationSize = 1
+numberOfGenerations = 10
+populationSize = 10
 numSensorNeurons = 6
 numMotorNeurons = 10
 motorJointRange = 0.5

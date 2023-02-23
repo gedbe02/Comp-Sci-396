@@ -73,6 +73,11 @@ class NEURON:
         self.Set_Value(0.0)
         for s in synapses:
             if s[1] == self.Get_Name():
+                ###
+                if s[0] not in neurons:
+                    print("\nCheck Here", s[0], neurons)
+                    exit()
+                ###
                 self.Allow_Presynaptic_Neuron_To_Influence_Me(synapses[s].Get_Weight(), neurons[s[0]].Get_Value())
         self.Threshold()
         

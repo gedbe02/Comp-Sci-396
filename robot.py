@@ -16,18 +16,22 @@ class ROBOT:
         self.motors = {}
 
         #Won't work with assignments <=5
-        self.robotId = p.loadURDF(f'body{solutionID}.urdf') #Need to change old PHC for it to work.
+        
 
         if test:
             if evolved:
-                self.nn = NEURAL_NETWORK(f'results/evolved/brain{solutionID}.nndf')
+                self.nn = NEURAL_NETWORK(f'brain{solutionID}.nndf')
+                self.robotId = p.loadURDF(f'body{solutionID}.urdf') 
             else:
-                self.nn = NEURAL_NETWORK(f'results/random/brain{solutionID}.nndf')
+                self.nn = NEURAL_NETWORK(f'brain{solutionID}.nndf')
+                self.robotId = p.loadURDF(f'body{solutionID}.urdf') 
         else:
             self.nn = NEURAL_NETWORK(f'brain{solutionID}.nndf')
+            self.robotId = p.loadURDF(f'body{solutionID}.urdf') 
 
         if not test:
             os.system(f'rm brain{solutionID}.nndf')
+            os.system(f'rm body{solutionID}.urdf')
         self.solutionID = solutionID
         #self.totalHeight = 0
         self.totalStandReward = 0
@@ -51,35 +55,8 @@ class ROBOT:
         for neuronName in self.nn.Get_Neuron_Names():
             if self.nn.Is_Motor_Neuron(neuronName):
                 jointName = self.nn.Get_Motor_Neurons_Joint(neuronName)
-                if jointName in ["Torso_UpperRightLeg", "Torso_UpperLeftLeg"]:
-                    desiredAngle = self.nn.Get_Value_Of(neuronName) * 1
-                elif jointName in ["UpperRightLeg_LowerRightLeg", "UpperLeftLeg_LowerLeftLeg"]:
-                    desiredAngle = self.nn.Get_Value_Of(neuronName) * 0.5
-                elif jointName in ["LowerRightLeg_RightFoot", "LowerLeftLeg_LeftFoot"]:
-                    desiredAngle = self.nn.Get_Value_Of(neuronName) * 0.2
-                else:
-                    desiredAngle = self.nn.Get_Value_Of(neuronName) * 0.4
-                self.motors[jointName]
+                desiredAngle = self.nn.Get_Value_Of(neuronName) * c.motorJointRange
                 self.motors[jointName].Set_Value(self.robotId, desiredAngle)
-        
-        
-        xPosition = p.getBasePositionAndOrientation(self.robotId)[0][0]
-        yPosition = p.getBasePositionAndOrientation(self.robotId)[0][1]
-        zPosition = p.getBasePositionAndOrientation(self.robotId)[0][2]
-
-        #if i % 100 == 0:
-            #deltaY = yPosition - self.lastSpot
-            #if deltaY > 0.1:
-            #    self.moveReward += 1
-            #self.lastSpot = yPosition
-
-        #self.totalHeight += zPosition
-        if zPosition >= 2:
-            self.totalStandReward += 10
-            self.lastYUp = yPosition
-        else:
-            self.totalStandReward -= 5
-        #print(zPosition)
     
     def Think(self):
         self.nn.Update()
@@ -108,8 +85,16 @@ class ROBOT:
         #print("fitness", yReward, (self.totalStandReward*.3/len(self.sensors)), self.moveReward*20, fitness)
         '''
 
+        basePositionAndOrientation = p.getBasePositionAndOrientation(self.robotId)
+        basePosition = basePositionAndOrientation[0]
+        xPosition = basePosition[0]
+        yPosition = basePosition[1]
+        zPosition = basePosition[2]
+
+        fitness = yPosition * 10
+
         f = open(f'tmp{self.solutionID}.txt', "w")
-        f.write(str(999))
+        f.write(str(fitness))
         f.close()
         os.system(f'mv tmp{self.solutionID}.txt fitness{self.solutionID}.txt')
 

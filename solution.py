@@ -18,8 +18,8 @@ from joint import JOINT
 green = ['Green','    <color rgba="0.0 1.0 0.0 1.0"/>']
 blue  = ['Blue','    <color rgba="0.0 0.5 1.0 1.0"/>']
 class SOLUTION:
-    def __init__(self, nextAvailableID):  
-        self.weights = np.random.rand(c.numSensorNeurons,c.numMotorNeurons)*2-1
+    def __init__(self, nextAvailableID): 
+        #self.weights = np.random.rand(c.numSensorNeurons,c.numMotorNeurons)*2-1 
         #self.motorJointRange = np.random.rand(c.numSensorNeurons,c.numMotorNeurons)*2-1 - Maybe add?
         self.myID = nextAvailableID
 
@@ -31,14 +31,18 @@ class SOLUTION:
         self.isSensor[random.sample(range(self.numParts), self.numSensors)] = True
         self.isSensor = list(self.isSensor)
 
+        self.weights = np.random.rand(self.numSensors, self.numParts-1)*2-1
+
         self.Initialize_Body()
 
 
 
-    def Start_Simulation(self, directOrGUI):
-        self.Create_World()
+    def Start_Simulation(self, directOrGUI, save):
         self.Create_Body()
         self.Create_Brain()
+        if save:
+            os.system(f'cp brain{self.myID}.nndf results/brain{self.myID}.nndf')
+            os.system(f'cp body{self.myID}.urdf results/body{self.myID}.urdf')
         os.system("python3 simulate.py " + directOrGUI + " "+ str(self.myID) + " not_test e &")
     
     def Wait_For_Simulation_To_End(self):
@@ -74,22 +78,25 @@ class SOLUTION:
 
 
     def Create_Body(self):
-        #Min Z - To Do
-        parts = self.parts.copy()
-        parts['Part0'].z -= self.minZ
-        if 'Part0_Part1' in parts:
+        # Temporarily alter absolute z's by Min Z
+        self.parts['Part0'].z -= self.minZ
+        if 'Part0_Part1' in self.parts:
             self.parts['Part0_Part1'].z -= self.minZ
 
         pyrosim.Start_URDF(f'body{self.myID}.urdf')
-        for name in parts:
-            part = parts[name]
+        for name in self.parts:
+            part = self.parts[name]
             if part.isJoint:
                 part.Send_Joint()
             else:
                 part.Send_Cube()
-        #If branch breaks, need to decrease numSensors
-        #self.numSensors = newTotalSensors
+
         pyrosim.End()
+
+        # Revert z's Back
+        self.parts['Part0'].z += self.minZ
+        if 'Part0_Part1' in self.parts:
+            self.parts['Part0_Part1'].z += self.minZ
     
     def Initialize_Body(self):
         #Part0
@@ -147,6 +154,9 @@ class SOLUTION:
         options = [[1,0,0], [0,1,0], [0,0,1], [-1,0,0], [0,-1,0], [0,0,-1]]
         if i != 1:
             options.remove(list(prevDirection*-1))
+            self.test_dims = [length, width, height]
+            self.test_options = options.copy()
+            self.tests = []
         
         # Try to make new cube/joint
         intersecting = True
@@ -169,6 +179,8 @@ class SOLUTION:
             cubeZ = height/2
             newZ = oldZ + ((prevHeight+height)/2 * direction[2])
 
+            if i != 1:
+                self.tests.append([newX, newY, newZ, direction])
             #Check for overlapping cubes
             for cub in self.cubes:
                 intersecting |= cub.overlapping([newX, newY, newZ], [length, width, height])
@@ -185,7 +197,7 @@ class SOLUTION:
         absoluteCubePos = np.array([newX, newY, newZ])
         
         # If not moving on z, must maintain height
-        # DO I NEED THIS? DO CHECK
+        # Need this because x and y start at 0, but z doesn't. Honestly, to get rid of this, make xyz=000
         if i == 1 and abs(direction[2]) != 1: #Don't do if moving on z axis
             jointPos[2] = oldZ 
 
@@ -198,7 +210,7 @@ class SOLUTION:
             #newTotalSensors += 1
         else:
             color = blue
-        
+    
         jointAxis = random.choice(["1 0 0", "0 1 0", "0 0 1"])
         joint = JOINT(f'{parentName}_Part{i}', jointPos, parentName, f'Part{i}', jointAxis)
         self.parts[f'{parentName}_Part{i}'] = joint
@@ -210,62 +222,47 @@ class SOLUTION:
 
         return 1
 
-    def Create_Brain(self):
-        pyrosim.Start_NeuralNetwork(f'brain{self.myID}.nndf')
-        #Sensor Neurons
-        i = 0
-        for part in range(self.numParts):
-            is_sensor = self.isSensor[part]
-            if is_sensor:
-                pyrosim.Send_Sensor_Neuron(name = i , linkName = f'Part{part}')
-                i += 1
-        #Motor Neurons
-        j = self.numSensors
-        for joint in self.joints:
-            pyrosim.Send_Motor_Neuron( name = j , jointName = joint.name)
-            j += 1
-
-        for sensor in range(self.numSensors):
-            for motor in range(self.numParts-1):
-                pyrosim.Send_Synapse( sourceNeuronName = sensor, targetNeuronName = motor+self.numSensors , weight = self.weights[sensor][motor] )
-        pyrosim.End()
-    
-
     # Add newParts body parts OR mutate a weight
     # IMPORTANT: Make sure new weight is added for new parts
     def Mutate(self, newParts, newSensors):
         # If no parts are being added, mutate a weight instead
         if newParts == 0:
             row = random.randint(0,self.numSensors-1)
-            col = random.randint(0,self.numParts-1)
+            col = random.randint(0,self.numParts-2)
             self.weights[row][col] = random.random() * 2 - 1
             return
 
         # Decide Sensors
         is_sensor = np.full((1,newParts), False)[0]
         is_sensor[random.sample(range(newParts), newSensors)] = True
-
         # Mutating Body
         for j in range(newParts):
             i = self.numParts + j
-            self.numParts += 1
+            self.isSensor.append(is_sensor[j])
 
             potential_parents = self.cubes[1:].copy()
+            parents_remaining = len(potential_parents)
             while len(potential_parents) != 0:
-                self.isSensor.append(is_sensor[j])
-                if is_sensor[j]: 
-                    self.numSensors +=1
+                #if is_sensor[j]: 
+                #    self.numSensors += 1
                 parent    = random.choice(potential_parents)
                 #oldCenter= np.array([0,0,0])
                 oldCenter = (parent.direction*np.array([parent.length, parent.width, parent.height])/2)
                 potential_parents.remove(parent)
-                
-                if (self.Make_Part(oldCenter, parent, i)):
+                if self.Make_Part(oldCenter, parent, i):
+                    #Can we see an example of a robot that cant keep building?
                     break
+                parents_remaining -= 1
             
             #Debug this if need
-            if len(potential_parents) == 0:
-                print("Need to debug situations when body cannot be expanded")
+            if parents_remaining == 0:
+                print("\nNeed to debug situations when body cannot be expanded", i, len(self.cubes), self.numParts)
+                print(self.test_options)
+                print(self.test_dims)
+                print(self.tests)
+                for cube in self.cubes:
+                    cube.print()
+                exit()
                 #If bug occurs here, will likely need to subtract from self.numParts
                 '''
                 # In the very unlikely situation that no branches can be made, stop trying to grow
@@ -287,23 +284,44 @@ class SOLUTION:
                         break
                 '''
 
-            # Update weights
-            # self.weights = np.random.rand(c.numSensorNeurons,c.numMotorNeurons)*2-1
+        # Update weights
+        # Adding new motor neurons to weights
+        for i in range(newParts): 
+            newCol = np.random.rand(1, self.numSensors)*2*-1
+            newCol = np.array([[x] for x in newCol[0]])
+            self.weights = np.append(self.weights, newCol, axis=1)
 
-            # Need to add new column for every new joint (# of new joints = newParts)
-            # Need to add new row for every new sensor
+        # Adding new sensor neurons to weights
+        for i in range(newSensors):
+            newRow = np.random.rand(1, self.numParts+newParts-1)*2*-1
+            self.weights = np.append(self.weights, newRow, axis=0)
+        
+        self.numParts   += newParts
+        self.numSensors += newSensors
 
-            # Adding new motor neurons to weights
-            for i in range(newParts): 
-                newCol = np.random.rand(1, self.numSensors)*2*-1
-                newCol = np.array([[x] for x in newCol[0]])
-                weights = np.append(weights, newCol, axis=1)
+    def Create_Brain(self):
+        pyrosim.Start_NeuralNetwork(f'brain{self.myID}.nndf')
+        #Sensor Neurons
+        i = 0
+        a = []
+        for cube in range(len(self.cubes)):
+            is_sensor = self.isSensor[cube]
+            if is_sensor:
+                pyrosim.Send_Sensor_Neuron(name = i , linkName = self.cubes[cube].name)
+                a.append(i)
+                i += 1
+        #Motor Neurons
+        j = self.numSensors
+        b = []
+        for joint in self.joints:
+            pyrosim.Send_Motor_Neuron( name = j , jointName = joint.name)
+            b.append(j)
+            j += 1
+        #print("\n",self.cubes, self.joints, "\nThis should be sequential: ", a+b, "Also: ", self.numParts, self.numSensors)
 
-            # Adding new sensor neurons to weights
-            for i in range(newSensors):
-                newRow = np.random.rand(1, self.numParts)*2*-1
-                weights = np.append(weights, newRow, axis=0)
-
-
+        for sensor in range(self.numSensors):
+            for motor in range(self.numParts-1):
+                pyrosim.Send_Synapse( sourceNeuronName = sensor, targetNeuronName = motor+self.numSensors , weight = self.weights[sensor][motor] )
+        pyrosim.End()
     def Set_ID(self, id):
         self.myID = id
