@@ -80,8 +80,12 @@ class SOLUTION:
     def Create_Body(self):
         # Temporarily alter absolute z's by Min Z
         self.parts['Part0'].z -= self.minZ
-        if 'Part0_Part1' in self.parts:
-            self.parts['Part0_Part1'].z -= self.minZ
+        for p in self.parts:
+            part = self.parts[p]
+            if part.isJoint and part.doAbsolute:
+                part.z -= self.minZ
+        #if 'Part0_Part1' in self.parts:
+        #    self.parts['Part0_Part1'].z -= self.minZ
 
         pyrosim.Start_URDF(f'body{self.myID}.urdf')
         for name in self.parts:
@@ -95,8 +99,12 @@ class SOLUTION:
 
         # Revert z's Back
         self.parts['Part0'].z += self.minZ
-        if 'Part0_Part1' in self.parts:
-            self.parts['Part0_Part1'].z += self.minZ
+        for p in self.parts:
+            part = self.parts[p]
+            if part.isJoint and part.doAbsolute:
+                part.z += self.minZ
+        #if 'Part0_Part1' in self.parts:
+        #    self.parts['Part0_Part1'].z += self.minZ
     
     def Initialize_Body(self):
         #Part0
@@ -122,19 +130,19 @@ class SOLUTION:
         z = 0.5
         cubePos = [x,y,z]
 
-        cube = CUBE("Part0", length, width, height, cubePos, cubePos, color, None)
+        cube = CUBE("Part0", length, width, height, cubePos, cubePos, color, None, True)
         self.parts["Part0"] = cube
         self.cubes.append(cube)
 
         #Trying to get minZ: Lowest z coordinate of body (Lowest edge)
         self.minZ = z - height/2 #Z coord of Center of Part0 - its "radius"
 
-        oldCenter = cubePos
+        #oldCenter = cubePos
         parent    = self.cubes[0]
-        self.Make_Part(oldCenter, parent, 1)
+        self.Make_Part(parent, 1)
 
     # Takes in previous center (relative or absolute) and a random parent
-    def Make_Part(self, oldCenter, parent, i):
+    def Make_Part(self, parent, i):
         #If branch cant continue, stop making new links
         #stop = False
         parentName    = parent.name
@@ -145,6 +153,12 @@ class SOLUTION:
         prevLength    = parent.length
         prevHeight    = parent.height
         prevDirection = parent.direction
+        doAbsolute    = parent.isOriginal
+
+        if doAbsolute:
+            oldCenter = parent.absolutePos
+        else:
+            oldCenter = (parent.direction*np.array([parent.length, parent.width, parent.height])/2)
 
         length = random.randint(self.minSide,self.maxSide)/100
         width  = random.randint(self.minSide,self.maxSide)/100
@@ -152,7 +166,7 @@ class SOLUTION:
 
         #Direction Options
         options = [[1,0,0], [0,1,0], [0,0,1], [-1,0,0], [0,-1,0], [0,0,-1]]
-        if i != 1:
+        if not doAbsolute:
             options.remove(list(prevDirection*-1))
             self.test_dims = [length, width, height]
             self.test_options = options.copy()
@@ -179,8 +193,10 @@ class SOLUTION:
             cubeZ = height/2
             newZ = oldZ + ((prevHeight+height)/2 * direction[2])
 
-            if i != 1:
+            ####
+            if not doAbsolute:
                 self.tests.append([newX, newY, newZ, direction])
+            ####
             #Check for overlapping cubes
             for cub in self.cubes:
                 intersecting |= cub.overlapping([newX, newY, newZ], [length, width, height])
@@ -198,7 +214,7 @@ class SOLUTION:
         
         # If not moving on z, must maintain height
         # Need this because x and y start at 0, but z doesn't. Honestly, to get rid of this, make xyz=000
-        if i == 1 and abs(direction[2]) != 1: #Don't do if moving on z axis
+        if doAbsolute and abs(direction[2]) != 1: #Don't do if moving on z axis
             jointPos[2] = oldZ 
 
         #minZ Calculation
@@ -212,11 +228,11 @@ class SOLUTION:
             color = blue
     
         jointAxis = random.choice(["1 0 0", "0 1 0", "0 0 1"])
-        joint = JOINT(f'{parentName}_Part{i}', jointPos, parentName, f'Part{i}', jointAxis)
+        joint = JOINT(f'{parentName}_Part{i}', jointPos, parentName, f'Part{i}', jointAxis, doAbsolute)
         self.parts[f'{parentName}_Part{i}'] = joint
         self.joints.append(joint)
         
-        cube = CUBE(f'Part{i}', length, width, height, relativeCubePos, absoluteCubePos, color, direction) 
+        cube = CUBE(f'Part{i}', length, width, height, relativeCubePos, absoluteCubePos, color, direction, False) 
         self.parts[f'Part{i}'] = cube
         self.cubes.append(cube)
 
@@ -224,7 +240,7 @@ class SOLUTION:
 
     # Add newParts body parts OR mutate a weight
     # IMPORTANT: Make sure new weight is added for new parts
-    def Mutate(self, newParts, newSensors):
+    def Mutate(self, newParts, newSensors): 
         # If no parts are being added, mutate a weight instead
         if newParts == 0:
             row = random.randint(0,self.numSensors-1)
@@ -240,16 +256,16 @@ class SOLUTION:
             i = self.numParts + j
             self.isSensor.append(is_sensor[j])
 
-            potential_parents = self.cubes[1:].copy()
+            potential_parents = self.cubes.copy()
             parents_remaining = len(potential_parents)
             while len(potential_parents) != 0:
                 #if is_sensor[j]: 
                 #    self.numSensors += 1
                 parent    = random.choice(potential_parents)
                 #oldCenter= np.array([0,0,0])
-                oldCenter = (parent.direction*np.array([parent.length, parent.width, parent.height])/2)
+                
                 potential_parents.remove(parent)
-                if self.Make_Part(oldCenter, parent, i):
+                if self.Make_Part(parent, i):
                     #Can we see an example of a robot that cant keep building?
                     break
                 parents_remaining -= 1

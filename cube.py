@@ -11,7 +11,7 @@ def dec_to_bigint(dec):
     return int(str_bigint)
 
 class CUBE(PART):
-    def __init__(self, name, length, width, height, relative_pos, absolute_pos, color, direction):
+    def __init__(self, name, length, width, height, relative_pos, absolute_pos, color, direction, is_original):
         self.name = name
         self.length = length
         self.width = width
@@ -23,6 +23,7 @@ class CUBE(PART):
         self.color = color
         self.direction = direction
         self.isJoint = False
+        self.isOriginal = is_original
 
         PART.__init__(self, name, self.x, self.y, self.z, self.isJoint)
 

@@ -20,11 +20,11 @@ class ROBOT:
 
         if test:
             if evolved:
-                self.nn = NEURAL_NETWORK(f'brain{solutionID}.nndf')
-                self.robotId = p.loadURDF(f'body{solutionID}.urdf') 
+                self.nn = NEURAL_NETWORK(f'results/evolved/{solutionID}/brain{solutionID}.nndf')
+                self.robotId = p.loadURDF(f'results/evolved/{solutionID}/body{solutionID}.urdf') 
             else:
-                self.nn = NEURAL_NETWORK(f'brain{solutionID}.nndf')
-                self.robotId = p.loadURDF(f'body{solutionID}.urdf') 
+                self.nn = NEURAL_NETWORK(f'results/random/{solutionID}/brain{solutionID}.nndf')
+                self.robotId = p.loadURDF(f'results/random/{solutionID}/body{solutionID}.urdf') 
         else:
             self.nn = NEURAL_NETWORK(f'brain{solutionID}.nndf')
             self.robotId = p.loadURDF(f'body{solutionID}.urdf') 

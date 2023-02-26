@@ -49,7 +49,7 @@ class PARALLEL_HILL_CLIMBER:
     def Mutate(self):
         num_mutated = 0
         for child in self.children:
-            new_parts   = random.randint(0,c.maximumAddedParts)
+            new_parts   = random.randint(1,c.maximumAddedParts)
             new_sensors = random.randint(new_parts//2, max(new_parts-1, 0))
             if num_mutated < c.populationSize/2:
                 self.children[child].Mutate(new_parts, new_sensors)
