@@ -1,15 +1,20 @@
 # Comp-Sci-396
 
-<h2>Random Creatures:</h2>
+<h2>Random Parallel Hill Climber:</h2>
 
- The goal of this program is to create robots with randomly sized and positioned links in 3 Dimenions. Each creature has a random number of parts (Between 7 and 15, as per constants.py) and a random number of sensors (Between 1 and NumParts-1). Sensor links are green, normal links are blue. Each link's length, width, and height are randomly selected (Between 0.25 and 1, as per constants.py). Each link is connected by a joint that either moves on the x, y, or z joint axis. 
+ The goal of this program is to evolve random robots that move in the positive y direction. Sensor links are green, normal links are blue. Each link's length, width, and height are randomly selected (Between 0.75 and 1.25, as per constants.py). Each link is connected by a joint that either moves on the x, y, or z joint axis. 
   
- To see it in action, click <a href="https://www.youtube.com/watch?v=Gg0BlUyQODs">here</a>. It has 6 random generations with the last one shown moving
+ To see it in action, click <a href>here</a>. XXXXX.
   
  To run the experiment, simply run main.py
  
  <h3> Code Explanation </h3>
  <h4> Body Generation </h4>
+ New - 
+ 
+ 
+ 
+ 
  The body of the creature is created in the Create_Body method in creature.py. The number of parts and sensors are passed into the initializer and
  saved to the object (CREATURE intialized in randomGeneration.py). The minimum and maximum size of each side is defined in constants.py. 
  
