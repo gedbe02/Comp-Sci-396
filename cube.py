@@ -25,6 +25,8 @@ class CUBE(PART):
         self.isJoint = False
         self.isOriginal = is_original
 
+        self.isPair = False
+
         PART.__init__(self, name, self.x, self.y, self.z, self.isJoint)
 
     def Send_Cube(self):

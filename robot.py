@@ -6,6 +6,7 @@ from sensor import SENSOR
 from motor import MOTOR
 import constants as c
 import math
+import random
 
 
 
@@ -92,6 +93,9 @@ class ROBOT:
         zPosition = basePosition[2]
 
         fitness = yPosition * 10
+        ###
+        fitness = self.solutionID
+        ###
 
         f = open(f'tmp{self.solutionID}.txt', "w")
         f.write(str(fitness))

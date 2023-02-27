@@ -17,6 +17,7 @@ from joint import JOINT
 
 green = ['Green','    <color rgba="0.0 1.0 0.0 1.0"/>']
 blue  = ['Blue','    <color rgba="0.0 0.5 1.0 1.0"/>']
+red  = ['Red','    <color rgba="1.0 0.5 0.0 1.0"/>']
 class SOLUTION:
     def __init__(self, nextAvailableID): 
         #self.weights = np.random.rand(c.numSensorNeurons,c.numMotorNeurons)*2-1 
@@ -114,6 +115,7 @@ class SOLUTION:
             #newTotalSensors += 1
         else:
             color = blue
+        #color = red
 
         self.minSide = 100 * c.minSide #/100
         self.maxSide = 100 * c.maxSide #/100
@@ -131,6 +133,7 @@ class SOLUTION:
         cubePos = [x,y,z]
 
         cube = CUBE("Part0", length, width, height, cubePos, cubePos, color, None, True)
+        cube.isPair = True #Part0 can't be paired with other links
         self.parts["Part0"] = cube
         self.cubes.append(cube)
 
@@ -138,7 +141,8 @@ class SOLUTION:
         self.minZ = z - height/2 #Z coord of Center of Part0 - its "radius"
 
         #oldCenter = cubePos
-        parent    = self.cubes[0]
+        
+        parent = self.cubes[0]
         self.Make_Part(parent, 1)
 
     # Takes in previous center (relative or absolute) and a random parent
@@ -168,15 +172,25 @@ class SOLUTION:
         options = [[1,0,0], [0,1,0], [0,0,1], [-1,0,0], [0,-1,0], [0,0,-1]]
         if not doAbsolute:
             options.remove(list(prevDirection*-1))
+            ####
             self.test_dims = [length, width, height]
             self.test_options = options.copy()
             self.tests = []
+            ####
+
         
         # Try to make new cube/joint
         intersecting = True
+        pairing = True
         while intersecting: 
             intersecting = False
+            #if not parent.isPair and list(prevDirection) in options: #Trying to bias longer limbs
+            #    direction = prevDirection
+                #print(f'{parentName} to Part{i}')
+                #parent.isPair = True
+           # else:
             direction = np.array(random.choice(options))
+             #   pairing = False
 
             #X
             jointX = oldCenter[0] + direction[0]*prevLength/2
@@ -233,6 +247,11 @@ class SOLUTION:
         self.joints.append(joint)
         
         cube = CUBE(f'Part{i}', length, width, height, relativeCubePos, absoluteCubePos, color, direction, False) 
+        #if pairing:
+            # If parent and child share a direction, they are pairs
+         #   parent.isPair = True
+            #cube.isPair = True
+            #SET CHILD AND PARENT ISPAIR TRUE
         self.parts[f'Part{i}'] = cube
         self.cubes.append(cube)
 
