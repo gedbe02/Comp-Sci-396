@@ -34,8 +34,8 @@ For every new cube, a random parent cube is chosen and a random side of that par
   
  <h2> Diagram </h2>
  <img width="1192" alt="Screen Shot 2023-02-20 at 4 49 11 PM" src="https://user-images.githubusercontent.com/82680052/220209260-5a376471-5263-4610-a1a0-5e88daf91a09.png">
-<img width="1198" alt="Screen Shot 2023-02-20 at 4 49 23 PM" src="https://user-images.githubusercontent.com/82680052/220209264-0c63dd94-0683-458c-8068-cd4f08816e9c.png">
 
+<img width="1004" alt="Screen Shot 2023-02-26 at 10 55 16 PM" src="https://user-images.githubusercontent.com/82680052/221477608-2caf70ad-c5eb-47d8-b694-06f235cf512d.png">
 
  
  
