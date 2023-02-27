@@ -94,7 +94,7 @@ class ROBOT:
 
         fitness = yPosition * 10
         ###
-        fitness = self.solutionID
+        #fitness = self.solutionID
         ###
 
         f = open(f'tmp{self.solutionID}.txt', "w")

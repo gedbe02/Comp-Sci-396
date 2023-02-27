@@ -26,7 +26,9 @@ class PARALLEL_HILL_CLIMBER:
     def Evolve(self):
         self.Evaluate(self.parents)
         for currentGeneration in range(c.numberOfGenerations):
+            self.bestOfGens.append(self.Best_Fitness())
             self.Evolve_For_One_Generation()
+        self.bestOfGens.append(self.Best_Fitness())
     
     def Evolve_For_One_Generation(self):
         #exit()
@@ -63,7 +65,7 @@ class PARALLEL_HILL_CLIMBER:
         for p in self.parents:
             if self.children[p].fitness > self.parents[p].fitness:
                 self.parents[p] = self.children[p]
-        self.bestOfGens.append(self.Best_Fitness())
+        #self.bestOfGens.append(self.Best_Fitness())
     
     def Best_Fitness(self):
         best_fitness = -float('inf')
@@ -74,7 +76,7 @@ class PARALLEL_HILL_CLIMBER:
                 best_fitness = self.parents[p].fitness
         return best_fitness
 
-    def Show_Best(self):
+    def Show_Best(self): 
         best_fitness = -float('inf')
         best = self.parents[0]
         for p in self.parents:

@@ -7,34 +7,16 @@ import constants as c
 from cube import CUBE
 from joint import JOINT
 
-# To Do
-# change init
-# Change Create_Body
-# Change Create_brain
-# Change Mutate
-    # On mutate, maybe add 0-c.maxNewParts parts and increase num sensors by 0-(# of new parts - 1)
-# Change Start_Simulation and Wait_For_Simulation_To_End
-
 green = ['Green','    <color rgba="0.0 1.0 0.0 1.0"/>']
 blue  = ['Blue','    <color rgba="0.0 0.5 1.0 1.0"/>']
 red  = ['Red','    <color rgba="1.0 0.5 0.0 1.0"/>']
 class SOLUTION:
     def __init__(self, nextAvailableID): 
-        #self.weights = np.random.rand(c.numSensorNeurons,c.numMotorNeurons)*2-1 
         #self.motorJointRange = np.random.rand(c.numSensorNeurons,c.numMotorNeurons)*2-1 - Maybe add?
         self.myID = nextAvailableID
 
-        # Random Generation #
-        # All parents shoudl initally start with 2 parts and 1-2 sensors, so it can actually move
-        self.numParts = 2
-        self.numSensors = random.randint(1,2)
-        self.isSensor = np.full((1,self.numParts), False)[0]
-        self.isSensor[random.sample(range(self.numParts), self.numSensors)] = True
-        self.isSensor = list(self.isSensor)
-
+        self.Initialize_Body() 
         self.weights = np.random.rand(self.numSensors, self.numParts-1)*2-1
-
-        self.Initialize_Body()
 
 
 
@@ -58,25 +40,6 @@ class SOLUTION:
         pyrosim.Start_SDF("world.sdf")
         pyrosim.End()
     
-    '''
-    Information:
-    Initialize_Body populates self.parts, but does so randomly every time
-
-    What Needs to Happen:
-    In init, Initialize_Body populates self.parts with Part0 and Part1
-
-    Run Create_Body to test solution
-
-    *Mutation*
-    A new body part(s) must be added to self.parts
-    Mutate_Body should do this
-        Needs to also randomly decide if part is a sensor or not
-
-    To Do:
-    Split Initialize Body into two functions
-    
-    '''
-
 
     def Create_Body(self):
         # Temporarily alter absolute z's by Min Z
@@ -85,8 +48,6 @@ class SOLUTION:
             part = self.parts[p]
             if part.isJoint and part.doAbsolute:
                 part.z -= self.minZ
-        #if 'Part0_Part1' in self.parts:
-        #    self.parts['Part0_Part1'].z -= self.minZ
 
         pyrosim.Start_URDF(f'body{self.myID}.urdf')
         for name in self.parts:
@@ -104,18 +65,22 @@ class SOLUTION:
             part = self.parts[p]
             if part.isJoint and part.doAbsolute:
                 part.z += self.minZ
-        #if 'Part0_Part1' in self.parts:
-        #    self.parts['Part0_Part1'].z += self.minZ
     
     def Initialize_Body(self):
-        #Part0
-        #newTotalSensors = 0
+        self.numParts = 1 #Part0
+        partsToAdd = random.randint(c.maxParts//2, c.maxParts)
+        numParts = partsToAdd + 1
+
+        self.numSensors = random.randint(numParts//2, numParts-1)
+        self.isSensor = [random.choice([True, False])]
+
+        # Part0
         if self.isSensor[0]:
             color = green
-            #newTotalSensors += 1
+            sensorsToAdd = self.numSensors - 1
         else:
             color = blue
-        #color = red
+            sensorsToAdd = self.numSensors
 
         self.minSide = 100 * c.minSide #/100
         self.maxSide = 100 * c.maxSide #/100
@@ -139,11 +104,10 @@ class SOLUTION:
 
         #Trying to get minZ: Lowest z coordinate of body (Lowest edge)
         self.minZ = z - height/2 #Z coord of Center of Part0 - its "radius"
-
-        #oldCenter = cubePos
         
-        parent = self.cubes[0]
-        self.Make_Part(parent, 1)
+        # Add other parts
+        self.Add_Parts(partsToAdd, sensorsToAdd) ###
+        self.numParts += partsToAdd
 
     # Takes in previous center (relative or absolute) and a random parent
     def Make_Part(self, parent, i):
@@ -257,20 +221,11 @@ class SOLUTION:
 
         return 1
 
-    # Add newParts body parts OR mutate a weight
-    # IMPORTANT: Make sure new weight is added for new parts
-    def Mutate(self, newParts, newSensors): 
-        # If no parts are being added, mutate a weight instead
-        if newParts == 0:
-            row = random.randint(0,self.numSensors-1)
-            col = random.randint(0,self.numParts-2)
-            self.weights[row][col] = random.random() * 2 - 1
-            return
-
+    # Adds #newParts parts with #newSensors of them being sensors
+    def Add_Parts(self, newParts, newSensors):
         # Decide Sensors
         is_sensor = np.full((1,newParts), False)[0]
         is_sensor[random.sample(range(newParts), newSensors)] = True
-        # Mutating Body
         for j in range(newParts):
             i = self.numParts + j
             self.isSensor.append(is_sensor[j])
@@ -278,10 +233,7 @@ class SOLUTION:
             potential_parents = self.cubes.copy()
             parents_remaining = len(potential_parents)
             while len(potential_parents) != 0:
-                #if is_sensor[j]: 
-                #    self.numSensors += 1
-                parent    = random.choice(potential_parents)
-                #oldCenter= np.array([0,0,0])
+                parent = random.choice(potential_parents)
                 
                 potential_parents.remove(parent)
                 if self.Make_Part(parent, i):
@@ -289,7 +241,7 @@ class SOLUTION:
                     break
                 parents_remaining -= 1
             
-            #Debug this if need
+            #Debug this if needed
             if parents_remaining == 0:
                 print("\nNeed to debug situations when body cannot be expanded", i, len(self.cubes), self.numParts)
                 print(self.test_options)
@@ -318,7 +270,19 @@ class SOLUTION:
                         exit()
                         break
                 '''
+   
+    # Add newParts body parts OR mutate a weight
+    def Mutate(self, newParts, newSensors): 
+        # If no parts are being added, mutate a weight instead
+        if newParts == 0:
+            row = random.randint(0,self.numSensors-1)
+            col = random.randint(0,self.numParts-2)
+            self.weights[row][col] = random.random() * 2 - 1
+            return
 
+        # Mutating Body
+        self.Add_Parts(newParts, newSensors)
+                
         # Update weights
         # Adding new motor neurons to weights
         for i in range(newParts): 
@@ -352,11 +316,11 @@ class SOLUTION:
             pyrosim.Send_Motor_Neuron( name = j , jointName = joint.name)
             b.append(j)
             j += 1
-        #print("\n",self.cubes, self.joints, "\nThis should be sequential: ", a+b, "Also: ", self.numParts, self.numSensors)
 
         for sensor in range(self.numSensors):
             for motor in range(self.numParts-1):
                 pyrosim.Send_Synapse( sourceNeuronName = sensor, targetNeuronName = motor+self.numSensors , weight = self.weights[sensor][motor] )
         pyrosim.End()
+   
     def Set_ID(self, id):
         self.myID = id
