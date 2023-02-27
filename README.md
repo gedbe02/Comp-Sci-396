@@ -4,7 +4,7 @@
 
  The goal of this program is to evolve random robots that move in the positive y direction. Sensor links are green, normal links are blue. Each link's length, width, and height are randomly selected (Between 0.75 and 1.25, as per constants.py). Each link is connected by a joint that either moves on the x, y, or z joint axis. 
   
- To see it in action, click <a href=https://youtu.be/4JCSnzAa1Tk>here</a>. The first 3 robots were randomly generated and the second 3 were evolved using a population size of 100 with 100 generations. 
+ To see it in action, click <a href=https://youtu.be/4JCSnzAa1Tk>here</a>. The first 2 robots were randomly generated and the second 2 were evolved using a population size of 100 with 100 generations. 
   
  To run the experiment, simply run main.py
  
