@@ -40,7 +40,6 @@ class SOLUTION:
         pyrosim.Start_SDF("world.sdf")
         pyrosim.End()
     
-
     def Create_Body(self):
         # Temporarily alter absolute z's by Min Z
         self.parts['Part0'].z -= self.minZ
