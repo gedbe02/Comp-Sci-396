@@ -136,8 +136,17 @@ class SOLUTION:
         self.minZ = z - height/2 #Z coord of Center of Part0 - its "radius"
         
         # Add other parts
-        self.Add_Parts(partsToAdd, sensorsToAdd) ###
-        self.numParts += partsToAdd
+        output = self.Add_Parts(partsToAdd, sensorsToAdd) ###
+        addedParts = output[0]
+        addedSensors = output[1]
+        self.numParts += addedParts
+        ##
+        if addedParts == 0:
+            if self.numSensors == 3:
+                self.numSensors = 1
+            elif self.numSensors == 2:
+                self.numSensors = 0
+        ##
         print(self.cubes)
     
     # Takes in previous center (relative or absolute) and a random parent
@@ -266,15 +275,19 @@ class SOLUTION:
         width  = random.randint(self.minSide,self.maxSide)/100
         height = random.randint(self.minSide,self.maxSide)/100
         jointAxis = random.choice(["1 0 0", "0 1 0", "0 0 1"])
-
+        print("Sym_Parts:")
         #Direction Options
         options = ["pos_x", "neg_x", "pos_y", "neg_y", "pos_z", "neg_z"]
         if not parent.isOriginal:
             print(parent.direction)
             options.remove(self.reverse_dir_dict[parent.direction])
+            options.remove(parent.direction)
+        else:
+            options = ["pos_x", "neg_x"]
 
         while len(options) != 0:
             for k in range(2):
+                print(k)
                 parentName    = parent.name
                 oldX          = parent.absolutePos[0]
                 oldY          = parent.absolutePos[1]
@@ -324,15 +337,21 @@ class SOLUTION:
                     for cub_key in self.cubes:
                         cub = self.cubes[cub_key]
                         intersecting |= cub.overlapping([newX, newY, newZ], [length, width, height])
+                        if intersecting:
+                            print(cub.name)
                     if intersecting:
                         if k == 1:
                             options = []
+                            print("________________________________________")
+                            print(dir)
                             print("Can Do: If k1 fails, go back and do k0 again")
+                            print("________________________________________")
                         else:
                             options.remove(dir)
 
                     #If branch reaches end point, start a new branch
                     if (len(options)) == 0:
+                        print("CANT DO IT")
                         if k == 1:
                             del self.parts[firstCube]
                             del self.cubes[firstCube]
@@ -362,6 +381,7 @@ class SOLUTION:
             
                 
                 joint = JOINT(f'{parentName}_Part{i}', jointPos, parentName, f'Part{i}', jointAxis, doAbsolute)
+                print(f'Part{i}')
                 self.parts[f'{parentName}_Part{i}'] = joint
                 self.joints[f'{parentName}_Part{i}'] = joint
                 
@@ -370,7 +390,7 @@ class SOLUTION:
                     pair = i + 1
                 else: #k == 1
                     pair = i - 1
-                cube = CUBE(f'Part{i}', length, width, height, relativeCubePos, absoluteCubePos, color, direction, False, pair) 
+                cube = CUBE(f'Part{i}', length, width, height, relativeCubePos, absoluteCubePos, color, dir, False, pair) 
 
                 self.parts[f'Part{i}'] = cube
                 self.cubes[f'Part{i}'] = cube
@@ -399,7 +419,10 @@ class SOLUTION:
         # Decide Sensors
         is_sensor = np.full((1,newParts), False)[0]
         is_sensor[random.sample(range(newParts), newSensors)] = True
-
+        print(is_sensor, ":::", newParts, newSensors)
+        #
+        successful_parts = 0
+        successful_sensors = 0
         #
         if self.isSymmetrical:
             j = 0
@@ -407,32 +430,57 @@ class SOLUTION:
                 i = self.numParts + j
                 self.isSensor.append(is_sensor[j])
                 self.isSensor.append(is_sensor[j+1])
-                j += 2
 
                 potential_parents = list(self.cubes.keys())
                 parents_remaining = len(potential_parents)
+                success = False
                 while len(potential_parents) != 0:
                     parent = self.cubes[random.choice(potential_parents)]
                     
                     potential_parents.remove(parent.name)
                     if self.Make_Sym_Parts(parent, i):
+                        successful_parts += 2
+                        if is_sensor[j]:
+                            successful_sensors += 2
+                        success = True
                         break
                     parents_remaining -= 1
+                if not success:
+                    self.isSensor.pop()
+                    self.isSensor.pop()
+                    newParts -= 2
+                else:
+                    j += 2
+
+
         else: # Asymmetry
-            for j in range(newParts):
+            j = 0
+            while j < newParts:
                 i = self.numParts + j
                 self.isSensor.append(is_sensor[j])
 
                 potential_parents = list(self.cubes.keys())
                 parents_remaining = len(potential_parents)
+                success = False
                 while len(potential_parents) != 0:
                     parent = self.cubes[random.choice(potential_parents)]
                     
                     potential_parents.remove(parent.name)
                     if self.Make_Part(parent, i):
                         #Can we see an example of a robot that cant keep building?
+                        successful_parts += 1
+                        if is_sensor[j]:
+                            successful_sensors += 1
+                        success = True
                         break
                     parents_remaining -= 1
+                if not success:
+                    self.isSensor.pop()
+                    newParts -= 1
+                else:
+                    j += 1
+        
+        return [successful_parts, successful_sensors]
         #
         
    # TO DO 
@@ -446,30 +494,36 @@ class SOLUTION:
             return
 
         # Mutating Body
-        self.Add_Parts(newParts, newSensors)
+        output = self.Add_Parts(newParts, newSensors)
+        print(output)
+        addedParts = output[0]
+        addedSensors = output[1]
+        print(self.isSensor)
                 
         # Update weights
         # Adding new motor neurons to weights
-        for i in range(newParts): 
+        for i in range(addedParts): 
             newCol = np.random.rand(1, self.numSensors)*2*-1
             newCol = np.array([[x] for x in newCol[0]])
             self.weights = np.append(self.weights, newCol, axis=1)
 
         # Adding new sensor neurons to weights
-        for i in range(newSensors):
+        for i in range(addedSensors):
             newRow = np.random.rand(1, self.numParts+newParts-1)*2*-1
             self.weights = np.append(self.weights, newRow, axis=0)
         
-        self.numParts   += newParts
-        self.numSensors += newSensors
+        self.numParts   += addedParts
+        self.numSensors += addedSensors
 
     def Create_Brain(self):
         pyrosim.Start_NeuralNetwork(f'brain{self.myID}.nndf')
         #Sensor Neurons
         i = 0
         a = []
-        print(self.cubes)
+        print("Create_Brain:")
+        print(self.cubes, self.numParts, self.numSensors)
         print(self.joints)
+        print()
         for c in range(len(self.cubes)):
             is_sensor = self.isSensor[c]
             cube = self.cubes[f'Part{c}']

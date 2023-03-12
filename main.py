@@ -11,6 +11,7 @@ t1 = time.time()
 for i in range(1):
     print("Add random seed again")
     #random.seed(i+1) 
+    random.seed(1)
     phc = PARALLEL_HILL_CLIMBER(True) # True = Symmetry
     #input("Start ")
     phc.Evolve()

@@ -25,7 +25,7 @@ fl_frequency = 10
 fl_phaseOffset = np.pi/4
 
 # Hill Climber
-numberOfGenerations = 3#500
+numberOfGenerations = 2#500
 populationSize = 1#10
 numSensorNeurons = 6
 numMotorNeurons = 10

@@ -75,7 +75,7 @@ class NEURON:
             if s[1] == self.Get_Name():
                 ###
                 if s[0] not in neurons:
-                    print("\nCheck Here", s[0], neurons)
+                    print("\nCheck Here: neuron.py", s[0], neurons)
                     exit()
                 ###
                 self.Allow_Presynaptic_Neuron_To_Influence_Me(synapses[s].Get_Weight(), neurons[s[0]].Get_Value())
