@@ -29,22 +29,25 @@ class SOLUTION:
                                 "neg_z" : "pos_z"}
 
         self.Initialize_Body() 
-        #self.weights = np.random.rand(self.numSensors, self.numParts-1)*2-1
-        #print(self.weights, self.numSensors)
-        #exit()
+        self.weights = np.random.rand(self.numSensors, self.numParts-1)*2-1
 
         
         
 
 
 
-    def Start_Simulation(self, directOrGUI, save):
+    def Start_Simulation(self, directOrGUI, save, sym):
         self.Create_Body()
         self.Create_Brain()
+
+        if sym:
+            folder = "sym"
+        else:
+            folder = "asym"
         if save:
-            os.mkdir(f'results/{self.myID}')
-            os.system(f'cp brain{self.myID}.nndf results/brain{self.myID}.nndf')
-            os.system(f'cp body{self.myID}.urdf results/body{self.myID}.urdf')
+            os.mkdir(f'results/{folder}/{self.myID}')
+            os.system(f'cp brain{self.myID}.nndf results/{folder}/{self.myID}/brain{self.myID}.nndf')
+            os.system(f'cp body{self.myID}.urdf results/{folder}/{self.myID}/body{self.myID}.urdf')
         os.system("python3 simulate.py " + directOrGUI + " "+ str(self.myID) + " not_test e &")
     
     def Wait_For_Simulation_To_End(self):
@@ -260,7 +263,7 @@ class SOLUTION:
         self.parts[f'{parentName}_Part{i}'] = joint
         self.joints[f'{parentName}_Part{i}'] = joint
         
-        cube = CUBE(f'Part{i}', length, width, height, relativeCubePos, absoluteCubePos, color, dir, False) 
+        cube = CUBE(f'Part{i}', length, width, height, relativeCubePos, absoluteCubePos, color, dir, False, -1) 
         #if pairing:
             # If parent and child share a direction, they are pairs
          #   parent.isPair = True

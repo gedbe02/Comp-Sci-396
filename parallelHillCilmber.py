@@ -51,13 +51,20 @@ class PARALLEL_HILL_CLIMBER:
         num_mutated = 0
         for child in self.children:
             if self.isSymmetrical:
-                new_parts   = 2#random.choice([0,2]) #For now, either add two parts or add none
-                new_sensors = random.choice([0,2])
+                new_parts   = random.choice([0,2]) #For now, either add two parts or add none
+                new_sensors = random.randint(0,4)
+                if new_sensors != 0:
+                    new_sensors = 2
             else:
                 new_parts   = random.randint(1,c.maximumAddedParts)
                 new_sensors = random.randint(new_parts//2, max(new_parts-1, 0))
             #print("REVERT MUTATE FUNCTION")
-            if num_mutated < c.populationSize/2:
+            change_weight = False
+            if self.children[child].numParts > 11:
+                new_parts = 0
+                new_sensors = 0
+                change_weight = True
+            if num_mutated < c.populationSize/2 and not change_weight:
                 self.children[child].Mutate(new_parts, new_sensors)
             else:
                 self.children[child].Mutate(0, 0)
@@ -82,7 +89,7 @@ class PARALLEL_HILL_CLIMBER:
                 best_fitness = self.parents[p].fitness
         return best_fitness
 
-    def Show_Best(self, save): 
+    def Show_Best(self, save, sym): 
         best_fitness = -float('inf')
         best = self.parents[0]
         for p in self.parents:
@@ -90,12 +97,11 @@ class PARALLEL_HILL_CLIMBER:
                 best = self.parents[p]
                 best_fitness = self.parents[p].fitness
         print(f'The best fitness was {best_fitness}. Reached {best_fitness/10} y position')
-        best.Start_Simulation("GUI", save)
-    
+        best.Start_Simulation("GUI", save, sym)
     
     def Evaluate(self, solutions):
         for p in range(c.populationSize):
-            solutions[p].Start_Simulation("DIRECT", False) 
+            solutions[p].Start_Simulation("DIRECT", False, False) 
         for p in range(c.populationSize):
             solutions[p].Wait_For_Simulation_To_End()
     

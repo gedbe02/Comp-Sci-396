@@ -1,24 +1,42 @@
 import os
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
+
 import random
 import time
 
 #os.system("python3 search.py ")
 
 from parallelHillCilmber import PARALLEL_HILL_CLIMBER
-evolutions = []
+sym_evolutions = []
+asym_evolutions = []
 t1 = time.time()
-for i in range(1):
-    print("Add random seed again")
+num_runs = 10
+for i in range(num_runs):
+    ''' print("Add random seed again")
     #random.seed(i+1) 
-    random.seed(1)
+    #random.seed(3)
     phc = PARALLEL_HILL_CLIMBER(True) # True = Symmetry
-    #input("Start ")
     phc.Evolve()
     #Wait for input
-    input("Show ")
-    phc.Show_Best(False)
-    evolutions.append(phc.bestOfGens)
+    #input("Show ")
+    phc.Show_Best(True, True)
+    sym_evolutions.append(phc.bestOfGens)'''
+    random.seed(i+1) 
+    if i < num_runs / 2:
+        phc = PARALLEL_HILL_CLIMBER(True) # True = Symmetry
+        phc.Evolve()
+        #Wait for input
+        #input("Show ")
+        phc.Show_Best(True, True)
+        sym_evolutions.append(phc.bestOfGens)
+    else:
+        phc = PARALLEL_HILL_CLIMBER(False) # True = Symmetry
+        phc.Evolve()
+        asym_evolutions.append(phc.bestOfGens)
+        phc.Show_Best(True, False)
+
+
 t2 = time.time()
 
 
@@ -41,10 +59,31 @@ if True:
 
 print(f'Done. It took {h}:{m}:{s}')
 
-#for e in evolutions:
-#    plt.plot(e)
-#plt.legend()
-#plt.show()
+for e in sym_evolutions:
+    plt.plot(e, color="green", label="Symmetrical")
+for e in asym_evolutions:
+    plt.plot(e, color="blue", label="Asymmetrical")
+
+sym = mpatches.Patch(color='green', label='Symmetrical')
+asym = mpatches.Patch(color='blue', label='Asymmetrical')
+
+plt.legend(handles=[sym, asym])
+plt.xlabel('Generations')
+plt.ylabel('Fitness')
+plt.show()
+
+
+f = open('savedSymData.txt', 'w')
+for s in sym_evolutions:
+    for i in s:
+        f.write(str(i) + "\n")
+f.close()
+f = open('savedAsymData.txt', 'w')
+for a in asym_evolutions:
+    for i in a:
+        f.write(str(i) + "\n")
+f.close()
+
 
 
 '''
