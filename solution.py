@@ -29,7 +29,9 @@ class SOLUTION:
                                 "neg_z" : "pos_z"}
 
         self.Initialize_Body() 
-        self.weights = np.random.rand(self.numSensors, self.numParts-1)*2-1
+        #self.weights = np.random.rand(self.numSensors, self.numParts-1)*2-1
+        #print(self.weights, self.numSensors)
+        #exit()
 
         
         
@@ -147,7 +149,9 @@ class SOLUTION:
             elif self.numSensors == 2:
                 self.numSensors = 0
         ##
-        print(self.cubes)
+        #self.weights = np.random.rand(self.numSensors, self.numParts-1)*2-1
+
+
     
     # Takes in previous center (relative or absolute) and a random parent
     def Make_Part(self, parent, i):
@@ -275,11 +279,9 @@ class SOLUTION:
         width  = random.randint(self.minSide,self.maxSide)/100
         height = random.randint(self.minSide,self.maxSide)/100
         jointAxis = random.choice(["1 0 0", "0 1 0", "0 0 1"])
-        print("Sym_Parts:")
         #Direction Options
         options = ["pos_x", "neg_x", "pos_y", "neg_y", "pos_z", "neg_z"]
         if not parent.isOriginal:
-            print(parent.direction)
             options.remove(self.reverse_dir_dict[parent.direction])
             options.remove(parent.direction)
         else:
@@ -287,7 +289,6 @@ class SOLUTION:
 
         while len(options) != 0:
             for k in range(2):
-                print(k)
                 parentName    = parent.name
                 oldX          = parent.absolutePos[0]
                 oldY          = parent.absolutePos[1]
@@ -334,24 +335,29 @@ class SOLUTION:
 
 
                     #Check for overlapping cubes
+                    #print("INTERSECT CHECK")
+                    #print("OG:", [newX, newY, newZ])
                     for cub_key in self.cubes:
                         cub = self.cubes[cub_key]
+                        #print(cub_key, cub.absolutePos)
+                        #print([length, width, height], [cub.length, cub.width, cub.height])
+                        #print(cub_key)
+                        #if cub_key == "Part2":
+                        #    print(cub.absolutePos, [cub.length, cub.width, cub.height])
+                         #   print([newX, newY, newZ], [length, width, height])
+
+                        #rint("TEST ZONE:")
                         intersecting |= cub.overlapping([newX, newY, newZ], [length, width, height])
-                        if intersecting:
-                            print(cub.name)
+
+                        #print(intersecting)
                     if intersecting:
                         if k == 1:
                             options = []
-                            print("________________________________________")
-                            print(dir)
-                            print("Can Do: If k1 fails, go back and do k0 again")
-                            print("________________________________________")
                         else:
                             options.remove(dir)
 
                     #If branch reaches end point, start a new branch
                     if (len(options)) == 0:
-                        print("CANT DO IT")
                         if k == 1:
                             del self.parts[firstCube]
                             del self.cubes[firstCube]
@@ -381,7 +387,6 @@ class SOLUTION:
             
                 
                 joint = JOINT(f'{parentName}_Part{i}', jointPos, parentName, f'Part{i}', jointAxis, doAbsolute)
-                print(f'Part{i}')
                 self.parts[f'{parentName}_Part{i}'] = joint
                 self.joints[f'{parentName}_Part{i}'] = joint
                 
@@ -419,7 +424,6 @@ class SOLUTION:
         # Decide Sensors
         is_sensor = np.full((1,newParts), False)[0]
         is_sensor[random.sample(range(newParts), newSensors)] = True
-        print(is_sensor, ":::", newParts, newSensors)
         #
         successful_parts = 0
         successful_sensors = 0
@@ -495,10 +499,8 @@ class SOLUTION:
 
         # Mutating Body
         output = self.Add_Parts(newParts, newSensors)
-        print(output)
         addedParts = output[0]
         addedSensors = output[1]
-        print(self.isSensor)
                 
         # Update weights
         # Adding new motor neurons to weights
@@ -520,10 +522,6 @@ class SOLUTION:
         #Sensor Neurons
         i = 0
         a = []
-        print("Create_Brain:")
-        print(self.cubes, self.numParts, self.numSensors)
-        print(self.joints)
-        print()
         for c in range(len(self.cubes)):
             is_sensor = self.isSensor[c]
             cube = self.cubes[f'Part{c}']

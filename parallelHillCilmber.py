@@ -56,11 +56,11 @@ class PARALLEL_HILL_CLIMBER:
             else:
                 new_parts   = random.randint(1,c.maximumAddedParts)
                 new_sensors = random.randint(new_parts//2, max(new_parts-1, 0))
-            print("REVERT MUTATE FUNCTION")
-            #if num_mutated < c.populationSize/2:
-            self.children[child].Mutate(new_parts, new_sensors)
-            #else:
-            #    self.children[child].Mutate(0, 0)
+            #print("REVERT MUTATE FUNCTION")
+            if num_mutated < c.populationSize/2:
+                self.children[child].Mutate(new_parts, new_sensors)
+            else:
+                self.children[child].Mutate(0, 0)
             #Randomly add new sensors?
 
             num_mutated += 1
@@ -69,9 +69,8 @@ class PARALLEL_HILL_CLIMBER:
         for p in self.parents:
             if self.children[p].fitness > self.parents[p].fitness:
                 self.parents[p] = self.children[p]
-            print("REVERT SELECT FUNCTION")
-            #Uhh, doesn't this look weird. Doesn't it only compare 1 child??
-            self.parents[p] = self.children[p]
+            #print("REVERT SELECT FUNCTION")
+            #self.parents[p] = self.children[p]
         #self.bestOfGens.append(self.Best_Fitness())
     
     def Best_Fitness(self):

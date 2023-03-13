@@ -2,13 +2,16 @@ import pyrosim.pyrosim as pyrosim
 from part import PART
 
 def dec_to_bigint(dec):
+    '''print(dec)
     s = str(dec)
     s = s.split(".")
     if len(s) == 1:
         return dec
         
     str_bigint = s[0] + s[1][:5]
-    return int(str_bigint)
+    print(str_bigint)'''
+    output = round(dec*10000)
+    return output
 
 class CUBE(PART):
     def __init__(self, name, length, width, height, relative_pos, absolute_pos, color, direction, is_original, pair):
@@ -64,12 +67,15 @@ class CUBE(PART):
 
         maxX2 = x2+l2
         minX2 = x2-l2
+        #print(f'minX2 = {x2}-{l2}' )
 
         maxY2 = y2+w2
         minY2 = y2-w2
 
         maxZ2 = z2+h2
         minZ2 = z2-h2
+
+        #print("X:", maxX1, minX2, "...", minX1, maxX2)
 
         
         overlapping  = maxX1 > minX2 and minX1 < maxX2
