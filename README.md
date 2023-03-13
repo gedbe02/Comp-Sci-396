@@ -7,23 +7,23 @@
  To run the experiment, simply run main.py
  
  <h3> Evolution </h3>
- <h4> Body Generation </h4>
+ <h4> Symmetrical Bodies </h4>
  [Explain how bodies are formed, what OG ones look like, how mutation works, give examples of lineages, etc.]
- <h5> Symmetrical Bodies </h5>
  ...
- <h6> Initalization </h6>
+ <h5> Initalization </h5>
  ...
- <h6> Mutation </h6>
+ <h5> Mutation </h5>
  ...
- <h6> Diagram </h6>
+ <h5> Diagram </h5>
  ...
- <h5> Asymmetrical Bodies </h5>
+ <h4> Asymmetrical Bodies </h4>
+ [Explain how bodies are formed, what OG ones look like, how mutation works, give examples of lineages, etc.]
  ...
- <h6> Initalization </h6>
+ <h5> Initalization </h5>
  ...
- <h6> Mutation </h6>
+ <h5> Mutation </h5>
  ...
- <h6> Diagram </h6>
+ <h5> Diagram </h5>
  <img width="901" alt="Screen Shot 2023-03-13 at 3 41 43 PM" src="https://user-images.githubusercontent.com/82680052/224827536-75eaeee2-e4ed-4114-94d3-a5d332fa27bb.png">
 <img width="894" alt="Screen Shot 2023-03-13 at 3 41 59 PM" src="https://user-images.githubusercontent.com/82680052/224827547-79835236-d1f4-4c9c-9b87-1a191e9d927d.png">
 
