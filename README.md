@@ -51,11 +51,17 @@ Here's a sneak peek: [gif]
  
  Direction Meaning: Positive z direction = Top face of link, negative z direction = Bottom face of link, etc.
  
- [Example of Mutation] ADD IMAGE
- 
  <h6> Mutating Synapse Weights </h6>
  A motor neuron and sensor is randomly selected and their weight is randomly changed. 
  
+ Here's some examples of final evolutions:
+ <br></br>
+ <img width="259" alt="Screen Shot 2023-03-14 at 11 10 02 AM" src="https://user-images.githubusercontent.com/82680052/225068451-b993ff11-6c64-4e77-9c13-90b65cdb48fe.png">
+<img width="220" alt="Screen Shot 2023-03-14 at 11 10 48 AM" src="https://user-images.githubusercontent.com/82680052/225068483-2cff5218-b700-4c86-83e9-16a43b8981ce.png">
+<img width="439" alt="Screen Shot 2023-03-14 at 11 09 07 AM" src="https://user-images.githubusercontent.com/82680052/225068522-d12f2ab6-cb5c-4a3e-942e-feb0b6cec3e3.png">
+ <br></br>
+
+Here's a step-by-step example of evolution, showing the creation of the initial body and every potential mutation type
  
  <img width="709" alt="Screen Shot 2023-03-13 at 7 38 29 PM" src="https://user-images.githubusercontent.com/82680052/224862842-450647a0-b048-4064-869d-7dfcc511767e.png">
 <img width="876" alt="Screen Shot 2023-03-13 at 10 09 13 PM" src="https://user-images.githubusercontent.com/82680052/224883150-b0b6ab60-013e-45a3-8b18-907d739278c8.png">
@@ -78,13 +84,19 @@ To create the initial bodies, a link with random dimensions is created and made 
    <h6> Adding Links </h6>
  1-2 links can be added at every mutation. These links are independent and are randomly shaped. 0-2 are randomly decided to be sensors. Once the dimensions of a link are made, a random parent and direction are chosen. If all directions lead to overlapping another link in the body, a different parent is chosen. By the nature of the robot, eventually a link can be made. Random synapse weights are made for this link, and if the link is a sensor, additional weights are added to the motor neurons. 
  
- 
- [Example of Mutation] ADD IMAGE
- 
  <h6> Mutating Synapse Weights </h6>
  A motor neuron and sensor is randomly selected and their weight is randomly changed. 
-  
+ 
+  Here's some examples of final evolutions:
+   <br></br>
+<img width="172" alt="Screen Shot 2023-03-14 at 11 11 16 AM" src="https://user-images.githubusercontent.com/82680052/225068846-44352adf-8836-4e54-93f3-e9e0b6603aac.png">
+<img width="400" alt="Screen Shot 2023-03-14 at 11 11 40 AM" src="https://user-images.githubusercontent.com/82680052/225068874-f6920069-023f-4a78-a233-5da9d08ede68.png">
+<img width="377" alt="Screen Shot 2023-03-14 at 11 12 25 AM" src="https://user-images.githubusercontent.com/82680052/225068900-3575bcda-670c-414a-821e-489d121a7a8d.png">
+ <br></br>
 
+
+Here's a step-by-step example of evolution, showing the creation of the initial body and every potential mutation type
+  
  <img width="901" alt="Screen Shot 2023-03-13 at 3 41 43 PM" src="https://user-images.githubusercontent.com/82680052/224827536-75eaeee2-e4ed-4114-94d3-a5d332fa27bb.png">
 <img width="894" alt="Screen Shot 2023-03-13 at 3 41 59 PM" src="https://user-images.githubusercontent.com/82680052/224827547-79835236-d1f4-4c9c-9b87-1a191e9d927d.png">
 
@@ -102,6 +114,9 @@ The fitness of a robot is the y position of the robot times 10. Simply, the fart
 After running the experiment several times, the results were:
 <img width="500" src="https://user-images.githubusercontent.com/82680052/224903923-d25a4553-8e79-4cfb-aa76-5896301ce39a.png">
 <img width="500" src="https://user-images.githubusercontent.com/82680052/224903939-2570391e-425a-4042-bb73-877006c3a41b.png">
+<img width="500" src="https://user-images.githubusercontent.com/82680052/225068977-66abeb4e-2e57-4bd3-82c1-c992471313c7.png">
+
+
 NEED TO EDIT: As per the graphs, it seems that adding symmetry isn't worse or better than normal asymmetry. The lines are overlapping and no group seems to be significantly better than the next.
 
 DO MORE DATA ANALYSIS
