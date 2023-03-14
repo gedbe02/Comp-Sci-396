@@ -1,6 +1,6 @@
 # Comp-Sci-396
 
-<h2>Symmetry vs. Asymmetry</h2>
+<h1>Symmetry vs. Asymmetry</h1>
 While watching my robots evolve, I noticed that robots that seemed more symmetrical moved better. Additionally, creatures in the real world are generally symmetric, so I hypothesized that symmetric must be valuable to fitness. Thus, in this experiment, I tested the difference between symmetrical robots and asymmetrical robots. 
 
 The symmetrical robots were bilaterally symmetric on the y axis. Their evolutionary algorithm was altered to assure symmetry. The asymmetrical robots were constructed with normal randomness. To test which type of robot was better, I ran 5 sets of symmetrical robots and 5 sets of asymmetrical robots with 500 generations and a population size of 10. 
@@ -26,12 +26,13 @@ Here's a sneak peek: [gif]
 
 
  
- <h3> Evolution </h3>
+ <h2> Evolution </h2>
  Bodies and synapse weights change throughout evolution, but the brain remains the same (fully connected)
- <h4> Symmetrical Bodies </h4>
+ 
+ <h3> Symmetrical Bodies </h3>
  The symmetrical robots are bilaterally symmetrical on the y axis. This means that if you split the robot down the middle on the y plane, each side will be identical. This was chosen instead of radial symmetry to decrease the amount of links. 
 
- <h5> Initalization </h5>
+ <h4> Initalization </h4>
  To create the initial bodies, a link with random dimensions is created and made to be either a sensor (green links) or a nonsenor (blue links). Then, two new links and joints of the same random dimensions are added to the initial link. For example, if the x axis is chosen, the new links will grow out of the left and right faces, if the y axis is chosen, out of the front and back face, and if the z axis is chosen, out of the top and bottom faces. The new links are either both sensors or both nonsensors.
  
  The brain is totally connected, meaning that every motor neuron is connected to every sensor neuron. Synapse weights are then randomly generated.
@@ -48,9 +49,10 @@ Here's a sneak peek: [gif]
  Here's a diagram of how this process is done:
 <img width="1067" alt="Screen Shot 2023-03-14 at 11 30 06 AM" src="https://user-images.githubusercontent.com/82680052/225073289-5f6825b8-ebe1-4105-be6d-cf6a06a40d31.png">
 
- <h5> Mutation </h5>
+ <h4> Mutation </h4>
  Every generation, populationSize children are created with different mutations. There are different types of mutations that can happen: Variations of adding links and mutating synapse weights, with about a 25% adding links and 75% chance of mutating synapse weights.
- <h6> Adding Links </h6>
+ 
+ <h5> Adding Links: </h5>
  Only two links can be added at every mutation. Random dimensions for the new link are made and a random parent and direction is chosen. If creating a link in that direction doesn't overlap with any other link in the body, that direction and parent are chosen. If the link does overlap, a different direction is chosen, but if there are no more directions to choose from, a different parent is chosen. Due to the nature of the robots, this process will eventually allow the creation of a link. 
  
  Once the first link's creation is allowed, a second link with the same exact dimensions is made. If the first link's direction is on the x axis, the second link will be made on the opposite side of the robot in the opposite direction. If the direction is on the y or z axis, the second link will be made on the opposite side of the robot in the same direction. If the second link cannot be made, the first link is recalcaluated.
@@ -62,8 +64,9 @@ Here's a sneak peek: [gif]
  
  Direction Meaning: Positive z direction = Top face of link, negative z direction = Bottom face of link, etc.
  
- <h6> Mutating Synapse Weights </h6>
+ <h5> Mutating Synapse Weights: </h5>
  A motor neuron and sensor is randomly selected and their weight is randomly changed. 
+ <br></br>
  
  Here's some examples of final evolutions:
  <br></br>
@@ -78,14 +81,15 @@ Here's a step-by-step example of evolution, showing the creation of the initial 
 <img width="876" alt="Screen Shot 2023-03-13 at 10 09 13 PM" src="https://user-images.githubusercontent.com/82680052/224883150-b0b6ab60-013e-45a3-8b18-907d739278c8.png">
 
 Lineage Example:
-[TO DO]
+<br></br>
+
+<img width="816" alt="Screen Shot 2023-03-14 at 3 48 45 PM" src="https://user-images.githubusercontent.com/82680052/225132832-c46e6f63-fab8-432b-bb61-cda33d04d543.png">
 
 
-
- <h4> Asymmetrical Bodies </h4>
+ <h3> Asymmetrical Bodies </h3>
  The asymmetrical robots are random and asymmetrical. Every new link is randomly added independent of any other link (besides checking for overlapping and relationship to parent)
  ...
- <h5> Initalization </h5>
+ <h4> Initalization </h4>
 To create the initial bodies, a link with random dimensions is created and made to be either a sensor (green links) or a nonsenor (blue links). Then, one  link of random dimensions is added to the initial link on any of its faces. This link can either be a sensor or a nonsensor
  
  The brain is totally connected, meaning that every motor neuron is connected to every sensor neuron. Synapse weights are then randomly generated.
@@ -101,20 +105,22 @@ Here's some examples of initial bodies:
 <img width="1016" alt="Screen Shot 2023-03-14 at 11 29 51 AM" src="https://user-images.githubusercontent.com/82680052/225073208-464ceb11-b81e-4444-8d26-2053f8522045.png">
 
 Lineage Example:
-[TO DO]
+<br></br>
+<img width="915" alt="Screen Shot 2023-03-14 at 4 01 07 PM" src="https://user-images.githubusercontent.com/82680052/225135239-1b9b4be9-1222-4c3f-8e90-e4de4659317c.png">
 
 
- <h5> Mutation </h5>
+ <h4> Mutation </h4>
   Every generation, populationSize children are created with different mutations. There are different types of mutations that can happen: Variations of adding links and mutating synapse weights, with 50% adding links and 50% mutating synapse weights.
   
-   <h6> Adding Links </h6>
+   <h5> Adding Links: </h5>
  1-2 links can be added at every mutation. These links are independent and are randomly shaped. 0-2 are randomly decided to be sensors. Once the dimensions of a link are made, a random parent and direction are chosen. If all directions lead to overlapping another link in the body, a different parent is chosen. By the nature of the robot, eventually a link can be made. Random synapse weights are made for this link, and if the link is a sensor, additional weights are added to the motor neurons. 
  
   As the brains of these robots are fully connected, these new sensor and motor neurons are connected to every other motor and sensor neurons.
 
  
- <h6> Mutating Synapse Weights </h6>
+ <h5> Mutating Synapse Weights: </h5>
  A motor neuron and sensor is randomly selected and their weight is randomly changed. 
+ <br></br>
  
   Here's some examples of final evolutions:
    <br></br>
@@ -129,14 +135,16 @@ Here's a step-by-step example of evolution, showing the creation of the initial 
  <img width="901" alt="Screen Shot 2023-03-13 at 3 41 43 PM" src="https://user-images.githubusercontent.com/82680052/224827536-75eaeee2-e4ed-4114-94d3-a5d332fa27bb.png">
 <img width="894" alt="Screen Shot 2023-03-13 at 3 41 59 PM" src="https://user-images.githubusercontent.com/82680052/224827547-79835236-d1f4-4c9c-9b87-1a191e9d927d.png">
 
- <h4> Brain Generation and Evolution </h4>
- Every motor neuron is connected to every sensor neuron. This never changes.
- [Diagram displaying how brains are generated and how they look when they evolve]
+ <h3> Brain Generation and Evolution </h3>
+ Every motor neuron is connected to every sensor neuron. When a new link is added, its associated motor neuron is added to the brain and conncted to all other sensor neurons. If the new link is a sensor, its associated sensor neuron is connected to all other motor neurons (including its own).
  
- <h4> Fitness </h4>
+ This logic is the same for both symmetrical and asymmetrical robots
+ <img width="879" alt="Screen Shot 2023-03-14 at 4 28 06 PM" src="https://user-images.githubusercontent.com/82680052/225140621-4f9e11a1-243e-4dd1-8a39-4a066562e0f9.png">
+ 
+ <h3> Fitness </h3>
 The fitness of a robot is the y position of the robot times 10. Simply, the farther in the positive y direction the robot goes, the more fit it is
 
-<h5> Parallel Hill Climber </h5>
+<h4> Parallel Hill Climber </h4>
 To choose which robots are chosen for the next generation, a parallel hill climber (PHC) is used. When the PHC is created, populationSize (10 in this experiment) random bodies are created, the parents. Then, the children are created by copying the parents and then mutating them (e.g., Add one link, add two links, mutate synapse weight, etc.). The fitness of each parent and child pair are compared, and the better robot becomes a parent for the next generation. This loop occurs numberOfGeneration times (500 in this experiment) and once it ends, the best parent out of the last generation is chosen as the final evolution.
 <br></br>
 While body creation is different for symmetrical and asymmetrical robots, the PHC operates the same way.
@@ -145,7 +153,7 @@ While body creation is different for symmetrical and asymmetrical robots, the PH
 
 
 
-<h3> Results </h3>
+<h2> Results </h2>
 [Graph, diagrams, images, cartoons]
 After running the experiment several times, the results were:
 <img width="500" src="https://user-images.githubusercontent.com/82680052/224903923-d25a4553-8e79-4cfb-aa76-5896301ce39a.png">
