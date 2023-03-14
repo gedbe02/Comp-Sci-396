@@ -139,7 +139,8 @@ Here's a step-by-step example of evolution, showing the creation of the initial 
  Every motor neuron is connected to every sensor neuron. When a new link is added, its associated motor neuron is added to the brain and conncted to all other sensor neurons. If the new link is a sensor, its associated sensor neuron is connected to all other motor neurons (including its own).
  
  This logic is the same for both symmetrical and asymmetrical robots
- <img width="879" alt="Screen Shot 2023-03-14 at 4 28 06 PM" src="https://user-images.githubusercontent.com/82680052/225140621-4f9e11a1-243e-4dd1-8a39-4a066562e0f9.png">
+<img width="765" alt="Screen Shot 2023-03-14 at 4 29 15 PM" src="https://user-images.githubusercontent.com/82680052/225141273-311b08f4-8b37-4e05-b79d-24cdc042f415.png">
+
  
  <h3> Fitness </h3>
 The fitness of a robot is the y position of the robot times 10. Simply, the farther in the positive y direction the robot goes, the more fit it is
