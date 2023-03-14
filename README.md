@@ -87,10 +87,21 @@ The fitness of a robot is the y position of the robot times 10. Simply, the fart
 After running the experiment several times, the results were:
 <img width="500" src="https://user-images.githubusercontent.com/82680052/224903923-d25a4553-8e79-4cfb-aa76-5896301ce39a.png">
 <img width="500" src="https://user-images.githubusercontent.com/82680052/224903939-2570391e-425a-4042-bb73-877006c3a41b.png">
+NEED TO EDIT: As per the graphs, it seems that adding symmetry isn't worse or better than normal asymmetry. The lines are overlapping and no group seems to be significantly better than the next.
+
+DO MORE DATA ANALYSIS
 
 
 <h3> Conclusions </h3>
 [Conclusions, limtations, future researsh]
+...
+Since the synapse weights were not symmetrical, the symmetry of the body may not have been as helpful. Many symmetrical robots made ended up moving in ways that didn't utilize their symmetry due to their weight differences. 
+<h4> Limitations </h4>
+While the symmetrical robots have symmetrical bodies, they do not have symmetrical brains. This means that each side of the body will act differently. Thus, it's possible that this issue cause the symmetrical robots to have similar results to the asymmetrical robots. Due to the limitations of the laptop used to run these simulations, robot bodies could only be so big and simulations so long. 
+
+<h4> Future Research </h4>
+Future research on symmetrical bodies should try to make symmetrical brains along with them. The synapse weights would be randomly generated, but each symmetrical pair will share them. Additionally, every time a synapse weight is mutated, the same change would occurr for the other pair. 
+
 
  
  
