@@ -15,7 +15,7 @@ Here's a sneak peek: [gif]
  <h3> Genotypes and Phenotypes</h3>
  Each robot's genotype is saved as a list of links and joints. The link data structure saves the name, dimensions, relative position, absolute position, sensorness, and direction. The joint data structure saves the name, relative position, parent link name, child link name, and joint axis. When the robot is mutated, the list of parts is appended to 
  
- 
+ <br>
  To create the phenotype, first, the z position of the first link and all joints connected to it are changed so the robot doesn't intersect the ground. Then, the function loops through all links and joints and creates them. Every time a simulation is run, the phenotype is recreated to account for changes in the genotype. 
  
  Genotypes and phenotypes were stored the same way for symmetrical and asymmetrical robots
