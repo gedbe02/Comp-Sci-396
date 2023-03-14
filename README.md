@@ -85,9 +85,9 @@ The fitness of a robot is the y position of the robot times 10. Simply, the fart
 <h3> Results </h3>
 [Graph, diagrams, images, cartoons]
 After running the experiment several times, the results were:
-<img width="300" src="https://user-images.githubusercontent.com/82680052/224903739-fd1ebf07-8a5b-4bd5-b9e0-31175169f490.png">
-<img width="300" src="https://user-images.githubusercontent.com/82680052/224903923-d25a4553-8e79-4cfb-aa76-5896301ce39a.png">
-<img width="300" src="https://user-images.githubusercontent.com/82680052/224903939-2570391e-425a-4042-bb73-877006c3a41b.png">
+<img width="500" src="https://user-images.githubusercontent.com/82680052/224903739-fd1ebf07-8a5b-4bd5-b9e0-31175169f490.png">
+<img width="500" src="https://user-images.githubusercontent.com/82680052/224903923-d25a4553-8e79-4cfb-aa76-5896301ce39a.png">
+<img width="500" src="https://user-images.githubusercontent.com/82680052/224903939-2570391e-425a-4042-bb73-877006c3a41b.png">
 
 
 <h3> Conclusions </h3>
