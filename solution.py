@@ -99,7 +99,7 @@ class SOLUTION:
             else:
                 self.isSensor = [True]
         else:
-            partsToAdd = 1 #random.randint(c.maxParts//2, c.maxParts) #CHANGE!
+            partsToAdd = random.randint(c.maxInitialParts//2, c.maxInitialParts)
             numParts = partsToAdd + 1
 
             self.numSensors = random.randint(numParts//2, numParts-1)
@@ -132,7 +132,7 @@ class SOLUTION:
         z = 0.5
         cubePos = [x,y,z]
 
-        cube = CUBE("Part0", length, width, height, cubePos, cubePos, color, None, True, 0)
+        cube = CUBE("Part0", length, width, height, cubePos, cubePos, color, None, True, 0, True)
         cube.isPair = True #Part0 can't be paired with other links
         self.parts["Part0"] = cube
         self.cubes["Part0"] = cube
@@ -263,7 +263,7 @@ class SOLUTION:
         self.parts[f'{parentName}_Part{i}'] = joint
         self.joints[f'{parentName}_Part{i}'] = joint
         
-        cube = CUBE(f'Part{i}', length, width, height, relativeCubePos, absoluteCubePos, color, dir, False, -1) 
+        cube = CUBE(f'Part{i}', length, width, height, relativeCubePos, absoluteCubePos, color, dir, False, -1, -1) 
         #if pairing:
             # If parent and child share a direction, they are pairs
          #   parent.isPair = True
@@ -284,11 +284,11 @@ class SOLUTION:
         jointAxis = random.choice(["1 0 0", "0 1 0", "0 0 1"])
         #Direction Options
         options = ["pos_x", "neg_x", "pos_y", "neg_y", "pos_z", "neg_z"]
-        if not parent.isOriginal:
+        if not parent.isCenter: #CHANGE TO ISCENTER
             options.remove(self.reverse_dir_dict[parent.direction])
             options.remove(parent.direction)
-        else:
-            options = ["pos_x", "neg_x"]
+        #else:
+        #    options = ["pos_x", "neg_x"]
 
         while len(options) != 0:
             for k in range(2):
@@ -398,7 +398,12 @@ class SOLUTION:
                     pair = i + 1
                 else: #k == 1
                     pair = i - 1
-                cube = CUBE(f'Part{i}', length, width, height, relativeCubePos, absoluteCubePos, color, dir, False, pair) 
+                
+                if parent.isCenter and dir not in ["pos_x", "neg_x"] and (dir == parent.direction or parent.direction == None):
+                    is_center = True
+                else:
+                    is_center = False
+                cube = CUBE(f'Part{i}', length, width, height, relativeCubePos, absoluteCubePos, color, dir, False, pair, is_center) 
 
                 self.parts[f'Part{i}'] = cube
                 self.cubes[f'Part{i}'] = cube
@@ -407,9 +412,12 @@ class SOLUTION:
                 firstJoint = f'{parentName}_Part{i}'
                 firstCube = f'Part{i}'
                 #
-                parent = self.parts[f'Part{parent.symPair}']
+                if parent.isCenter and not is_center:
+                    parent = parent
+                else:
+                    parent = self.parts[f'Part{parent.symPair}']
                 # Next Direction
-                if dir in ["pos_x", "neg_x"]:
+                if dir in ["pos_x", "neg_x"] or is_center:
                     dir = self.reverse_dir_dict[dir]
                 #else: Stay the same
                 i += 1 #Assure that this works right

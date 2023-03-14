@@ -1,6 +1,6 @@
 import os
 import numpy as np
-os.system("python3 simulate.py " + "GUI" + " "+ str(4792) + " test e &")
+os.system("python3 simulate.py " + "GUI" + " "+ str(4950) + " test e &")
 
 
 '''

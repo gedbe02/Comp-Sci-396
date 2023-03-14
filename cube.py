@@ -14,7 +14,7 @@ def dec_to_bigint(dec):
     return output
 
 class CUBE(PART):
-    def __init__(self, name, length, width, height, relative_pos, absolute_pos, color, direction, is_original, pair):
+    def __init__(self, name, length, width, height, relative_pos, absolute_pos, color, direction, is_original, pair, is_center):
         self.name = name
         self.length = length
         self.width = width
@@ -29,6 +29,7 @@ class CUBE(PART):
         self.isOriginal = is_original
 
         self.isPair = False
+        self.isCenter = is_center
 
         # A symPair is the symmetrical counterpart to a part. Ex: Right hand and Left hand
         self.symPair = pair #Number of its pair
