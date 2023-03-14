@@ -14,6 +14,7 @@ Here's a sneak peek: [gif]
  To see a specific saved robot in action, go into testing.py, replace the robot ID with your desired robot, and hit run. *MAKE SURE WORKS
  
  <h3> Evolution </h3>
+ Bodies and synapse weights change throughout evolution, but the brain remains the same (fully connected)
  <h4> Symmetrical Bodies </h4>
  [Explain how bodies are formed, what OG ones look like, how mutation works, give examples of lineages, etc.]
  The symmetrical robots are bilaterally symmetrical on the y axis. This means that if you split the robot down the middle on the y plane, each side will be identical. This was chosen instead of radial symmetry to decrease the amount of links. 
@@ -75,15 +76,19 @@ To create the initial bodies, a link with random dimensions is created and made 
 
  
  <h4> Fitness </h4>
- [Fitness Function Explanation]
+The fitness of a robot is the y position of the robot times 10. Simply, the farther in the positive y direction the robot goes, the more fit it is
  
  <h4> Brain Generation </h4>
- Every motor neuron is connected to every sensor neuron. 
+ Every motor neuron is connected to every sensor neuron. This never changes.
  [Diagrams]
 
 <h3> Results </h3>
 [Graph, diagrams, images, cartoons]
-![Figure_1](https://user-images.githubusercontent.com/82680052/224827577-aa34d5d7-b020-457e-8bfc-9b2dea60b22d.png)
+After running the experiment several times, the results were:
+<img width="300" src="https://user-images.githubusercontent.com/82680052/224903739-fd1ebf07-8a5b-4bd5-b9e0-31175169f490.png">
+<img width="300" src="https://user-images.githubusercontent.com/82680052/224903923-d25a4553-8e79-4cfb-aa76-5896301ce39a.png">
+<img width="300" src="https://user-images.githubusercontent.com/82680052/224903939-2570391e-425a-4042-bb73-877006c3a41b.png">
+
 
 <h3> Conclusions </h3>
 [Conclusions, limtations, future researsh]
