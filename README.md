@@ -1,10 +1,17 @@
 # Comp-Sci-396
 
 <h2>Symmetry vs. Asymmetry</h2>
+While watching my robots evolve, I noticed that robots that seemed more symmetrical moved better. Additionally, creatures in the real world are generally symmetric, so I hypothesized that symmetric must be valuable to fitness. Thus, in this experiment, I tested the difference between symmetrical robots and asymmetrical robots. 
 
+The symmetrical robots were bilaterally symmetric on the y axis. Their evolutionary algorithm was altered to assure symmetry. The asymmetrical robots were constructed with normal randomness. To test which type of robot was better, I ran 5 sets of symmetrical robots and 5 sets of asymmetrical robots with 500 generations and a population size of 10. 
+
+To see a video of the experiment and its results, click [here].
+Here's a sneak peek: [gif]
  [Explain experiment, AB groups, how to run experiment, how to run tests, inspiration, teaser gif, video]
   
- To run the experiment, simply run main.py
+ To run the experiment, simply run main.py (10 sets of 500 generations with population size of 10. Half the sets are symmetrical and the other half are asymmetrical.
+ 
+ To see a specific saved robot in action, go into testing.py, replace the robot ID with your desired robot, and hit run. *MAKE SURE WORKS
  
  <h3> Evolution </h3>
  <h4> Symmetrical Bodies </h4>
