@@ -29,9 +29,8 @@ Here's a sneak peek: [gif]
  <h3> Evolution </h3>
  Bodies and synapse weights change throughout evolution, but the brain remains the same (fully connected)
  <h4> Symmetrical Bodies </h4>
- [Explain how bodies are formed, what OG ones look like, how mutation works, give examples of lineages, etc.]
  The symmetrical robots are bilaterally symmetrical on the y axis. This means that if you split the robot down the middle on the y plane, each side will be identical. This was chosen instead of radial symmetry to decrease the amount of links. 
- ...
+
  <h5> Initalization </h5>
  To create the initial bodies, a link with random dimensions is created and made to be either a sensor (green links) or a nonsenor (blue links). Then, two new links and joints of the same random dimensions are added to the initial link. For example, if the x axis is chosen, the new links will grow out of the left and right faces, if the y axis is chosen, out of the front and back face, and if the z axis is chosen, out of the top and bottom faces. The new links are either both sensors or both nonsensors.
  
@@ -40,9 +39,10 @@ Here's a sneak peek: [gif]
 
  
  Here's some examples of initial bodies:
+ <br></br>
 <img width="191" alt="Screen Shot 2023-03-14 at 11 33 49 AM" src="https://user-images.githubusercontent.com/82680052/225074292-8d64f105-dcf5-4655-95a5-4810f4a632d6.png">
-<img width="210" alt="Screen Shot 2023-03-14 at 11 34 02 AM" src="https://user-images.githubusercontent.com/82680052/225074314-efc6bddc-c1a6-4ce2-8b6c-e49ab28bc3<img width="174" alt="Screen Shot 2023-03-14 at 11 34 09 AM" src="https://user-images.githubusercontent.com/82680052/225074454-8883069f-c14f-4254-ae94-4bd8da82f064.png">
-a3.png">
+<img width="210" alt="Screen Shot 2023-03-14 at 11 34 02 AM" src="https://user-images.githubusercontent.com/82680052/225074314-efc6bddc-c1a6-4ce2-8b6c-e49ab28bc3a3.png">
+<img width="174" alt="Screen Shot 2023-03-14 at 11 34 09 AM" src="https://user-images.githubusercontent.com/82680052/225074649-89b301f3-f671-4474-94ad-bc52ab284d32.png">
 
  
  Here's a diagram of how this process is done:
@@ -77,9 +77,12 @@ Here's a step-by-step example of evolution, showing the creation of the initial 
  <img width="709" alt="Screen Shot 2023-03-13 at 7 38 29 PM" src="https://user-images.githubusercontent.com/82680052/224862842-450647a0-b048-4064-869d-7dfcc511767e.png">
 <img width="876" alt="Screen Shot 2023-03-13 at 10 09 13 PM" src="https://user-images.githubusercontent.com/82680052/224883150-b0b6ab60-013e-45a3-8b18-907d739278c8.png">
 
+Lineage Example:
+[TO DO]
+
+
 
  <h4> Asymmetrical Bodies </h4>
- [Explain how bodies are formed, what OG ones look like, how mutation works, give examples of lineages, etc.]
  The asymmetrical robots are random and asymmetrical. Every new link is randomly added independent of any other link (besides checking for overlapping and relationship to parent)
  ...
  <h5> Initalization </h5>
@@ -87,11 +90,18 @@ To create the initial bodies, a link with random dimensions is created and made 
  
  The brain is totally connected, meaning that every motor neuron is connected to every sensor neuron. Synapse weights are then randomly generated.
  
-Here's some examples of initial bodies
- [Examples of Intial Bodies]
+Here's some examples of initial bodies:
+<br></br>
+<img width="216" alt="Screen Shot 2023-03-14 at 11 36 03 AM" src="https://user-images.githubusercontent.com/82680052/225075581-fd0f037d-6d52-4841-a999-0ea320ed34a2.png">
+<img width="151" alt="Screen Shot 2023-03-14 at 11 36 12 AM" src="https://user-images.githubusercontent.com/82680052/225075601-90497818-a085-48dc-a4c7-d33efc56fa0b.png">
+<img width="203" alt="Screen Shot 2023-03-14 at 11 39 10 AM" src="https://user-images.githubusercontent.com/82680052/225075629-e7393581-e67a-47fc-bbc1-d1ee0941a7fc.png">
+
  
  Here's a diagram of how this process is done:
 <img width="1016" alt="Screen Shot 2023-03-14 at 11 29 51 AM" src="https://user-images.githubusercontent.com/82680052/225073208-464ceb11-b81e-4444-8d26-2053f8522045.png">
+
+Lineage Example:
+[TO DO]
 
 
  <h5> Mutation </h5>
@@ -119,14 +129,21 @@ Here's a step-by-step example of evolution, showing the creation of the initial 
  <img width="901" alt="Screen Shot 2023-03-13 at 3 41 43 PM" src="https://user-images.githubusercontent.com/82680052/224827536-75eaeee2-e4ed-4114-94d3-a5d332fa27bb.png">
 <img width="894" alt="Screen Shot 2023-03-13 at 3 41 59 PM" src="https://user-images.githubusercontent.com/82680052/224827547-79835236-d1f4-4c9c-9b87-1a191e9d927d.png">
 
+ <h4> Brain Generation and Evolution </h4>
+ Every motor neuron is connected to every sensor neuron. This never changes.
+ [Diagram displaying how brains are generated and how they look when they evolve]
  
  <h4> Fitness </h4>
 The fitness of a robot is the y position of the robot times 10. Simply, the farther in the positive y direction the robot goes, the more fit it is
-  [Add Diagram for Selection]
 
- <h4> Brain Generation </h4>
- Every motor neuron is connected to every sensor neuron. This never changes.
- [Diagrams]
+<h5> Parallel Hill Climber </h5>
+To choose which robots are chosen for the next generation, a parallel hill climber (PHC) is used. When the PHC is created, populationSize (10 in this experiment) random bodies are created, the parents. Then, the children are created by copying the parents and then mutating them (e.g., Add one link, add two links, mutate synapse weight, etc.). The fitness of each parent and child pair are compared, and the better robot becomes a parent for the next generation. This loop occurs numberOfGeneration times (500 in this experiment) and once it ends, the best parent out of the last generation is chosen as the final evolution.
+<br></br>
+While body creation is different for symmetrical and asymmetrical robots, the PHC operates the same way.
+<img width="543" alt="Screen Shot 2023-03-14 at 12 14 59 PM" src="https://user-images.githubusercontent.com/82680052/225085360-95746d09-895f-40cc-aa42-303d3f3c27f5.png">
+
+
+
 
 <h3> Results </h3>
 [Graph, diagrams, images, cartoons]
