@@ -11,6 +11,8 @@ Here's a sneak peek: [gif]
   
  To run the experiment, simply run main.py (10 sets of 500 generations with population size of 10. Half the sets are symmetrical and the other half are asymmetrical.
  
+ Note: The below diagrams show the x and y axis, but the z axis is also included in practice. For symmetrical robots, the z and y axes act the same, and for asymmetrical robots, all axes act the same
+ 
  To see a specific saved robot in action, go into testing.py, replace the robot ID with your desired robot, and hit run. #MAKE SURE WORKS
  <h3> Genotypes and Phenotypes</h3>
  Each robot's genotype is saved as a list of links and joints. The link data structure saves the name, dimensions, relative position, absolute position, sensorness, and direction. The joint data structure saves the name, relative position, parent link name, child link name, and joint axis. When the robot is mutated, the list of parts is appended to. 
@@ -35,10 +37,17 @@ Here's a sneak peek: [gif]
  
  The brain is totally connected, meaning that every motor neuron is connected to every sensor neuron. Synapse weights are then randomly generated.
  
- [Add Diagram for Creation]
+
  
- Here's some examples of initial bodies
- [Examples of Intial Bodies]
+ Here's some examples of initial bodies:
+<img width="191" alt="Screen Shot 2023-03-14 at 11 33 49 AM" src="https://user-images.githubusercontent.com/82680052/225074292-8d64f105-dcf5-4655-95a5-4810f4a632d6.png">
+<img width="210" alt="Screen Shot 2023-03-14 at 11 34 02 AM" src="https://user-images.githubusercontent.com/82680052/225074314-efc6bddc-c1a6-4ce2-8b6c-e49ab28bc3<img width="174" alt="Screen Shot 2023-03-14 at 11 34 09 AM" src="https://user-images.githubusercontent.com/82680052/225074454-8883069f-c14f-4254-ae94-4bd8da82f064.png">
+a3.png">
+
+ 
+ Here's a diagram of how this process is done:
+<img width="1067" alt="Screen Shot 2023-03-14 at 11 30 06 AM" src="https://user-images.githubusercontent.com/82680052/225073289-5f6825b8-ebe1-4105-be6d-cf6a06a40d31.png">
+
  <h5> Mutation </h5>
  Every generation, populationSize children are created with different mutations. There are different types of mutations that can happen: Variations of adding links and mutating synapse weights, with about a 25% adding links and 75% chance of mutating synapse weights.
  <h6> Adding Links </h6>
@@ -48,6 +57,8 @@ Here's a sneak peek: [gif]
  
  Either both the links will be sensors or both will be nonsensors. Additionally, their joints will have identical qualities (e.g., same joint axis). 
  Random synapse weights are created for each link. If the links are sensors, additional weights are added to the motor neurons. 
+ 
+ As the brains of these robots are fully connected, these new sensor and motor neurons are connected to every other motor and sensor neurons.
  
  Direction Meaning: Positive z direction = Top face of link, negative z direction = Bottom face of link, etc.
  
@@ -76,13 +87,21 @@ To create the initial bodies, a link with random dimensions is created and made 
  
  The brain is totally connected, meaning that every motor neuron is connected to every sensor neuron. Synapse weights are then randomly generated.
  
-  [Add Diagram for Creation]
+Here's some examples of initial bodies
+ [Examples of Intial Bodies]
+ 
+ Here's a diagram of how this process is done:
+<img width="1016" alt="Screen Shot 2023-03-14 at 11 29 51 AM" src="https://user-images.githubusercontent.com/82680052/225073208-464ceb11-b81e-4444-8d26-2053f8522045.png">
+
 
  <h5> Mutation </h5>
   Every generation, populationSize children are created with different mutations. There are different types of mutations that can happen: Variations of adding links and mutating synapse weights, with 50% adding links and 50% mutating synapse weights.
   
    <h6> Adding Links </h6>
  1-2 links can be added at every mutation. These links are independent and are randomly shaped. 0-2 are randomly decided to be sensors. Once the dimensions of a link are made, a random parent and direction are chosen. If all directions lead to overlapping another link in the body, a different parent is chosen. By the nature of the robot, eventually a link can be made. Random synapse weights are made for this link, and if the link is a sensor, additional weights are added to the motor neurons. 
+ 
+  As the brains of these robots are fully connected, these new sensor and motor neurons are connected to every other motor and sensor neurons.
+
  
  <h6> Mutating Synapse Weights </h6>
  A motor neuron and sensor is randomly selected and their weight is randomly changed. 
