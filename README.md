@@ -26,7 +26,22 @@ Here's a sneak peek: [gif]
  Here's some examples of initial bodies
  [Examples of Intial Bodies]
  <h5> Mutation </h5>
- Every generation, populationSize children are created with different mutations. There are a few types of mutations that can happen
+ Every generation, populationSize children are created with different mutations. There are different types of mutations that can happen: Variations of adding links and mutating synapse weights, with about a 25% adding links and 75% chance of mutating synapse weights.
+ <h6> Adding Links </h6>
+ Only two links can be added at every mutation. Random dimensions for the new link are made and a random parent and direction is chosen. If creating a link in that direction doesn't overlap with any other link in the body, that direction and parent are chosen. If the link does overlap, a different direction is chosen, but if there are no more directions to choose from, a different parent is chosen. Due to the nature of the robots, this process will eventually allow the creation of a link. 
+ 
+ Once the first link's creation is allowed, a second link with the same exact dimensions is made. If the first link's direction is on the x axis, the second link will be made on the opposite side of the robot in the opposite direction. If the direction is on the y or z axis, the second link will be made on the opposite side of the robot in the same direction. If the second link cannot be made, the first link is recalcaluated.
+ 
+ Either both the links will be sensors or both will be nonsensors. Additionally, their joints will have identical qualities (e.g., same joint axis). 
+ 
+ Direction Meaning: Positive z direction = Top face of link, negative z direction = Bottom face of link, etc.
+ 
+ [Example of Mutation] ADD IMAGE
+ 
+ <h6> Mutating Synapse Weights </h6>
+ A motor neuron and sensor is randomly selected and their weight is randomly changed. 
+ 
+ 
  <h5> Diagram </h5>
  <img width="709" alt="Screen Shot 2023-03-13 at 7 38 29 PM" src="https://user-images.githubusercontent.com/82680052/224862842-450647a0-b048-4064-869d-7dfcc511767e.png">
 <img width="876" alt="Screen Shot 2023-03-13 at 10 09 13 PM" src="https://user-images.githubusercontent.com/82680052/224883150-b0b6ab60-013e-45a3-8b18-907d739278c8.png">
