@@ -16,14 +16,21 @@ Here's a sneak peek: [gif]
  <h3> Evolution </h3>
  <h4> Symmetrical Bodies </h4>
  [Explain how bodies are formed, what OG ones look like, how mutation works, give examples of lineages, etc.]
+ The symmetrical robots are bilaterally symmetrical on the y axis. This means that if you split the robot down the middle on the y plane, each side will be identical. This was chosen instead of radial symmetry to decrease the amount of parts. 
  ...
  <h5> Initalization </h5>
- ...
+ To create the initial bodies, a link with random dimensions is created and made to be either a sensor (green links) or a nonsenor (blue links). Then, two new links and joints of the same random dimensions are added to the initial link. For example, if the x axis is chosen, the new links will grow out of the left and right faces, if the y axis is chosen, out of the front and back face, and if the z axis is chosen, out of the top and bottom faces. The new links are either both sensors or both nonsensors.
+ 
+ The brain is totally connected, meaning that every motor neuron is connected to every sensor neuron. Synapse weights are then randomly generated.
+ 
+ Here's some examples of initial bodies
+ [Examples of Intial Bodies]
  <h5> Mutation </h5>
- ...
+ Every generation, populationSize children are created with different mutations. There are a few types of mutations that can happen
  <h5> Diagram </h5>
  <img width="709" alt="Screen Shot 2023-03-13 at 7 38 29 PM" src="https://user-images.githubusercontent.com/82680052/224862842-450647a0-b048-4064-869d-7dfcc511767e.png">
-<img width="447" alt="Screen Shot 2023-03-13 at 7 38 40 PM" src="https://user-images.githubusercontent.com/82680052/224862862-43d40509-16df-437b-ab7f-58c0672d9763.png">
+<img width="876" alt="Screen Shot 2023-03-13 at 10 09 13 PM" src="https://user-images.githubusercontent.com/82680052/224883150-b0b6ab60-013e-45a3-8b18-907d739278c8.png">
+
 
  <h4> Asymmetrical Bodies </h4>
  [Explain how bodies are formed, what OG ones look like, how mutation works, give examples of lineages, etc.]
