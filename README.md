@@ -50,7 +50,6 @@ Here's a sneak peek: [gif]
  A motor neuron and sensor is randomly selected and their weight is randomly changed. 
  
  
- <h5> Diagram </h5>
  <img width="709" alt="Screen Shot 2023-03-13 at 7 38 29 PM" src="https://user-images.githubusercontent.com/82680052/224862842-450647a0-b048-4064-869d-7dfcc511767e.png">
 <img width="876" alt="Screen Shot 2023-03-13 at 10 09 13 PM" src="https://user-images.githubusercontent.com/82680052/224883150-b0b6ab60-013e-45a3-8b18-907d739278c8.png">
 
@@ -76,7 +75,6 @@ To create the initial bodies, a link with random dimensions is created and made 
  A motor neuron and sensor is randomly selected and their weight is randomly changed. 
   
 
- <h5> Diagram </h5>
  <img width="901" alt="Screen Shot 2023-03-13 at 3 41 43 PM" src="https://user-images.githubusercontent.com/82680052/224827536-75eaeee2-e4ed-4114-94d3-a5d332fa27bb.png">
 <img width="894" alt="Screen Shot 2023-03-13 at 3 41 59 PM" src="https://user-images.githubusercontent.com/82680052/224827547-79835236-d1f4-4c9c-9b87-1a191e9d927d.png">
 
