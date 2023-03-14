@@ -15,7 +15,9 @@
  <h5> Mutation </h5>
  ...
  <h5> Diagram </h5>
- ...
+ <img width="709" alt="Screen Shot 2023-03-13 at 7 38 29 PM" src="https://user-images.githubusercontent.com/82680052/224862842-450647a0-b048-4064-869d-7dfcc511767e.png">
+<img width="447" alt="Screen Shot 2023-03-13 at 7 38 40 PM" src="https://user-images.githubusercontent.com/82680052/224862862-43d40509-16df-437b-ab7f-58c0672d9763.png">
+
  <h4> Asymmetrical Bodies </h4>
  [Explain how bodies are formed, what OG ones look like, how mutation works, give examples of lineages, etc.]
  ...
