@@ -12,6 +12,12 @@ Here's a sneak peek: [gif]
  To run the experiment, simply run main.py (10 sets of 500 generations with population size of 10. Half the sets are symmetrical and the other half are asymmetrical.
  
  To see a specific saved robot in action, go into testing.py, replace the robot ID with your desired robot, and hit run. *MAKE SURE WORKS
+ <h3> Genotypes </h3>
+ Each robot's genotype is saved as a list of links and joints. The link data structure saves the name, dimensions, relative position, absolute position, sensorness, and direction. The joint data structure saves the name, relative position, parent link name, child link name, and joint axis. When the robot is mutated, the list of parts is appended to 
+ 
+ 
+ To create the phenotype, first, the z position of the first link and all joints connected to it are changed so the robot doesn't intersect the ground. Then, the function loops through all links and joints and creates them. Every time a simulation is run, the phenotype is recreated to account for changes in the genotype. 
+
  
  <h3> Evolution </h3>
  Bodies and synapse weights change throughout evolution, but the brain remains the same (fully connected)
