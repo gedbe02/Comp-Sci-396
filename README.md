@@ -16,7 +16,7 @@ Here's a sneak peek: [gif]
  <h3> Evolution </h3>
  <h4> Symmetrical Bodies </h4>
  [Explain how bodies are formed, what OG ones look like, how mutation works, give examples of lineages, etc.]
- The symmetrical robots are bilaterally symmetrical on the y axis. This means that if you split the robot down the middle on the y plane, each side will be identical. This was chosen instead of radial symmetry to decrease the amount of parts. 
+ The symmetrical robots are bilaterally symmetrical on the y axis. This means that if you split the robot down the middle on the y plane, each side will be identical. This was chosen instead of radial symmetry to decrease the amount of links. 
  ...
  <h5> Initalization </h5>
  To create the initial bodies, a link with random dimensions is created and made to be either a sensor (green links) or a nonsenor (blue links). Then, two new links and joints of the same random dimensions are added to the initial link. For example, if the x axis is chosen, the new links will grow out of the left and right faces, if the y axis is chosen, out of the front and back face, and if the z axis is chosen, out of the top and bottom faces. The new links are either both sensors or both nonsensors.
@@ -33,6 +33,7 @@ Here's a sneak peek: [gif]
  Once the first link's creation is allowed, a second link with the same exact dimensions is made. If the first link's direction is on the x axis, the second link will be made on the opposite side of the robot in the opposite direction. If the direction is on the y or z axis, the second link will be made on the opposite side of the robot in the same direction. If the second link cannot be made, the first link is recalcaluated.
  
  Either both the links will be sensors or both will be nonsensors. Additionally, their joints will have identical qualities (e.g., same joint axis). 
+ Random synapse weights are created for each link. If the links are sensors, additional weights are added to the motor neurons. 
  
  Direction Meaning: Positive z direction = Top face of link, negative z direction = Bottom face of link, etc.
  
@@ -49,11 +50,25 @@ Here's a sneak peek: [gif]
 
  <h4> Asymmetrical Bodies </h4>
  [Explain how bodies are formed, what OG ones look like, how mutation works, give examples of lineages, etc.]
+ The asymmetrical robots are random and asymmetrical. Every new link is randomly added independent of any other link (besides checking for overlapping and relationship to parent)
  ...
  <h5> Initalization </h5>
- ...
+To create the initial bodies, a link with random dimensions is created and made to be either a sensor (green links) or a nonsenor (blue links). Then, one  link of random dimensions is added to the initial link on any of its faces. This link can either be a sensor or a nonsensor
+ 
+ The brain is totally connected, meaning that every motor neuron is connected to every sensor neuron. Synapse weights are then randomly generated.
  <h5> Mutation </h5>
- ...
+  Every generation, populationSize children are created with different mutations. There are different types of mutations that can happen: Variations of adding links and mutating synapse weights, with 50% adding links and 50% mutating synapse weights.
+  
+   <h6> Adding Links </h6>
+ 1-2 links can be added at every mutation. These links are independent and are randomly shaped. 0-2 are randomly decided to be sensors. Once the dimensions of a link are made, a random parent and direction are chosen. If all directions lead to overlapping another link in the body, a different parent is chosen. By the nature of the robot, eventually a link can be made. Random synapse weights are made for this link, and if the link is a sensor, additional weights are added to the motor neurons. 
+ 
+ 
+ [Example of Mutation] ADD IMAGE
+ 
+ <h6> Mutating Synapse Weights </h6>
+ A motor neuron and sensor is randomly selected and their weight is randomly changed. 
+  
+
  <h5> Diagram </h5>
  <img width="901" alt="Screen Shot 2023-03-13 at 3 41 43 PM" src="https://user-images.githubusercontent.com/82680052/224827536-75eaeee2-e4ed-4114-94d3-a5d332fa27bb.png">
 <img width="894" alt="Screen Shot 2023-03-13 at 3 41 59 PM" src="https://user-images.githubusercontent.com/82680052/224827547-79835236-d1f4-4c9c-9b87-1a191e9d927d.png">
