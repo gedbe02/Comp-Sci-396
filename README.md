@@ -35,6 +35,8 @@ Here's a sneak peek: [gif]
  
  The brain is totally connected, meaning that every motor neuron is connected to every sensor neuron. Synapse weights are then randomly generated.
  
+ [Add Diagram for Creation]
+ 
  Here's some examples of initial bodies
  [Examples of Intial Bodies]
  <h5> Mutation </h5>
@@ -67,6 +69,9 @@ Here's a sneak peek: [gif]
 To create the initial bodies, a link with random dimensions is created and made to be either a sensor (green links) or a nonsenor (blue links). Then, one  link of random dimensions is added to the initial link on any of its faces. This link can either be a sensor or a nonsensor
  
  The brain is totally connected, meaning that every motor neuron is connected to every sensor neuron. Synapse weights are then randomly generated.
+ 
+  [Add Diagram for Creation]
+
  <h5> Mutation </h5>
   Every generation, populationSize children are created with different mutations. There are different types of mutations that can happen: Variations of adding links and mutating synapse weights, with 50% adding links and 50% mutating synapse weights.
   
@@ -86,7 +91,8 @@ To create the initial bodies, a link with random dimensions is created and made 
  
  <h4> Fitness </h4>
 The fitness of a robot is the y position of the robot times 10. Simply, the farther in the positive y direction the robot goes, the more fit it is
- 
+  [Add Diagram for Selection]
+
  <h4> Brain Generation </h4>
  Every motor neuron is connected to every sensor neuron. This never changes.
  [Diagrams]
