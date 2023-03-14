@@ -20,7 +20,7 @@ Here's a sneak peek: [gif]
  
  Genotypes and phenotypes were stored the same way for symmetrical and asymmetrical robots
  <img width="785" alt="Screen Shot 2023-03-14 at 1 09 28 AM" src="https://user-images.githubusercontent.com/82680052/224911298-bfd387f2-2a57-402b-b9e2-aa191c2fd46b.png">
- Each joint has a parent (top of arrow) and a child (bottom of arrow)
+ <br>Each joint has a parent (top of arrow) and a child (bottom of arrow)
 
 
  
