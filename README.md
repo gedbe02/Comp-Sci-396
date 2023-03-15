@@ -7,7 +7,10 @@ The symmetrical robots were bilaterally symmetric on the y axis. Their evolution
 
 To see a video of the experiment and its results, click <a href="https://youtu.be/u1U9H4WchxM">here</a>.
 
-Here's a sneak peek: [gif]
+Here's a sneak peek: 
+<br></br>
+![Teaser Gif](https://user-images.githubusercontent.com/82680052/225194220-cf7bee9e-1bca-4a4f-afcf-4784840ee833.gif)
+
  [Explain experiment, AB groups, how to run experiment, how to run tests, inspiration, teaser gif, video]
   
  To run the experiment, simply run main.py (10 sets of 500 generations with population size of 10. Half the sets are symmetrical and the other half are asymmetrical.
