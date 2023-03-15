@@ -1,7 +1,7 @@
 # Comp-Sci-396
 
 <h1>Symmetry vs. Asymmetry</h1>
-While watching my robots evolve, I noticed that robots that seemed more symmetrical moved better. Additionally, creatures in the real world are generally symmetric, so I hypothesized that symmetric must be valuable to fitness. Thus, in this experiment, I tested the difference between symmetrical robots and asymmetrical robots. 
+While watching my robots evolve, I noticed that robots that seemed more symmetrical moved better. Additionally, creatures in the real world are generally symmetric, so I hypothesized that symmetry must be valuable to fitness. Thus, in this experiment, I tested the difference between symmetrical robots and asymmetrical robots. 
 
 The symmetrical robots were bilaterally symmetric on the y axis. Their evolutionary algorithm was altered to assure symmetry. The asymmetrical robots were constructed with normal randomness. To test which type of robot was better, I ran 5 sets of symmetrical robots and 5 sets of asymmetrical robots with 500 generations and a population size of 10. 
 
@@ -53,7 +53,7 @@ Here's a sneak peek showing the symmetrical robots:
 <img width="1067" alt="Screen Shot 2023-03-14 at 11 30 06 AM" src="https://user-images.githubusercontent.com/82680052/225073289-5f6825b8-ebe1-4105-be6d-cf6a06a40d31.png">
 
  <h4> Mutation </h4>
- Every generation, populationSize children are created with different mutations. There are different types of mutations that can happen: Variations of adding links and mutating synapse weights, with about a 25% adding links and 75% chance of mutating synapse weights.
+ Every generation, populationSize children are created with different mutations. There are different types of mutations that can happen: Variations of adding links and mutating synapse weights, with about a 50% adding links and 50% chance of mutating synapse weights.
  
  <h5> Adding Links: </h5>
  Only two links can be added at every mutation. Random dimensions for the new link are made and a random parent and direction is chosen. If creating a link in that direction doesn't overlap with any other link in the body, that direction and parent are chosen. If the link does overlap, a different direction is chosen, but if there are no more directions to choose from, a different parent is chosen. Due to the nature of the robots, this process will eventually allow the creation of a link. 
@@ -80,7 +80,7 @@ Here's a sneak peek showing the symmetrical robots:
 
 Here's a step-by-step example of evolution, showing the creation of the initial body and every potential mutation type
  
- <img width="709" alt="Screen Shot 2023-03-13 at 7 38 29 PM" src="https://user-images.githubusercontent.com/82680052/224862842-450647a0-b048-4064-869d-7dfcc511767e.png">
+ <img width="876" alt="Screen Shot 2023-03-13 at 7 38 29 PM" src="https://user-images.githubusercontent.com/82680052/224862842-450647a0-b048-4064-869d-7dfcc511767e.png">
 <img width="876" alt="Screen Shot 2023-03-13 at 10 09 13 PM" src="https://user-images.githubusercontent.com/82680052/224883150-b0b6ab60-013e-45a3-8b18-907d739278c8.png">
 
 Lineage Example:
@@ -91,9 +91,9 @@ Lineage Example:
 
  <h3> Asymmetrical Bodies </h3>
  The asymmetrical robots are random and asymmetrical. Every new link is randomly added independent of any other link (besides checking for overlapping and relationship to parent)
- ...
+ 
  <h4> Initalization </h4>
-To create the initial bodies, a link with random dimensions is created and made to be either a sensor (green links) or a nonsenor (blue links). Then, one  link of random dimensions is added to the initial link on any of its faces. This link can either be a sensor or a nonsensor
+To create the initial bodies, a link with random dimensions is created and made to be either a sensor (green links) or a nonsenor (blue links). Then, one  link of random dimensions is added to the initial link on any of its faces. This link can either be a sensor or a nonsensor. If another link is chosen to be made, its dimensions will be random and its parent can be the initial link or the second link
  
  The brain is totally connected, meaning that every motor neuron is connected to every sensor neuron. Synapse weights are then randomly generated.
  
@@ -161,24 +161,25 @@ While body creation is different for symmetrical and asymmetrical robots, the PH
 
 <h3> Data </h3>
 After running the experiment two times, the results were:
+<br></br>
 Run 1:
 <br></br>
 <img width="500" src="https://user-images.githubusercontent.com/82680052/224903939-2570391e-425a-4042-bb73-877006c3a41b.png">
 <br></br>
-Average Final Symmetrical Fitness: 69.76
-Number of Improvements: 77
+Average Final Symmetrical Fitness: 69.76, 
+Number of Improvements: 77, 
 
-Average Final Asymmetrical Fitness: 70.60
+Average Final Asymmetrical Fitness: 70.60, 
 Number of Improvements: 80
 
 Run 2:
 <br></br>
 <img width="500" src="https://user-images.githubusercontent.com/82680052/225068977-66abeb4e-2e57-4bd3-82c1-c992471313c7.png">
 <br></br>
-Average Final Symmetrical Fitness: 65.93
+Average Final Symmetrical Fitness: 65.93, 
 Number of Improvements: 111
 
-Average Final Asymmetrical Fitness: 69.35
+Average Final Asymmetrical Fitness: 69.35, 
 Number of Improvements: 83
 
 <h3> Examples of Final Robots </h3>
@@ -198,7 +199,8 @@ As per the graphs, it seems that adding symmetry isn't worse or better than norm
 Symmetrical robots also ended up being smaller usually than asymmetrical robots
 
 
-<h3> Conclusions </h3>
+<h3> Conclusion </h3>
+The results of the experiment demonstrate that adding bilateral symmetry doesn't necessarily improve fitness. Symmetrical and Asymmetrical robots usually ended up with relatively equal fitnesses on average and neither seemed to be better in that regard. However, the symmetrical robots were smaller, meaning they had to rely more on moving fast rather than the slower strides of the larger asymmetrical robots. Nevertheless, symmetry, in the way it was utilized in this experiment, did not lead to better results.  
 
 <h4> Limitations </h4>
 While the symmetrical robots have symmetrical bodies, they do not have symmetrical synapse weights. This means that each side of the body will act differently. Thus, it's possible that this issue caused the symmetrical robots to have similar results to the asymmetrical robots. Due to the limitations of the laptop used to run these simulations, robot bodies could only be so big and simulations so long. 
