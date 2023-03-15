@@ -5,7 +5,7 @@ While watching my robots evolve, I noticed that robots that seemed more symmetri
 
 The symmetrical robots were bilaterally symmetric on the y axis. Their evolutionary algorithm was altered to assure symmetry. The asymmetrical robots were constructed with normal randomness. To test which type of robot was better, I ran 5 sets of symmetrical robots and 5 sets of asymmetrical robots with 500 generations and a population size of 10. 
 
-To see a video of the experiment and its results, click [here].
+To see a video of the experiment and its results, click <a href="https://youtu.be/u1U9H4WchxM">here</a>.
 Here's a sneak peek: [gif]
  [Explain experiment, AB groups, how to run experiment, how to run tests, inspiration, teaser gif, video]
   
@@ -168,6 +168,7 @@ Number of Improvements: 77
 
 Average Final Asymmetrical Fitness: 70.60
 Number of Improvements: 80
+
 Run 2:
 <br></br>
 <img width="500" src="https://user-images.githubusercontent.com/82680052/225068977-66abeb4e-2e57-4bd3-82c1-c992471313c7.png">
