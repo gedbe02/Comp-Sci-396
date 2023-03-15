@@ -155,29 +155,57 @@ While body creation is different for symmetrical and asymmetrical robots, the PH
 
 
 <h2> Results </h2>
+
+<h3> Data </h3>
 [Graph, diagrams, images, cartoons]
-After running the experiment several times, the results were:
-<img width="500" src="https://user-images.githubusercontent.com/82680052/224903923-d25a4553-8e79-4cfb-aa76-5896301ce39a.png">
+After running the experiment two times, the results were:
+Run 1:
+<br></br>
 <img width="500" src="https://user-images.githubusercontent.com/82680052/224903939-2570391e-425a-4042-bb73-877006c3a41b.png">
+Average Final Symmetrical Fitness: 69.76
+Number of Improvements: 77
+
+Average Final Asymmetrical Fitness: 70.60
+Number of Improvements: 80
+Run 2:
+<br></br>
 <img width="500" src="https://user-images.githubusercontent.com/82680052/225068977-66abeb4e-2e57-4bd3-82c1-c992471313c7.png">
+Average Final Symmetrical Fitness: 65.93
+Number of Improvements: 111
+
+Average Final Asymmetrical Fitness: 69.35
+Number of Improvements: 83
+
+<h3> Examples of Final Robots </h3>
+<h4> Symmetrical Robots </h4>
+<img width="272" alt="Screen Shot 2023-03-14 at 6 41 34 PM" src="https://user-images.githubusercontent.com/82680052/225166220-0b1d5de0-9764-43a4-98ca-2354d984ef72.png">
+<img width="312" alt="Screen Shot 2023-03-14 at 6 41 55 PM" src="https://user-images.githubusercontent.com/82680052/225166236-345fe75d-2dac-461e-83dd-3f33b5bc507d.png">
+<img width="194" alt="Screen Shot 2023-03-14 at 7 38 39 PM" src="https://user-images.githubusercontent.com/82680052/225173898-36b3a010-9f37-43fe-a486-ef37b309cd9f.png">
 
 
-NEED TO EDIT: As per the graphs, it seems that adding symmetry isn't worse or better than normal asymmetry. The lines are overlapping and no group seems to be significantly better than the next.
+<h4> Asymmetrical Robots </h4>
+<img width="445" alt="Screen Shot 2023-03-14 at 6 42 26 PM" src="https://user-images.githubusercontent.com/82680052/225166244-df406c2e-cc22-4579-9bd4-f2c6e68f3158.png">
+<img width="344" alt="Screen Shot 2023-03-14 at 6 42 13 PM" src="https://user-images.githubusercontent.com/82680052/225166251-4d255d9d-f739-4d5d-9f7d-234db7c43146.png">
 
-DO MORE DATA ANALYSIS
+
+As per the graphs, it seems that adding symmetry isn't worse or better than normal asymmetry. The lines are overlapping and no group seems to be significantly better than the next. Additionally, both groups ended up with about the same average fitness. Symmetrical and asymmetrical robots evolved a similar amount of times in Run 1, but Symmetrical robots had more changes in Run 2. However, this aspect seems to not be important to being more fit than the other group. 
+
+Symmetrical robots also ended up being smaller usually than asymmetrical robots
 
 
 <h3> Conclusions </h3>
 [Conclusions, limtations, future researsh]
 ...
-Since the synapse weights were not symmetrical, the symmetry of the body may not have been as helpful. Many symmetrical robots made ended up moving in ways that didn't utilize their symmetry due to their weight differences. 
+
 <h4> Limitations </h4>
-While the symmetrical robots have symmetrical bodies, they do not have symmetrical brains. This means that each side of the body will act differently. Thus, it's possible that this issue cause the symmetrical robots to have similar results to the asymmetrical robots. Due to the limitations of the laptop used to run these simulations, robot bodies could only be so big and simulations so long. 
+While the symmetrical robots have symmetrical bodies, they do not have symmetrical synapse weights. This means that each side of the body will act differently. Thus, it's possible that this issue caused the symmetrical robots to have similar results to the asymmetrical robots. Due to the limitations of the laptop used to run these simulations, robot bodies could only be so big and simulations so long. 
+
+Since the synapse weights were not symmetrical, the symmetry of the body may not have been as helpful. Many symmetrical robots made ended up moving in ways that didn't utilize their symmetry due to their weight differences. 
 
 <h4> Future Research </h4>
 Future research on symmetrical bodies should try to make symmetrical brains along with them. The synapse weights would be randomly generated, but each symmetrical pair will share them. Additionally, every time a synapse weight is mutated, the same change would occurr for the other pair. 
 
 
- 
+ <br></br>
  
 Code based on reddit.com/r/ludobots. pyrosim folder taken from [Pyrosim](https://github.com/jbongard/pyrosim.git)
