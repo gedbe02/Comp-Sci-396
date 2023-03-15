@@ -7,7 +7,7 @@ The symmetrical robots were bilaterally symmetric on the y axis. Their evolution
 
 To see a video of the experiment and its results, click <a href="https://youtu.be/u1U9H4WchxM">here</a>.
 
-Here's a sneak peek: 
+Here's a sneak peek showing the symmetrical robots: 
 <br></br>
 ![Teaser Gif](https://user-images.githubusercontent.com/82680052/225194220-cf7bee9e-1bca-4a4f-afcf-4784840ee833.gif)
   
