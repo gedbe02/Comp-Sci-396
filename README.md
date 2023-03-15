@@ -162,6 +162,7 @@ After running the experiment two times, the results were:
 Run 1:
 <br></br>
 <img width="500" src="https://user-images.githubusercontent.com/82680052/224903939-2570391e-425a-4042-bb73-877006c3a41b.png">
+<br></br>
 Average Final Symmetrical Fitness: 69.76
 Number of Improvements: 77
 
@@ -170,6 +171,7 @@ Number of Improvements: 80
 Run 2:
 <br></br>
 <img width="500" src="https://user-images.githubusercontent.com/82680052/225068977-66abeb4e-2e57-4bd3-82c1-c992471313c7.png">
+<br></br>
 Average Final Symmetrical Fitness: 65.93
 Number of Improvements: 111
 
