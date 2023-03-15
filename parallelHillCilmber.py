@@ -27,6 +27,9 @@ class PARALLEL_HILL_CLIMBER:
     def Evolve(self):
         self.Evaluate(self.parents)
         for currentGeneration in range(c.numberOfGenerations):
+            #
+            #self.Show_Best(currentGeneration, True)
+            #
             self.bestOfGens.append(self.Best_Fitness())
             self.Evolve_For_One_Generation()
         self.bestOfGens.append(self.Best_Fitness())
@@ -46,19 +49,17 @@ class PARALLEL_HILL_CLIMBER:
             self.children[p].Set_ID(self.nextAvailableID)
             self.nextAvailableID += 1
 
-    # TO DO
     def Mutate(self):
         num_mutated = 0
         for child in self.children:
             if self.isSymmetrical:
-                new_parts   = random.choice([0,2]) #For now, either add two parts or add none
+                new_parts   = random.choice([0,2]) 
                 new_sensors = random.randint(0,4)
                 if new_sensors != 0:
                     new_sensors = 2
             else:
                 new_parts   = random.randint(1,c.maximumAddedParts)
                 new_sensors = random.randint(new_parts//2, max(new_parts-1, 0))
-            #print("REVERT MUTATE FUNCTION")
             change_weight = False
             if self.children[child].numParts > 11:
                 new_parts = 0
@@ -68,7 +69,6 @@ class PARALLEL_HILL_CLIMBER:
                 self.children[child].Mutate(new_parts, new_sensors)
             else:
                 self.children[child].Mutate(0, 0)
-            #Randomly add new sensors?
 
             num_mutated += 1
 
@@ -87,6 +87,7 @@ class PARALLEL_HILL_CLIMBER:
             if self.parents[p].fitness > best_fitness:
                 best = self.parents[p]
                 best_fitness = self.parents[p].fitness
+        
         return best_fitness
 
     def Show_Best(self, save, sym): 
@@ -96,8 +97,13 @@ class PARALLEL_HILL_CLIMBER:
             if self.parents[p].fitness > best_fitness:
                 best = self.parents[p]
                 best_fitness = self.parents[p].fitness
-        print(f'The best fitness was {best_fitness}. Reached {best_fitness/10} y position')
-        best.Start_Simulation("GUI", save, sym)
+        #
+        if (type(save)==int):
+            best.Start_Simulation("NO", save, sym)
+        else:    
+        #
+            print(f'The best fitness was {best_fitness}. Reached {best_fitness/10} y position')
+            best.Start_Simulation("GUI", save, sym)
     
     def Evaluate(self, solutions):
         for p in range(c.populationSize):

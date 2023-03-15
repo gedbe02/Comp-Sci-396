@@ -44,11 +44,23 @@ class SOLUTION:
             folder = "sym"
         else:
             folder = "asym"
-        if save:
-            os.mkdir(f'results/{folder}/{self.myID}')
-            os.system(f'cp brain{self.myID}.nndf results/{folder}/{self.myID}/brain{self.myID}.nndf')
-            os.system(f'cp body{self.myID}.urdf results/{folder}/{self.myID}/body{self.myID}.urdf')
-        os.system("python3 simulate.py " + directOrGUI + " "+ str(self.myID) + " not_test e &")
+        #
+        if directOrGUI == "NO":
+            print("ayo")
+            os.mkdir(f'results/lineage/{folder}/Gen{save}')
+            os.mkdir(f'results/lineage/{folder}/Gen{save}/{self.myID}')
+            os.system(f'cp brain{self.myID}.nndf results/lineage/{folder}/Gen{save}/{self.myID}/brain{self.myID}.nndf')
+            os.system(f'cp body{self.myID}.urdf results/lineage/{folder}/Gen{save}/{self.myID}/body{self.myID}.urdf')
+        else:
+        #
+            if save:
+                os.mkdir(f'results/{folder}/{self.myID}')
+                os.system(f'cp brain{self.myID}.nndf results/{folder}/{self.myID}/brain{self.myID}.nndf')
+                os.system(f'cp body{self.myID}.urdf results/{folder}/{self.myID}/body{self.myID}.urdf')
+            
+            
+
+            os.system("python3 simulate.py " + directOrGUI + " "+ str(self.myID) + " not_test e &")
     
     def Wait_For_Simulation_To_End(self):
         while not os.path.exists(f'fitness{self.myID}.txt'):

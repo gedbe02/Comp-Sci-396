@@ -12,30 +12,20 @@ sym_evolutions = []
 asym_evolutions = []
 t1 = time.time()
 num_runs = 1
-test = True
 for i in range(num_runs):
-    if test:
-        #random.seed(4) 
-        phc = PARALLEL_HILL_CLIMBER(False) # True = Symmetry
+    random.seed(i+1) 
+    if i < num_runs / 2:
+        phc = PARALLEL_HILL_CLIMBER(True) 
         phc.Evolve()
         #Wait for input
         #input("Show ")
-        phc.Show_Best(False, True)
+        #phc.Show_Best(True, True)
         sym_evolutions.append(phc.bestOfGens)
     else:
-        random.seed(i+1) 
-        if i < num_runs / 2:
-            phc = PARALLEL_HILL_CLIMBER(True) 
-            phc.Evolve()
-            #Wait for input
-            #input("Show ")
-            phc.Show_Best(True, True)
-            sym_evolutions.append(phc.bestOfGens)
-        else:
-            phc = PARALLEL_HILL_CLIMBER(False)
-            phc.Evolve()
-            asym_evolutions.append(phc.bestOfGens)
-            phc.Show_Best(True, False)
+        phc = PARALLEL_HILL_CLIMBER(False)
+        phc.Evolve()
+        asym_evolutions.append(phc.bestOfGens)
+        #phc.Show_Best(True, False)
 
 
 t2 = time.time()
@@ -59,8 +49,6 @@ if True:
         s = "0" + s
 
 print(f'Done. It took {h}:{m}:{s}')
-if test:
-    exit()
 
 for e in sym_evolutions:
     plt.plot(e, color="green", label="Symmetrical")
@@ -86,9 +74,3 @@ for a in asym_evolutions:
     for i in a:
         f.write(str(i) + "\n")
 f.close()
-
-
-
-'''
-Symmetry vs. Asymmetrical
-'''

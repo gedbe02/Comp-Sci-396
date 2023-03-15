@@ -12,7 +12,7 @@ import random
 
 
 class ROBOT:
-    def __init__(self, solutionID, test, evolved):
+    def __init__(self, solutionID, test, testABot):
         self.sensors = {}
         self.motors = {}
 
@@ -20,12 +20,12 @@ class ROBOT:
         
 
         if test:
-            if evolved:
-                self.nn = NEURAL_NETWORK(f'results/evolved/{solutionID}/brain{solutionID}.nndf')
-                self.robotId = p.loadURDF(f'results/evolved/{solutionID}/body{solutionID}.urdf') 
+            if testABot:
+                self.nn = NEURAL_NETWORK(f'results/testing/{solutionID}/brain{solutionID}.nndf')
+                self.robotId = p.loadURDF(f'results/testing/{solutionID}/body{solutionID}.urdf') 
             else:
-                self.nn = NEURAL_NETWORK(f'results/random/{solutionID}/brain{solutionID}.nndf')
-                self.robotId = p.loadURDF(f'results/random/{solutionID}/body{solutionID}.urdf') 
+                self.nn = NEURAL_NETWORK(f'results/to_run/{solutionID}/brain{solutionID}.nndf')
+                self.robotId = p.loadURDF(f'results/to_run/{solutionID}/body{solutionID}.urdf') 
         else:
             self.nn = NEURAL_NETWORK(f'brain{solutionID}.nndf')
             self.robotId = p.loadURDF(f'body{solutionID}.urdf') 

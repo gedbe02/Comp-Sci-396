@@ -9,10 +9,10 @@ from world import WORLD
 from robot import ROBOT
 
 class SIMULATION:
-    def __init__(self, directOrGUI, solutionID, test, evolved):
+    def __init__(self, directOrGUI, solutionID, test, testABot):
         self.directOrGUI = directOrGUI
         self.test = test
-        self.evolved = evolved
+        self.testABot = testABot
         if directOrGUI == "DIRECT":
             self.physicsClient = p.connect(p.DIRECT)
         else:
@@ -22,7 +22,7 @@ class SIMULATION:
         p.setGravity(c.gravity_x,c.gravity_y,c.gravity_z)
         self.world = WORLD()
 
-        self.robot = ROBOT(solutionID, test, evolved) 
+        self.robot = ROBOT(solutionID, test, testABot) 
 
         pyrosim.Prepare_To_Simulate(self.robot.robotId) 
         self.robot.Prepare_To_Sense()
@@ -33,7 +33,7 @@ class SIMULATION:
             p.stepSimulation()
             self.robot.Sense(i) 
             self.robot.Think()
-            #self.robot.Act(i)
+            self.robot.Act(i)
             if self.directOrGUI == "GUI":
                 time.sleep(c.sleep_time)
     

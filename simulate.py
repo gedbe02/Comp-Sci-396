@@ -1,12 +1,12 @@
 from simulation import SIMULATION
 import constants as c
-import sys
+import sys 
 
 directOrGUI = sys.argv[1] 
 solutionID = sys.argv[2]
 test = sys.argv[3] == "test"
-evolved = sys.argv[4] == "e"
+testABot = sys.argv[4] == "testABot"
 
-simulation = SIMULATION(directOrGUI, solutionID, test, evolved) 
+simulation = SIMULATION(directOrGUI, solutionID, test, testABot) 
 simulation.Run()
 simulation.Get_Fitness()
