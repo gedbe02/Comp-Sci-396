@@ -10,14 +10,13 @@ To see a video of the experiment and its results, click <a href="https://youtu.b
 Here's a sneak peek: 
 <br></br>
 ![Teaser Gif](https://user-images.githubusercontent.com/82680052/225194220-cf7bee9e-1bca-4a4f-afcf-4784840ee833.gif)
-
- [Explain experiment, AB groups, how to run experiment, how to run tests, inspiration, teaser gif, video]
   
  To run the experiment, simply run main.py (10 sets of 500 generations with population size of 10. Half the sets are symmetrical and the other half are asymmetrical.
  
  Note: The below diagrams show the x and y axis, but the z axis is also included in practice. For symmetrical robots, the z and y axes act the same, and for asymmetrical robots, all axes act the same
  
- To see a specific saved robot in action, go into testing.py, replace the robot ID with your desired robot, and hit run. #MAKE SURE WORKS
+ To see a specific saved robot in action, go into runABot.py, replace the robot ID with your desired robot ID (IDs are under results/to_run), and hit run. 
+ 
  <h3> Genotypes and Phenotypes</h3>
  Each robot's genotype is saved as a list of links and joints. The link data structure saves the name, dimensions, relative position, absolute position, sensorness, and direction. The joint data structure saves the name, relative position, parent link name, child link name, and joint axis. When the robot is mutated, the list of parts is appended to. 
  
@@ -161,7 +160,6 @@ While body creation is different for symmetrical and asymmetrical robots, the PH
 <h2> Results </h2>
 
 <h3> Data </h3>
-[Graph, diagrams, images, cartoons]
 After running the experiment two times, the results were:
 Run 1:
 <br></br>
@@ -201,8 +199,6 @@ Symmetrical robots also ended up being smaller usually than asymmetrical robots
 
 
 <h3> Conclusions </h3>
-[Conclusions, limtations, future researsh]
-...
 
 <h4> Limitations </h4>
 While the symmetrical robots have symmetrical bodies, they do not have symmetrical synapse weights. This means that each side of the body will act differently. Thus, it's possible that this issue caused the symmetrical robots to have similar results to the asymmetrical robots. Due to the limitations of the laptop used to run these simulations, robot bodies could only be so big and simulations so long. 
